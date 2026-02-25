@@ -1,28 +1,35 @@
 import { motion } from "framer-motion";
-import { Zap, Target, Users } from "lucide-react";
+import { Zap, Target, Users, CheckCircle2 } from "lucide-react";
 
 const pillars = [
   {
     icon: Target,
-    title: "Mission-Driven",
-    description: "We partner with companies whose work matters, building AI that creates genuine value.",
+    title: "Startup-First Approach",
+    description: "We understand runway and speed. Our solutions ship fast and iterate faster — built for startups that move quickly.",
   },
   {
     icon: Zap,
-    title: "Speed & Precision",
-    description: "Rapid prototyping to production deployment — without cutting corners on quality.",
+    title: "Rapid Prototyping",
+    description: "From concept to working prototype in under 2 weeks. Production-grade deployment within 30 days.",
   },
   {
     icon: Users,
-    title: "Expert Team",
-    description: "PhDs, engineers, and strategists who've shipped AI at the world's top companies.",
+    title: "Dedicated AI Engineers",
+    description: "Your own team of ML engineers, prompt specialists, and automation architects — embedded in your workflow.",
   },
+];
+
+const milestones = [
+  "Y Combinator-backed startups trust us",
+  "SOC 2 Type II compliant infrastructure",
+  "99.9% uptime across all deployed agents",
+  "Average 3x ROI within first quarter",
 ];
 
 const AboutSection = () => {
   return (
     <section id="about" className="py-32 relative">
-      <div className="absolute inset-0 bg-gradient-hero opacity-50" />
+      <div className="absolute inset-0 bg-gradient-hero opacity-30" />
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -31,19 +38,30 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-sm text-primary font-medium tracking-wider uppercase mb-3">About Us</p>
+            <p className="text-sm text-primary font-medium tracking-wider uppercase mb-3">About Nexus AI</p>
             <h2 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-              The agency for teams that <span className="text-gradient">refuse to settle</span>
+              Built by founders, <span className="text-gradient">for founders</span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-              Founded by AI researchers and product builders, Nexus AI exists at the intersection
-              of cutting-edge research and real-world execution. We've helped startups and Fortune 500s
-              alike unlock step-change improvements through intelligent automation.
+              We started Nexus AI because we saw too many startups wasting months trying to build AI in-house.
+              Our team of ex-Google, ex-OpenAI engineers helps you skip the learning curve and go straight
+              to production-ready AI.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-              Our approach is simple: understand the problem deeply, move fast, and deliver systems
-              that work in production — not just in demos.
-            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
+              {milestones.map((item, i) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <CheckCircle2 size={15} className="text-primary shrink-0" />
+                  {item}
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div
@@ -60,9 +78,10 @@ const AboutSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 + i * 0.15 }}
-                className="flex gap-5 p-6 rounded-xl bg-gradient-card border-gradient"
+                whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                className="flex gap-5 p-6 rounded-xl bg-gradient-card border-gradient hover:shadow-glow-sm transition-all duration-300"
               >
-                <div className="w-10 h-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-10 h-10 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
                   <pillar.icon size={20} className="text-primary" />
                 </div>
                 <div>

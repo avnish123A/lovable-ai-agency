@@ -6,57 +6,59 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 96%;
+    --background: 140 30% 4%;
+    --foreground: 0 0% 100%;
 
-    --card: 222 44% 9%;
-    --card-foreground: 210 40% 96%;
+    --card: 140 25% 7%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222 44% 9%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 140 25% 7%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 100% 56%;
-    --primary-foreground: 222 47% 6%;
+    --primary: 168 96% 49%;
+    --primary-foreground: 140 30% 4%;
 
-    --secondary: 222 30% 14%;
-    --secondary-foreground: 210 40% 90%;
+    --secondary: 140 20% 12%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 222 30% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 140 15% 12%;
+    --muted-foreground: 140 10% 50%;
 
-    --accent: 180 80% 50%;
-    --accent-foreground: 222 47% 6%;
+    --accent: 75 100% 63%;
+    --accent-foreground: 140 30% 4%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 222 30% 16%;
-    --input: 222 30% 16%;
-    --ring: 210 100% 56%;
+    --border: 140 20% 14%;
+    --input: 140 20% 14%;
+    --ring: 168 96% 49%;
 
     --radius: 0.75rem;
 
-    --glow-primary: 210 100% 56%;
-    --glow-accent: 180 80% 50%;
+    --glow-primary: 168 96% 49%;
+    --glow-accent: 75 100% 63%;
 
-    --sidebar-background: 222 44% 9%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 210 100% 56%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 222 30% 14%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 222 30% 16%;
-    --sidebar-ring: 210 100% 56%;
+    --sidebar-background: 140 25% 7%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 168 96% 49%;
+    --sidebar-primary-foreground: 140 30% 4%;
+    --sidebar-accent: 140 20% 12%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 140 20% 14%;
+    --sidebar-ring: 168 96% 49%;
 
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
 
-    --gradient-hero: linear-gradient(135deg, hsl(210 100% 56% / 0.15), hsl(180 80% 50% / 0.08), transparent);
-    --gradient-card: linear-gradient(135deg, hsl(222 30% 14%), hsl(222 44% 9%));
-    --gradient-text: linear-gradient(135deg, hsl(210 100% 70%), hsl(180 80% 60%));
-    --gradient-border: linear-gradient(135deg, hsl(210 100% 56% / 0.3), hsl(180 80% 50% / 0.1));
-    --shadow-glow: 0 0 40px -10px hsl(210 100% 56% / 0.3);
-    --shadow-glow-sm: 0 0 20px -5px hsl(210 100% 56% / 0.2);
+    --gradient-hero: radial-gradient(ellipse at 30% 20%, hsl(168 96% 49% / 0.12), transparent 60%),
+                     radial-gradient(ellipse at 70% 80%, hsl(75 100% 63% / 0.06), transparent 50%);
+    --gradient-card: linear-gradient(145deg, hsl(140 25% 9%), hsl(140 25% 5%));
+    --gradient-text: linear-gradient(135deg, hsl(168 96% 60%), hsl(75 100% 65%));
+    --gradient-border: linear-gradient(135deg, hsl(168 96% 49% / 0.4), hsl(75 100% 63% / 0.15));
+    --shadow-glow: 0 0 50px -12px hsl(168 96% 49% / 0.4);
+    --shadow-glow-sm: 0 0 25px -5px hsl(168 96% 49% / 0.25);
+    --shadow-glow-accent: 0 0 40px -10px hsl(75 100% 63% / 0.3);
   }
 }
 
@@ -99,6 +101,10 @@
     box-shadow: var(--shadow-glow-sm);
   }
 
+  .shadow-glow-accent {
+    box-shadow: var(--shadow-glow-accent);
+  }
+
   .border-gradient {
     border: 1px solid transparent;
     background-clip: padding-box;
@@ -121,8 +127,18 @@
 
   .grid-pattern {
     background-image: 
-      linear-gradient(hsl(222 30% 16% / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(222 30% 16% / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(140 20% 14% / 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(140 20% 14% / 0.4) 1px, transparent 1px);
     background-size: 60px 60px;
+  }
+
+  .scanline {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(168 96% 49% / 0.03) 2px,
+      hsl(168 96% 49% / 0.03) 4px
+    );
   }
 }
