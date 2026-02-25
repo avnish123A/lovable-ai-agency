@@ -1,7 +1,60 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 
+const rotatingWords = ["Builder", "Platform", "Engine", "Toolkit"];
+
+const TypingWord = ({ word }: { word: string }) => {
+  const [displayText, setDisplayText] = useState("");
+  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing");
+
+  useEffect(() => {
+    setDisplayText("");
+    setPhase("typing");
+  }, [word]);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (phase === "typing") {
+      if (displayText.length < word.length) {
+        timeout = setTimeout(() => setDisplayText(word.slice(0, displayText.length + 1)), 80);
+      } else {
+        timeout = setTimeout(() => setPhase("pause"), 2000);
+      }
+    } else if (phase === "pause") {
+      timeout = setTimeout(() => setPhase("deleting"), 200);
+    } else if (phase === "deleting") {
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => setDisplayText(displayText.slice(0, -1)), 50);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, phase, word]);
+
+  return (
+    <span className="text-gradient">
+      {displayText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-[3px] h-[0.85em] bg-primary ml-0.5 align-middle rounded-full"
+      />
+    </span>
+  );
+};
+
 const HeroSection = () => {
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background effects */}
@@ -9,7 +62,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 scanline pointer-events-none" />
       <div className="absolute top-1/4 left-1/3 w-[700px] h-[700px] rounded-full bg-primary/8 blur-[150px] animate-pulse-glow" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
-      
+
       {/* Floating orbs */}
       <motion.div
         animate={{ y: [-15, 15, -15], x: [-5, 5, -5] }}
@@ -42,9 +95,9 @@ const HeroSection = () => {
           >
             Your AI-Agent
             <br />
-            <span className="text-gradient">Builder</span> for
+            <TypingWord word={rotatingWords[wordIndex]} />
             <br />
-            Modern Teams
+            <span className="text-foreground">for Modern Teams</span>
           </motion.h1>
 
           <motion.p
