@@ -95,8 +95,13 @@ const LeadCaptureDialog = ({ open, onOpenChange, deal, onSuccess }: LeadCaptureD
       city: form.city.trim(),
       salary_range: form.salary_range,
       service: deal?.subcategory || "finance",
+      product_name: deal?.title || productName,
+      bank_name: deal?.merchant || deal?.bank_name || null,
       notes: `Deal: ${deal?.title || "Unknown"}`,
-      deal_id: deal?.id || null,
+      deal_id: deal?.is_finance_deal ? deal.id : null,
+      source_page: window.location.pathname,
+      device: /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "desktop",
+      user_agent: navigator.userAgent.slice(0, 500),
     });
 
     setSubmitting(false);
