@@ -37,7 +37,11 @@ const CashbackCalc = lazy(() => import("./pages/tools/CashbackCalc"));
 const RewardPointsCalc = lazy(() => import("./pages/tools/RewardPointsCalc"));
 const CreditCardFinder = lazy(() => import("./pages/tools/CreditCardFinder"));
 
-const { PrivacyPolicy, TermsConditions, AffiliateDisclosure, Disclaimer, CookiePolicy } = await import("./pages/PolicyPages");
+const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
+const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
+const AffiliateDisclosure = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.AffiliateDisclosure })));
+const Disclaimer = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.Disclaimer })));
+const CookiePolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.CookiePolicy })));
 
 const queryClient = new QueryClient();
 
