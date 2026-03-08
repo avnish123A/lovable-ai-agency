@@ -1,14 +1,22 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calculator, IndianRupee } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Calculator } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
+import FinancialScore from "@/components/gamification/FinancialScore";
+import AchievementBadge from "@/components/gamification/AchievementBadge";
+import AnimatedCounter from "@/components/gamification/AnimatedCounter";
+import AIInsight from "@/components/gamification/AIInsight";
+import WhatIfSlider from "@/components/gamification/WhatIfSlider";
+import ResultActions from "@/components/gamification/ResultActions";
+import StepIndicator from "@/components/gamification/StepIndicator";
 
 const EMICalculator = () => {
   const [amount, setAmount] = useState(500000);
   const [rate, setRate] = useState(10.5);
   const [tenure, setTenure] = useState(24);
+  const [step, setStep] = useState(0);
 
   const result = useMemo(() => {
     const r = rate / 12 / 100;
@@ -20,109 +28,185 @@ const EMICalculator = () => {
     return { emi, totalInterest, totalPayment };
   }, [amount, rate, tenure]);
 
+  const affordabilityScore = useMemo(() => {
+    const emiToLoanRatio = result.totalInterest / amount;
+    if (emiToLoanRatio < 0.1) return 95;
+    if (emiToLoanRatio < 0.2) return 80;
+    if (emiToLoanRatio < 0.35) return 60;
+    if (emiToLoanRatio < 0.5) return 40;
+    return 20;
+  }, [result, amount]);
+
+  const pieData = [
+    { name: "Principal", value: Math.round(amount) },
+    { name: "Interest", value: Math.round(result.totalInterest) },
+  ];
+  const COLORS = ["hsl(var(--primary))", "hsl(var(--destructive))"];
+
+  const yearlyBreakdown = useMemo(() => {
+    const r = rate / 12 / 100;
+    const monthlyEMI = result.emi;
+    const years = Math.ceil(tenure / 12);
+    return Array.from({ length: years }, (_, i) => {
+      const startMonth = i * 12;
+      const endMonth = Math.min((i + 1) * 12, tenure);
+      let principal = 0, interest = 0, balance = amount;
+      for (let m = 0; m < startMonth; m++) {
+        const intPart = balance * r;
+        balance -= (monthlyEMI - intPart);
+      }
+      for (let m = startMonth; m < endMonth; m++) {
+        const intPart = balance * r;
+        interest += intPart;
+        principal += (monthlyEMI - intPart);
+        balance -= (monthlyEMI - intPart);
+      }
+      return { year: `Y${i + 1}`, principal: Math.round(principal), interest: Math.round(interest) };
+    });
+  }, [amount, rate, tenure, result.emi]);
+
   const fmt = (n: number) =>
     new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
+
+  const showBadge = affordabilityScore >= 80;
+  const currentStep = result.emi > 0 ? 2 : amount > 50000 ? 1 : 0;
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <section className="pt-28 pb-24">
-        <div className="container mx-auto px-4 md:px-8 max-w-3xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+        <div className="container mx-auto px-4 md:px-8 max-w-5xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-3">
               <span className="text-gradient">EMI</span> Calculator
             </h1>
-            <p className="text-muted-foreground">Plan your loan repayment with our easy-to-use calculator.</p>
+            <p className="text-muted-foreground">Plan your loan repayment with AI-powered insights</p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="rounded-xl border border-border bg-card p-8"
-          >
-            <div className="space-y-8">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-foreground">Loan Amount</label>
-                  <span className="text-sm text-primary font-semibold">{fmt(amount)}</span>
-                </div>
-                <input
-                  type="range"
-                  min={50000}
-                  max={5000000}
-                  step={10000}
-                  value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                  className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>₹50K</span>
-                  <span>₹50L</span>
-                </div>
-              </div>
+          <StepIndicator steps={["Enter Details", "View Results", "Get Recommendations"]} current={currentStep} />
 
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-foreground">Interest Rate (% p.a.)</label>
-                  <span className="text-sm text-primary font-semibold">{rate}%</span>
-                </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={30}
-                  step={0.25}
-                  value={rate}
-                  onChange={(e) => setRate(Number(e.target.value))}
-                  className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>5%</span>
-                  <span>30%</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-foreground">Loan Tenure (months)</label>
-                  <span className="text-sm text-primary font-semibold">{tenure} months</span>
-                </div>
-                <input
-                  type="range"
-                  min={6}
-                  max={84}
-                  step={1}
-                  value={tenure}
-                  onChange={(e) => setTenure(Number(e.target.value))}
-                  className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>6 mo</span>
-                  <span>84 mo</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid lg:grid-cols-5 gap-8">
+            {/* Input Panel */}
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-2 rounded-2xl border border-border bg-card p-6 space-y-6">
               {[
-                { label: "Monthly EMI", value: fmt(result.emi), highlight: true },
-                { label: "Total Interest", value: fmt(result.totalInterest) },
-                { label: "Total Payment", value: fmt(result.totalPayment) },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className={`rounded-lg p-5 text-center ${
-                    item.highlight ? "bg-primary/10 border border-primary/20" : "bg-secondary"
-                  }`}
-                >
-                  <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
-                  <p className={`text-xl font-heading font-bold ${item.highlight ? "text-primary" : "text-foreground"}`}>
-                    {item.value}
-                  </p>
+                { label: "Loan Amount", value: amount, set: setAmount, min: 50000, max: 5000000, step: 10000, fmt: fmt(amount), minLabel: "₹50K", maxLabel: "₹50L" },
+                { label: "Interest Rate (% p.a.)", value: rate, set: setRate, min: 5, max: 30, step: 0.25, fmt: `${rate}%`, minLabel: "5%", maxLabel: "30%" },
+                { label: "Loan Tenure (months)", value: tenure, set: setTenure, min: 6, max: 84, step: 1, fmt: `${tenure} months`, minLabel: "6 mo", maxLabel: "84 mo" },
+              ].map((f) => (
+                <div key={f.label}>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-foreground">{f.label}</label>
+                    <span className="text-sm text-primary font-semibold">{f.fmt}</span>
+                  </div>
+                  <input type="range" min={f.min} max={f.max} step={f.step} value={f.value}
+                    onChange={(e) => f.set(Number(e.target.value))}
+                    className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-primary" />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>{f.minLabel}</span><span>{f.maxLabel}</span>
+                  </div>
                 </div>
               ))}
-            </div>
-          </motion.div>
+
+              {/* What-If Simulator */}
+              <WhatIfSlider
+                label="What if tenure changes?"
+                baseValue={tenure}
+                min={6} max={84} step={1}
+                format={(v) => `${v} months`}
+                onResult={(delta) => {
+                  if (delta === 0) return "";
+                  const r2 = rate / 12 / 100;
+                  const n2 = tenure + delta;
+                  const newEmi = (amount * r2 * Math.pow(1 + r2, n2)) / (Math.pow(1 + r2, n2) - 1);
+                  const diff = result.emi - newEmi;
+                  return diff > 0
+                    ? `EMI reduces by ${fmt(diff)}/month`
+                    : `EMI increases by ${fmt(Math.abs(diff))}/month`;
+                }}
+              />
+            </motion.div>
+
+            {/* Results Panel */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-3 space-y-5">
+              {/* EMI Result Cards */}
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "Monthly EMI", value: result.emi, highlight: true },
+                  { label: "Total Interest", value: result.totalInterest },
+                  { label: "Total Payment", value: result.totalPayment },
+                ].map((item) => (
+                  <div key={item.label}
+                    className={`rounded-xl p-4 text-center ${item.highlight ? "bg-primary/10 border border-primary/20" : "bg-secondary"}`}
+                  >
+                    <p className="text-[11px] text-muted-foreground mb-1">{item.label}</p>
+                    <AnimatedCounter value={Math.round(item.value)} prefix="₹"
+                      className={`text-lg font-heading font-bold ${item.highlight ? "text-primary" : "text-foreground"}`} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Charts Row */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-border bg-card p-4">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Payment Breakdown</p>
+                  <ResponsiveContainer width="100%" height={160}>
+                    <PieChart>
+                      <Pie data={pieData} cx="50%" cy="50%" innerRadius={45} outerRadius={65} dataKey="value" strokeWidth={2}>
+                        {pieData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
+                      </Pie>
+                      <Tooltip formatter={(v: number) => fmt(v)} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex justify-center gap-4 text-[10px] mt-1">
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-primary" />Principal</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-destructive" />Interest</span>
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-border bg-card p-4">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Yearly Breakdown</p>
+                  <ResponsiveContainer width="100%" height={160}>
+                    <BarChart data={yearlyBreakdown}>
+                      <XAxis dataKey="year" tick={{ fontSize: 10 }} />
+                      <YAxis hide />
+                      <Tooltip formatter={(v: number) => fmt(v)} />
+                      <Bar dataKey="principal" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="interest" fill="hsl(var(--destructive) / 0.5)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Financial Score */}
+              <div className="grid grid-cols-2 gap-4">
+                <FinancialScore score={affordabilityScore} label="Loan Affordability" sublabel={rate <= 12 ? "Great interest rate!" : "Consider negotiating rate"} />
+                <div className="space-y-3">
+                  <AIInsight type="ai" title="AI Recommendation"
+                    message={result.emi < 20000 ? `Your EMI of ${fmt(result.emi)} looks manageable. Keep EMI under 40% of income for healthy finances.` : `Your EMI is ${fmt(result.emi)}. Consider increasing tenure to reduce monthly burden.`}
+                  />
+                  <AIInsight type="tip" title="Pro Tip" delay={0.2}
+                    message={`Paying just ${fmt(result.emi * 0.1)} extra monthly can save you ${fmt(result.totalInterest * 0.15)} in interest!`}
+                  />
+                </div>
+              </div>
+
+              {/* Achievement */}
+              <AchievementBadge type="smart_planner" show={showBadge} message="You've chosen an affordable loan structure!" />
+
+              {/* Actions */}
+              <ResultActions
+                title="EMI Calculation Result"
+                data={{
+                  "Loan Amount": fmt(amount),
+                  "Interest Rate": `${rate}%`,
+                  "Tenure": `${tenure} months`,
+                  "Monthly EMI": fmt(result.emi),
+                  "Total Interest": fmt(result.totalInterest),
+                  "Total Payment": fmt(result.totalPayment),
+                }}
+                productLink="/loans"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
       <Footer />
