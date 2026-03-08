@@ -1,83 +1,64 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { TrendingUp } from "lucide-react";
+
+const footerLinks = {
+  Products: [
+    { label: "Credit Cards", href: "/credit-cards" },
+    { label: "Personal Loans", href: "/loans" },
+    { label: "Cashback Offers", href: "/cashback" },
+  ],
+  Tools: [
+    { label: "EMI Calculator", href: "/emi-calculator" },
+    { label: "Eligibility Checker", href: "/eligibility" },
+  ],
+  Company: [
+    { label: "About Us", href: "#" },
+    { label: "Blog", href: "#" },
+    { label: "Contact", href: "#" },
+  ],
+};
 
 const Footer = () => {
-  const linkVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.05, duration: 0.4 },
-    }),
-  };
-
   return (
-    <footer className="border-t border-border/30 py-20 relative overflow-hidden">
-      <div className="absolute bottom-0 left-1/4 w-[300px] h-[200px] bg-primary/3 blur-[150px] rounded-full" />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
-        >
+    <footer className="border-t border-border bg-card">
+      <div className="container mx-auto px-4 md:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
-            <Link to="/" className="flex items-center gap-2.5 font-heading text-lg font-bold text-foreground mb-5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-cta flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">N</span>
+            <Link to="/" className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-primary-foreground" />
               </div>
-              NEXUS<span className="text-gradient">AI</span>
+              <span className="text-xl font-heading font-bold text-foreground">
+                Money<span className="text-primary">Mint</span>
+              </span>
             </Link>
-            <p className="text-sm text-muted-foreground font-light leading-relaxed">
-              Expert team of AI specialists and professional developers building the future of digital.
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Find the best credit cards, loans, and cashback offers. Compare, choose, and save smarter.
             </p>
           </div>
-          <div>
-            <h4 className="font-heading font-semibold text-foreground text-sm mb-5">Services</h4>
-            <div className="space-y-3">
-              {["AI Services", "Web Development", "UI/UX Design", "Digital Marketing"].map((s, i) => (
-                <motion.div key={s} custom={i} variants={linkVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                  <Link to="/services" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-300 font-light">{s}</Link>
-                </motion.div>
-              ))}
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title}>
+              <h4 className="font-heading font-semibold text-foreground mb-4">{title}</h4>
+              <ul className="space-y-2.5">
+                {links.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+          ))}
+        </div>
+        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} MoneyMint. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors">Privacy</a>
+            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors">Terms</a>
+            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors">Disclaimer</a>
           </div>
-          <div>
-            <h4 className="font-heading font-semibold text-foreground text-sm mb-5">Company</h4>
-            <div className="space-y-3">
-              {[
-                { label: "About", to: "/about" },
-                { label: "Portfolio", to: "/portfolio" },
-                { label: "Contact", to: "/contact" },
-              ].map((link, i) => (
-                <motion.div key={link.label} custom={i} variants={linkVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                  <Link to={link.to} className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-300 font-light">{link.label}</Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="font-heading font-semibold text-foreground text-sm mb-5">Connect</h4>
-            <div className="space-y-3">
-              {["Twitter", "LinkedIn", "GitHub"].map((link, i) => (
-                <motion.div key={link} custom={i} variants={linkVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                  <a href="#" className="block text-sm text-muted-foreground hover:text-primary transition-colors duration-300 font-light">{link}</a>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-        <div className="divider-line w-full mb-8" />
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center text-xs text-muted-foreground"
-        >
-          © {new Date().getFullYear()} Nexus AI. All rights reserved.
-        </motion.p>
+        </div>
       </div>
     </footer>
   );
