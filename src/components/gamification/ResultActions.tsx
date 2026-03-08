@@ -1,5 +1,5 @@
 import { useState, RefObject } from "react";
-import { Share2, Bookmark, ShoppingCart, FileText, Image, Loader2 } from "lucide-react";
+import { Share2, Bookmark, ShoppingCart, Image, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -168,7 +168,7 @@ const ResultActions = ({
   productLink = "/credit-cards",
   captureRef,
 }: ResultActionsProps) => {
-  const [downloading, setDownloading] = useState<"txt" | "png" | null>(null);
+  const [downloading, setDownloading] = useState<"png" | null>(null);
   const [sharing, setSharing] = useState(false);
 
   const textSummary = `════════════════════════════════════════
@@ -188,21 +188,6 @@ apninivesh.in
   const getTarget = () =>
     captureRef?.current || (document.querySelector("[data-result-capture]") as HTMLElement | null);
 
-  const handleDownloadTXT = () => {
-    setDownloading("txt");
-    try {
-      const blob = new Blob([textSummary], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.download = `${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.txt`;
-      link.href = URL.createObjectURL(blob);
-      link.click();
-      URL.revokeObjectURL(link.href);
-      toast.success("Text file downloaded!");
-    } catch {
-      toast.error("Download failed");
-    }
-    setDownloading(null);
-  };
 
   const handleDownloadPNG = async () => {
     setDownloading("png");
@@ -284,10 +269,6 @@ apninivesh.in
 
   return (
     <div className="flex flex-wrap gap-2 mt-4">
-      <Button variant="outline" size="sm" onClick={handleDownloadTXT} disabled={downloading === "txt"} className="rounded-xl text-xs gap-1.5">
-        {downloading === "txt" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
-        TXT
-      </Button>
       <Button variant="outline" size="sm" onClick={handleDownloadPNG} disabled={downloading === "png"} className="rounded-xl text-xs gap-1.5">
         {downloading === "png" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Image className="w-3.5 h-3.5" />}
         Image
