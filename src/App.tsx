@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import KriyaAIChatbot from "./components/KriyaAIChatbot";
@@ -37,6 +38,18 @@ const CashbackCalc = lazy(() => import("./pages/tools/CashbackCalc"));
 const RewardPointsCalc = lazy(() => import("./pages/tools/RewardPointsCalc"));
 const CreditCardFinder = lazy(() => import("./pages/tools/CreditCardFinder"));
 
+// Admin pages
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminCreditCards = lazy(() => import("./pages/admin/AdminCreditCards"));
+const AdminLoans = lazy(() => import("./pages/admin/AdminLoans"));
+const AdminDeals = lazy(() => import("./pages/admin/AdminDeals"));
+const AdminCashback = lazy(() => import("./pages/admin/AdminCashback"));
+const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
+const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
+const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
+
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
 const AffiliateDisclosure = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.AffiliateDisclosure })));
@@ -60,6 +73,8 @@ const Loading = () => (
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
   return (
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} {...pageTransition}>
@@ -91,6 +106,19 @@ const AnimatedRoutes = () => {
             <Route path="/tools/cashback-calc" element={<CashbackCalc />} />
             <Route path="/tools/reward-points" element={<RewardPointsCalc />} />
             <Route path="/tools/card-finder" element={<CreditCardFinder />} />
+            {/* Admin */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="credit-cards" element={<AdminCreditCards />} />
+              <Route path="loans" element={<AdminLoans />} />
+              <Route path="deals" element={<AdminDeals />} />
+              <Route path="cashback" element={<AdminCashback />} />
+              <Route path="leads" element={<AdminLeads />} />
+              <Route path="messages" element={<AdminMessages />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+            {/* Legal */}
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsConditions />} />
             <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
@@ -110,8 +138,10 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AnimatedRoutes />
-        <KriyaAIChatbot />
+        <AuthProvider>
+          <AnimatedRoutes />
+          <KriyaAIChatbot />
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
