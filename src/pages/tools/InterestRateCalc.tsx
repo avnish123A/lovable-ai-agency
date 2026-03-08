@@ -1,17 +1,32 @@
 import { useState } from "react";
 import { Percent } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import AnimatedCounter from "@/components/gamification/AnimatedCounter";
+import AIInsight from "@/components/gamification/AIInsight";
+import ResultActions from "@/components/gamification/ResultActions";
+import StepIndicator from "@/components/gamification/StepIndicator";
 
 const InterestRateCalc = () => {
   const [principal, setPrincipal] = useState(100000);
   const [finalAmount, setFinalAmount] = useState(150000);
   const [years, setYears] = useState(3);
 
+  const interestEarned = finalAmount - principal;
   const simpleRate = ((finalAmount - principal) / (principal * years)) * 100;
   const compoundRate = (Math.pow(finalAmount / principal, 1 / years) - 1) * 100;
 
+  const growthData = Array.from({ length: years + 1 }, (_, i) => ({
+    year: `Y${i}`,
+    simple: Math.round(principal + (interestEarned / years) * i),
+    compound: Math.round(principal * Math.pow(finalAmount / principal, i / years)),
+  }));
+
+  const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
+
   return (
     <ToolLayout title="Interest Rate Calculator" description="Find the interest rate from principal, final amount and time" icon={<Percent className="w-7 h-7 text-primary" />}>
+      <StepIndicator steps={["Enter Amounts", "Set Period", "View Rates"]} current={finalAmount > principal ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
@@ -20,26 +35,50 @@ const InterestRateCalc = () => {
             { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
           ].map((f) => (
             <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Year") ? `${f.value} yrs` : `₹${f.value.toLocaleString("en-IN")}`}</span></div>
+              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span></div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
         </div>
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
-            <p className="text-sm text-muted-foreground mb-1">Simple Interest Rate</p>
-            <p className="text-3xl font-bold text-primary">{simpleRate.toFixed(2)}%</p>
-            <p className="text-xs text-muted-foreground mt-1">per annum</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 text-center">
+              <p className="text-xs text-muted-foreground mb-1">Simple Interest Rate</p>
+              <AnimatedCounter value={parseFloat(simpleRate.toFixed(1))} className="text-3xl font-bold text-primary" />
+              <p className="text-primary text-lg font-bold">% p.a.</p>
+            </div>
+            <div className="rounded-2xl border border-accent/20 bg-accent/5 p-5 text-center">
+              <p className="text-xs text-muted-foreground mb-1">Compound Rate</p>
+              <AnimatedCounter value={parseFloat(compoundRate.toFixed(1))} className="text-3xl font-bold text-accent" />
+              <p className="text-accent text-lg font-bold">% p.a.</p>
+            </div>
           </div>
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
-            <p className="text-sm text-muted-foreground mb-1">Compound Interest Rate</p>
-            <p className="text-3xl font-bold text-accent">{compoundRate.toFixed(2)}%</p>
-            <p className="text-xs text-muted-foreground mt-1">per annum (compounded annually)</p>
+
+          <div className="rounded-2xl border border-border bg-card p-5 text-center">
+            <p className="text-xs text-muted-foreground">Interest Earned</p>
+            <AnimatedCounter value={interestEarned} prefix="₹" className="text-2xl font-bold text-foreground" />
+            <p className="text-xs text-muted-foreground mt-1">over {years} year{years > 1 ? "s" : ""}</p>
+            <p className="text-xs text-primary font-semibold mt-1">Money grew {(finalAmount / principal).toFixed(2)}x</p>
           </div>
-          <div className="rounded-xl bg-secondary/50 p-4 text-xs text-muted-foreground">
-            <p className="font-semibold text-foreground mb-1">💡 Interest Earned</p>
-            <p>₹{(finalAmount - principal).toLocaleString("en-IN")} over {years} year{years > 1 ? "s" : ""}</p>
+
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-xs font-semibold text-muted-foreground mb-2">Growth Comparison</p>
+            <ResponsiveContainer width="100%" height={150}>
+              <AreaChart data={growthData}>
+                <XAxis dataKey="year" tick={{ fontSize: 10 }} /><YAxis hide />
+                <Tooltip formatter={(v: number) => fmt(v)} />
+                <Area type="monotone" dataKey="simple" fill="hsl(var(--primary) / 0.1)" stroke="hsl(var(--primary))" strokeWidth={2} />
+                <Area type="monotone" dataKey="compound" fill="hsl(var(--accent) / 0.1)" stroke="hsl(var(--accent))" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
+            <div className="flex justify-center gap-4 text-[10px] mt-1">
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-primary" />Simple</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent" />Compound</span>
+            </div>
           </div>
+
+          <AIInsight type="ai" title="AI Rate Analysis" message={compoundRate > 10 ? `${compoundRate.toFixed(1)}% compound return is excellent — better than most FDs. This could be equity-like growth.` : `${compoundRate.toFixed(1)}% compound return is moderate. FDs offer 6-8%, mutual funds can give 12%+.`} />
+          <ResultActions title="Interest Rate Analysis" data={{ "Principal": fmt(principal), "Final": fmt(finalAmount), "Years": `${years}`, "Simple Rate": `${simpleRate.toFixed(2)}%`, "Compound Rate": `${compoundRate.toFixed(2)}%`, "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
         </div>
       </div>
     </ToolLayout>
