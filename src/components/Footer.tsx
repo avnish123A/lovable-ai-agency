@@ -69,14 +69,14 @@ const Footer = () => {
                 <Wallet className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-heading font-bold text-foreground">
-                Kriya<span className="text-accent">pay</span>
+                Apni<span className="text-accent">Nivesh</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">
               Compare the best credit cards, loans, insurance & investment products from India's top banks.
             </p>
             <p className="text-xs text-muted-foreground">
-              A product by <strong className="text-foreground">Inspirex Technologies</strong>
+              A product by <strong className="text-foreground">Inspirex Technologies INC</strong>
             </p>
           </div>
           {Object.entries(footerLinks).map(([title, links]) => (
@@ -95,7 +95,7 @@ const Footer = () => {
           ))}
         </div>
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Kriyapay by Inspirex Technologies. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC. All rights reserved.</p>
           <div className="flex gap-6">
             <Link to="/privacy" className="text-xs text-muted-foreground hover:text-accent transition-colors">Privacy</Link>
             <Link to="/terms" className="text-xs text-muted-foreground hover:text-accent transition-colors">Terms</Link>

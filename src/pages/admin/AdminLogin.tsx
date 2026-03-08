@@ -49,7 +49,7 @@ const AdminLogin = () => {
             </div>
           </div>
           <CardTitle className="font-heading text-2xl">Admin Login</CardTitle>
-          <CardDescription>Sign in to manage Kriyapay</CardDescription>
+          <CardDescription>Sign in to manage ApniNivesh</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -58,7 +58,7 @@ const AdminLogin = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@kriyapay.co.in"
+                placeholder="admin@apninivesh.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

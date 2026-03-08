@@ -37,7 +37,7 @@ const AdminSidebar = () => {
             <Wallet className="w-5 h-5 text-primary-foreground" />
           </div>
           <div>
-            <span className="text-lg font-heading font-bold text-foreground">Kriya<span className="text-accent">pay</span></span>
+            <span className="text-lg font-heading font-bold text-foreground">Apni<span className="text-accent">Nivesh</span></span>
             <p className="text-[10px] text-muted-foreground -mt-0.5">Admin Panel</p>
           </div>
         </Link>

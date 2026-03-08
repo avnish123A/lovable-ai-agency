@@ -5,7 +5,7 @@ const testimonials = [
   {
     name: "Priya Sharma",
     role: "Software Engineer",
-    text: "Kriyapay helped me find a credit card with 5X rewards on online shopping. Saved ₹15,000 in the first year!",
+    text: "ApniNivesh helped me find a credit card with 5X rewards on online shopping. Saved ₹15,000 in the first year!",
     rating: 5,
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: "Ananya Patel",
     role: "Marketing Manager",
-    text: "I love the cashback offers section. I check Kriyapay before every major purchase now.",
+    text: "I love the cashback offers section. I check ApniNivesh before every major purchase now.",
     rating: 4,
   },
 ];
@@ -36,7 +36,7 @@ const TestimonialsSection = () => {
             Loved by <span className="text-gradient">50,000+</span> Users
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
-            See how Kriyapay is helping people save money and make smarter financial choices.
+            See how ApniNivesh is helping people save money and make smarter financial choices.
           </p>
         </motion.div>
 

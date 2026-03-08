@@ -34,10 +34,6 @@ const values = [
   },
 ];
 
-const team = [
-  { name: "Inspirex Technologies", role: "Development Partner", desc: "Building innovative fintech solutions for the Indian market." },
-];
-
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -48,11 +44,11 @@ const About = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-20 max-w-3xl mx-auto">
             <TrustBadge variant="partner" className="mb-6" />
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
-              About <span className="text-gradient">Kriyapay</span>
+              About <span className="text-gradient">ApniNivesh</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Kriyapay is India's trusted financial comparison platform built by{" "}
-              <strong className="text-foreground">Inspirex Technologies</strong>. We help millions of Indians
+              ApniNivesh is India's trusted financial comparison platform built by{" "}
+              <strong className="text-foreground">Inspirex Technologies INC</strong>. We help millions of Indians
               discover, compare, and apply for the best credit cards, loans, and insurance products from
               top banks — all in one place.
             </p>
@@ -136,18 +132,18 @@ const About = () => {
             className="text-center"
           >
             <h2 className="text-3xl font-heading font-bold mb-4">
-              Built by <span className="text-gradient">Inspirex Technologies</span>
+              Built by <span className="text-gradient">Inspirex Technologies INC</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-              Inspirex Technologies is a technology company focused on building innovative fintech
-              solutions for the Indian market. Kriyapay is our flagship product.
+              Inspirex Technologies INC is a technology company focused on building innovative fintech
+              solutions for the Indian market. ApniNivesh is our flagship product.
             </p>
             <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl border border-border bg-card shadow-card">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Building className="w-5 h-5 text-primary" />
               </div>
               <div className="text-left">
-                <p className="font-heading font-bold text-foreground text-sm">Inspirex Technologies</p>
+                <p className="font-heading font-bold text-foreground text-sm">Inspirex Technologies INC</p>
                 <p className="text-xs text-muted-foreground">Fintech Innovation Studio</p>
               </div>
             </div>

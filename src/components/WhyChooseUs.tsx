@@ -20,7 +20,7 @@ const reasons = [
   {
     icon: Headphones,
     title: "24/7 AI Support",
-    desc: "Ask KriyaAI questions about any financial product.",
+    desc: "Ask NiveshAI questions about any financial product.",
   },
 ];
 
@@ -48,7 +48,7 @@ const WhyChooseUs = () => {
             viewport={{ once: true }}
           >
             <span className="inline-block px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6">
-              Why Kriyapay
+              Why ApniNivesh
             </span>
             <h2 className="text-4xl md:text-5xl font-heading font-extrabold mb-8 text-foreground leading-tight tracking-tight">
               Trusted Financial{" "}

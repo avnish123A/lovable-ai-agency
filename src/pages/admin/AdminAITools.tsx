@@ -186,7 +186,7 @@ const AdminAITools = () => {
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="secondary" className="text-xs">
               <Sparkles className="w-3 h-3 mr-1" />
-              AI-Powered by Kriyapay
+              AI-Powered by ApniNivesh
             </Badge>
             <span className="text-xs text-muted-foreground">Edit any output before publishing</span>
           </div>
