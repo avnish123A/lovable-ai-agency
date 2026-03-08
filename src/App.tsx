@@ -168,7 +168,7 @@ const App = () => (
         <AuthProvider>
           <MaintenanceProvider>
             <AnimatedRoutes />
-            <KriyaAIChatbot />
+            <NiveshAIChatbot />
           </MaintenanceProvider>
         </AuthProvider>
       </BrowserRouter>
