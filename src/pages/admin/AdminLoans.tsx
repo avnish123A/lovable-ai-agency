@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2, Loader2, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ const AdminLoans = () => {
   const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [form, setForm] = useState({
     loan_name: "", bank_name: "", interest_rate: 0, min_amount: 50000, max_amount: 5000000,
     min_tenure: 12, max_tenure: 60, processing_fee: "", apply_link: "",
@@ -140,6 +142,16 @@ const AdminLoans = () => {
     fetchLoans();
   };
 
+  const handleBulkDelete = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Delete ${selected.size} loans?`)) return;
+    for (const id of selected) { await supabase.from("loan_products").delete().eq("id", id); }
+    toast.success(`${selected.size} loans deleted`); setSelected(new Set()); fetchLoans();
+  };
+
+  const toggleSelect = (id: string) => setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const toggleAll = () => setSelected(prev => prev.size === filtered.length ? new Set() : new Set(filtered.map(l => l.id)));
+
   const fields = [
     { key: "loan_name", label: "Loan Name *", type: "text" },
     { key: "bank_name", label: "Bank Name *", type: "text" },
@@ -154,14 +166,15 @@ const AdminLoans = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-heading font-bold">Loan Products</h1>
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
+          {selected.size > 0 && <Button variant="destructive" size="sm" onClick={handleBulkDelete}><Trash2 className="w-4 h-4 mr-1" /> Delete {selected.size}</Button>}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Search loans..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 w-64"
+              className="pl-9 w-48"
             />
           </div>
           <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) resetForm(); }}>
@@ -275,10 +288,12 @@ const AdminLoans = () => {
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
       ) : (
         <div className="grid gap-3">
+          {filtered.length > 0 && <div className="flex items-center gap-2 text-sm text-muted-foreground"><Checkbox checked={selected.size === filtered.length && filtered.length > 0} onCheckedChange={toggleAll} /><span>Select All ({filtered.length})</span></div>}
           {filtered.map((loan) => (
-            <Card key={loan.id}>
+            <Card key={loan.id} className={selected.has(loan.id) ? "border-primary" : ""}>
               <CardContent className="flex items-center justify-between py-4">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <Checkbox checked={selected.has(loan.id)} onCheckedChange={() => toggleSelect(loan.id)} />
                   {loan.image_url ? (
                     <img src={loan.image_url} alt={loan.loan_name} className="w-16 h-10 object-contain rounded" />
                   ) : (
