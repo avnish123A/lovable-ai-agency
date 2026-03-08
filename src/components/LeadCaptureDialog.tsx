@@ -105,9 +105,16 @@ const LeadCaptureDialog = ({ open, onOpenChange, deal, onSuccess }: LeadCaptureD
       console.error("Supabase lead error:", error);
     }
 
-    toast({ title: "Your application has been submitted successfully.", description: "We'll contact you shortly with the best offers." });
-    onOpenChange(false);
+    toast({ title: "Your application has been submitted successfully.", description: "Redirecting you to the partner page..." });
     setForm({ name: "", email: "", phone: "", city: "", salary_range: "" });
+    onOpenChange(false);
+
+    // Redirect to partner tracking link after form submission
+    if (deal?.tracking_link) {
+      setTimeout(() => {
+        window.open(deal.tracking_link, "_blank", "noopener");
+      }, 500);
+    }
     onSuccess();
   };
 
