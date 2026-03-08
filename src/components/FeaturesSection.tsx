@@ -1,25 +1,31 @@
 import { motion } from "framer-motion";
-import { CreditCard, Landmark, Shield, Gift, Calculator, CheckCircle } from "lucide-react";
+import { CreditCard, Landmark, Shield, Gift, Calculator, CheckCircle, Sparkles, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const features = [
   {
     icon: CreditCard,
-    title: "Credit Cards",
+    title: "Compare Products",
     desc: "Compare 100+ credit cards from HDFC, ICICI, Axis, SBI & more with instant approval.",
     href: "/credit-cards",
   },
   {
-    icon: Landmark,
-    title: "Personal Loans",
-    desc: "Find the best interest rates from top banks and get pre-approved in minutes.",
-    href: "/loans",
+    icon: Sparkles,
+    title: "AI Recommendations",
+    desc: "Get personalized product suggestions powered by AI based on your profile.",
+    href: "/tools/card-finder",
   },
   {
     icon: Shield,
-    title: "Insurance",
-    desc: "Compare health, life, and vehicle insurance plans from trusted providers.",
-    href: "/finance-deals?filter=insurance",
+    title: "Trusted Partners",
+    desc: "We partner with India's top banks and verified financial institutions.",
+    href: "/about",
+  },
+  {
+    icon: Calculator,
+    title: "Smart Tools",
+    desc: "17+ financial calculators to plan EMI, savings, investments and more.",
+    href: "/tools",
   },
   {
     icon: Gift,
@@ -28,16 +34,10 @@ const features = [
     href: "/cashback",
   },
   {
-    icon: Calculator,
-    title: "EMI Calculator",
-    desc: "Plan your finances with our advanced EMI calculator for loans and purchases.",
-    href: "/emi-calculator",
-  },
-  {
-    icon: CheckCircle,
-    title: "Eligibility Check",
-    desc: "Instantly check your eligibility for credit cards and loans. No credit impact.",
-    href: "/eligibility",
+    icon: TrendingUp,
+    title: "Financial Guidance",
+    desc: "Learn about credit scores, KYC, and smart money management strategies.",
+    href: "/tools/credit-score",
   },
 ];
 
@@ -83,8 +83,8 @@ const FeaturesSection = () => {
                 to={f.href}
                 className="block p-6 rounded-2xl border border-border bg-card shadow-card card-hover group"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/8 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
-                  <f.icon className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                  <f.icon className="w-6 h-6 text-accent" />
                 </div>
                 <h3 className="text-lg font-heading font-semibold text-foreground mb-2">{f.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
