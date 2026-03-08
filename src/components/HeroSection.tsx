@@ -220,13 +220,15 @@ const HeroSection = () => {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-3xl scale-110" />
-              <Suspense fallback={
-                <div className="relative w-full h-[500px] flex items-center justify-center">
-                  <div className="w-80 h-48 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/10 animate-pulse" />
-                </div>
-              }>
-                <CreditCard3D />
-              </Suspense>
+              <Card3DErrorBoundary>
+                <Suspense fallback={
+                  <div className="relative w-full h-[500px] flex items-center justify-center">
+                    <div className="w-80 h-48 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/10 animate-pulse" />
+                  </div>
+                }>
+                  <CreditCard3D />
+                </Suspense>
+              </Card3DErrorBoundary>
             </div>
           </motion.div>
         </div>
