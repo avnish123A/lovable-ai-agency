@@ -41,7 +41,7 @@ const FinanceTools = () => (
             Finance <span className="text-gradient">Power Tools</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            17+ interactive calculators and AI-powered tools to help you make smarter financial decisions.
+            20+ interactive calculators and AI-powered tools to help you make smarter financial decisions.
           </p>
         </motion.div>
 
