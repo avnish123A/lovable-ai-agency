@@ -1,5 +1,5 @@
 import { useState, RefObject } from "react";
-import { Share2, Bookmark, ShoppingCart, FileText, Image, Loader2 } from "lucide-react";
+import { Share2, Bookmark, ShoppingCart, Image, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
