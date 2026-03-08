@@ -2,22 +2,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const brands = [
-  { name: "HDFC Bank", logo: "https://companieslogo.com/img/orig/HDB-bb6320d2.png" },
-  { name: "ICICI Bank", logo: "https://companieslogo.com/img/orig/IBN-83cf8e93.png" },
-  { name: "Axis Bank", logo: "https://companieslogo.com/img/orig/AXISBANK.NS-27e68e77.png" },
-  { name: "SBI", logo: "https://companieslogo.com/img/orig/SBIN.NS-7a431f4f.png" },
-  { name: "Kotak", logo: "https://companieslogo.com/img/orig/KOTAKBANK.NS-1cba0ccc.png" },
-  { name: "IndusInd Bank", logo: "https://companieslogo.com/img/orig/INDUSINDBK.NS-f82eb4b9.png" },
-  { name: "Yes Bank", logo: "https://companieslogo.com/img/orig/YESBANK.NS-08b36fa5.png" },
-  { name: "Bajaj Finserv", logo: "https://companieslogo.com/img/orig/BAJFINANCE.NS-d8e019c6.png" },
-  { name: "Paytm", logo: "https://companieslogo.com/img/orig/PAYTM.NS-1511ad11.png" },
-  { name: "PhonePe", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" },
-  { name: "Razorpay", logo: "https://razorpay.com/assets/razorpay-logo.svg" },
-  { name: "CRED", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/CRED_app_logo.png/480px-CRED_app_logo.png" },
-  { name: "Groww", logo: "https://companieslogo.com/img/orig/GROWW.NS-42862e53.png" },
-  { name: "Zerodha", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Zerodha_logo.svg/512px-Zerodha_logo.svg.png" },
-  { name: "PolicyBazaar", logo: "https://companieslogo.com/img/orig/POLICYBZR.NS-a04c0b4b.png" },
-  { name: "BankBazaar", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/BankBazaar_Logo.svg/512px-BankBazaar_Logo.svg.png" },
+  { name: "HDFC Bank", logo: "/logos/hdfc.png" },
+  { name: "ICICI Bank", logo: "/logos/icici.png" },
+  { name: "Axis Bank", logo: "/logos/axis.png" },
+  { name: "SBI", logo: "/logos/sbi.png" },
+  { name: "Kotak", logo: "/logos/kotak.png" },
+  { name: "IndusInd Bank", logo: "/logos/indusind.png" },
+  { name: "Yes Bank", logo: "/logos/yesbank.png" },
+  { name: "Bajaj Finserv", logo: "/logos/bajaj.png" },
+  { name: "Paytm", logo: "/logos/paytm.png" },
+  { name: "PhonePe", logo: "/logos/phonepe.png" },
 ];
 
 const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
