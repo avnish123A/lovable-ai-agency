@@ -6,9 +6,9 @@ import AnimatedCounter from "@/components/gamification/AnimatedCounter";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getTaxInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
-// FY 2025-26 New Regime slabs (Budget 2025)
 const newSlabs = [
   { min: 0, max: 400000, rate: 0 },
   { min: 400001, max: 800000, rate: 5 },
@@ -19,7 +19,6 @@ const newSlabs = [
   { min: 2400001, max: Infinity, rate: 30 },
 ];
 
-// FY 2025-26 Old Regime slabs
 const oldSlabs = [
   { min: 0, max: 250000, rate: 0 },
   { min: 250001, max: 500000, rate: 5 },
@@ -51,10 +50,8 @@ const TaxEstimator = () => {
   const [income, setIncome] = useState(1200000);
   const [deductions, setDeductions] = useState(150000);
   const [regime, setRegime] = useState<"new" | "old">("new");
-  const standardDeduction = INDIAN_BENCHMARKS.standardDeduction; // ₹75,000
+  const standardDeduction = INDIAN_BENCHMARKS.standardDeduction;
 
-  // New regime: Standard deduction applies, no 80C etc.
-  // Old regime: Standard deduction (₹50K for old) + user deductions
   const taxableNew = Math.max(0, income - standardDeduction);
   const taxableOld = Math.max(0, income - 50000 - deductions);
   const taxable = regime === "new" ? taxableNew : taxableOld;
@@ -62,12 +59,10 @@ const TaxEstimator = () => {
 
   const { tax, slabBreakdown } = useMemo(() => {
     const result = calcTax(taxable, slabs);
-    // Section 87A rebate: New regime - if taxable <= ₹7L, full rebate up to ₹25K
     if (regime === "new" && taxable <= 700000) {
       const rebate = Math.min(result.tax, 25000);
       return { tax: Math.max(0, result.tax - rebate), slabBreakdown: result.breakdown };
     }
-    // Old regime - if taxable <= ₹5L, rebate up to ₹12,500
     if (regime === "old" && taxable <= 500000) {
       const rebate = Math.min(result.tax, 12500);
       return { tax: Math.max(0, result.tax - rebate), slabBreakdown: result.breakdown };
@@ -82,7 +77,6 @@ const TaxEstimator = () => {
   const monthlyTax = totalTax / 12;
   const takeHome = income - totalTax;
 
-  // Compare regimes
   const { tax: altTax } = calcTax(regime === "new" ? taxableOld : taxableNew, regime === "new" ? oldSlabs : newSlabs);
   const altCess = altTax * 0.04;
   const altTotal = altTax + altCess;
@@ -110,18 +104,11 @@ const TaxEstimator = () => {
               </button>
             ))}
           </div>
-          <div>
-            <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Annual Income (₹)</span><span className="font-semibold">{fmt(income)}</span></div>
-            <input type="range" min={0} max={10000000} step={50000} value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full accent-primary" />
-          </div>
+          <EditableSliderInput label="Annual Income" value={income} onChange={setIncome} min={0} max={10000000} step={50000} prefix="₹" />
           {regime === "old" && (
-            <div>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Deductions (80C, 80D, HRA etc.)</span><span className="font-semibold">{fmt(deductions)}</span></div>
-              <input type="range" min={0} max={500000} step={10000} value={deductions} onChange={(e) => setDeductions(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
+            <EditableSliderInput label="Deductions (80C, 80D, HRA etc.)" value={deductions} onChange={setDeductions} min={0} max={500000} step={10000} prefix="₹" />
           )}
 
-          {/* Regime comparison */}
           <div className={`rounded-xl border p-4 ${regimeSavings > 0 ? "border-accent/30 bg-accent/5" : regimeSavings < 0 ? "border-amber-500/30 bg-amber-500/5" : "border-border bg-secondary/50"}`}>
             <p className="text-xs font-semibold text-foreground mb-1">📊 Regime Comparison</p>
             <p className="text-xs text-muted-foreground">

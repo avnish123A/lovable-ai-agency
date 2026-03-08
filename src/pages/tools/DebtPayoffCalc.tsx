@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getDebtInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const DebtPayoffCalc = () => {
@@ -46,16 +47,9 @@ const DebtPayoffCalc = () => {
       <StepIndicator steps={["Enter Debt", "Set Payment", "Payoff Plan"]} current={payment > minPayment ? 2 : 1} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Total Debt (₹)", value: debt, set: setDebt, min: 10000, max: 10000000, step: 10000 },
-            { label: `Interest Rate (Avg PL: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`, value: rate, set: setRate, min: 5, max: 40, step: 0.5 },
-            { label: "Monthly Payment (₹)", value: payment, set: setPayment, min: Math.ceil(minPayment), max: debt, step: 1000 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Rate") ? `${f.value}%` : fmt(f.value)}</span></div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Total Debt" value={debt} onChange={setDebt} min={10000} max={10000000} step={10000} prefix="₹" />
+          <EditableSliderInput label={`Interest Rate (Avg PL: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`} value={rate} onChange={setRate} min={5} max={40} step={0.5} suffix="%" />
+          <EditableSliderInput label="Monthly Payment" value={payment} onChange={setPayment} min={Math.ceil(minPayment)} max={debt} step={1000} prefix="₹" />
           <WhatIfSlider label="What if you pay more?" baseValue={payment} min={Math.ceil(minPayment)} max={debt} step={1000}
             onResult={(delta) => {
               if (delta <= 0) return "Increase payment to save time";

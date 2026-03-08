@@ -6,40 +6,35 @@ import AchievementBadge from "@/components/gamification/AchievementBadge";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from "recharts";
 import { getCreditScoreInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const factors = [
-  { key: "payment", label: "On-Time Payments (%)", min: 0, max: 100, step: 5, default: 90, weight: 0.35, emoji: "💳" },
-  { key: "utilization", label: "Credit Utilization (%)", min: 0, max: 100, step: 5, default: 30, weight: 0.30, emoji: "📊", inverse: true },
-  { key: "history", label: "Credit History (years)", min: 0, max: 30, step: 1, default: 5, weight: 0.15, emoji: "📅" },
-  { key: "mix", label: "Credit Mix (1-5)", min: 1, max: 5, step: 1, default: 3, weight: 0.10, emoji: "🔀" },
-  { key: "inquiries", label: "Hard Inquiries (last 2yr)", min: 0, max: 10, step: 1, default: 2, weight: 0.10, emoji: "🔍", inverse: true },
+  { key: "payment", label: "On-Time Payments", min: 0, max: 100, step: 5, default: 90, weight: 0.35, emoji: "💳", suffix: "%" },
+  { key: "utilization", label: "Credit Utilization", min: 0, max: 100, step: 5, default: 30, weight: 0.30, emoji: "📊", inverse: true, suffix: "%" },
+  { key: "history", label: "Credit History", min: 0, max: 30, step: 1, default: 5, weight: 0.15, emoji: "📅", suffix: " yrs" },
+  { key: "mix", label: "Credit Mix (1-5)", min: 1, max: 5, step: 1, default: 3, weight: 0.10, emoji: "🔀", suffix: "" },
+  { key: "inquiries", label: "Hard Inquiries (last 2yr)", min: 0, max: 10, step: 1, default: 2, weight: 0.10, emoji: "🔍", inverse: true, suffix: "" },
 ];
 
-// CIBIL-aligned scoring algorithm
 function calculateCIBILScore(vals: number[]) {
-  // CIBIL uses 300-900 range with weighted factors
   let total = 0;
   factors.forEach((f, i) => {
     let normalized: number;
     if (f.key === "payment") {
-      // Payment history: Non-linear — missing even 1% has outsized impact
       normalized = vals[i] >= 99 ? 1 : vals[i] >= 95 ? 0.9 : vals[i] >= 90 ? 0.75 : vals[i] >= 80 ? 0.5 : vals[i] / 100 * 0.4;
     } else if (f.key === "utilization") {
-      // Utilization: Sweet spot is 1-30%, 0% is slightly penalized
       if (vals[i] === 0) normalized = 0.85;
       else if (vals[i] <= 10) normalized = 1;
       else if (vals[i] <= 30) normalized = 0.9;
       else if (vals[i] <= 50) normalized = 0.6;
       else normalized = Math.max(0, 1 - vals[i] / 100);
     } else if (f.key === "history") {
-      // History: Logarithmic — first 7 years matter most
       normalized = Math.min(1, Math.log(1 + vals[i]) / Math.log(31));
     } else if (f.key === "mix") {
       normalized = (vals[i] - 1) / 4;
     } else {
-      // Inquiries: Each one hurts, but diminishing
       normalized = Math.max(0, 1 - vals[i] * 0.12);
     }
     total += normalized * f.weight;
@@ -71,6 +66,12 @@ const CreditScoreSimulator = () => {
     payment: values[0], utilization: values[1], history: values[2], mix: values[3], inquiries: values[4],
   }), [score, values]);
 
+  const updateValue = (index: number, newVal: number) => {
+    const n = [...values];
+    n[index] = newVal;
+    setValues(n);
+  };
+
   return (
     <ToolLayout title="Credit Score Simulator" description="See how your financial habits impact your CIBIL credit score (300-900)" icon={<Shield className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Adjust Factors", "View Score", "Get Tips"]} current={score !== prevScore ? 2 : values.some((v, i) => v !== factors[i].default) ? 1 : 0} />
@@ -78,14 +79,14 @@ const CreditScoreSimulator = () => {
         <div className="space-y-4">
           {factors.map((f, i) => (
             <div key={f.key} className="rounded-xl border border-border bg-card p-4">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">{f.emoji} {f.label}</span>
-                <span className="font-semibold">{values[i]}{f.key === "payment" || f.key === "utilization" ? "%" : ""}</span>
-              </div>
-              <input
-                type="range" min={f.min} max={f.max} step={f.step} value={values[i]}
-                onChange={(e) => { const n = [...values]; n[i] = Number(e.target.value); setValues(n); }}
-                className="w-full accent-primary"
+              <EditableSliderInput
+                label={`${f.emoji} ${f.label}`}
+                value={values[i]}
+                onChange={(v) => updateValue(i, v)}
+                min={f.min}
+                max={f.max}
+                step={f.step}
+                suffix={f.suffix}
               />
               <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
                 <span>{f.min}</span>

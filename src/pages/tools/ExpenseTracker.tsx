@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import AchievementBadge from "@/components/gamification/AchievementBadge";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const CATEGORIES = [
   { label: "Food", emoji: "🍽️", color: "hsl(142,71%,45%)" },
@@ -45,6 +46,13 @@ const ExpenseTracker = () => {
     setNewAmount("");
   };
 
+  const updateExpenseAmount = (id: number, newAmt: string) => {
+    const parsed = Number(newAmt);
+    if (!isNaN(parsed) && parsed >= 0) {
+      setExpenses((p) => p.map((e) => e.id === id ? { ...e, amount: parsed } : e));
+    }
+  };
+
   const removeExpense = (id: number) => setExpenses((p) => p.filter((e) => e.id !== id));
 
   const catTotals = CATEGORIES.map((c) => ({
@@ -66,13 +74,7 @@ const ExpenseTracker = () => {
       <StepIndicator steps={["Set Income", "Add Expenses", "Analyze"]} current={expenses.length > 3 ? 2 : expenses.length > 0 ? 1 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          <div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-muted-foreground">Monthly Income</span>
-              <span className="font-semibold">{fmt(income)}</span>
-            </div>
-            <input type="range" min={10000} max={500000} step={5000} value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full accent-primary" />
-          </div>
+          <EditableSliderInput label="Monthly Income" value={income} onChange={setIncome} min={10000} max={500000} step={5000} prefix="₹" />
 
           <div className="rounded-xl border border-border bg-card p-4 space-y-3">
             <p className="text-sm font-semibold">Add Expense</p>
@@ -97,8 +99,14 @@ const ExpenseTracker = () => {
                     <span>{cat?.emoji}</span>
                     <span className="text-sm font-medium">{e.name}</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold">{fmt(e.amount)}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-muted-foreground text-xs">₹</span>
+                    <input
+                      type="number"
+                      value={e.amount}
+                      onChange={(ev) => updateExpenseAmount(e.id, ev.target.value)}
+                      className="w-20 text-right text-sm font-semibold rounded-md border border-border bg-background px-1.5 py-0.5 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
+                    />
                     <button onClick={() => removeExpense(e.id)} className="text-muted-foreground hover:text-destructive transition-colors">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>

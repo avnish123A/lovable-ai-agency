@@ -11,12 +11,12 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const EMICalculator = () => {
   const [amount, setAmount] = useState(500000);
   const [rate, setRate] = useState(10.5);
   const [tenure, setTenure] = useState(24);
-  const [step, setStep] = useState(0);
 
   const result = useMemo(() => {
     const r = rate / 12 / 100;
@@ -86,28 +86,11 @@ const EMICalculator = () => {
           <StepIndicator steps={["Enter Details", "View Results", "Get Recommendations"]} current={currentStep} />
 
           <div className="grid lg:grid-cols-5 gap-8">
-            {/* Input Panel */}
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-2 rounded-2xl border border-border bg-card p-6 space-y-6">
-              {[
-                { label: "Loan Amount", value: amount, set: setAmount, min: 50000, max: 5000000, step: 10000, fmt: fmt(amount), minLabel: "₹50K", maxLabel: "₹50L" },
-                { label: "Interest Rate (% p.a.)", value: rate, set: setRate, min: 5, max: 30, step: 0.25, fmt: `${rate}%`, minLabel: "5%", maxLabel: "30%" },
-                { label: "Loan Tenure (months)", value: tenure, set: setTenure, min: 6, max: 84, step: 1, fmt: `${tenure} months`, minLabel: "6 mo", maxLabel: "84 mo" },
-              ].map((f) => (
-                <div key={f.label}>
-                  <div className="flex justify-between mb-2">
-                    <label className="text-sm font-medium text-foreground">{f.label}</label>
-                    <span className="text-sm text-primary font-semibold">{f.fmt}</span>
-                  </div>
-                  <input type="range" min={f.min} max={f.max} step={f.step} value={f.value}
-                    onChange={(e) => f.set(Number(e.target.value))}
-                    className="w-full h-2 bg-secondary rounded-full appearance-none cursor-pointer accent-primary" />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>{f.minLabel}</span><span>{f.maxLabel}</span>
-                  </div>
-                </div>
-              ))}
+              <EditableSliderInput label="Loan Amount" value={amount} onChange={setAmount} min={50000} max={5000000} step={10000} prefix="₹" />
+              <EditableSliderInput label="Interest Rate (% p.a.)" value={rate} onChange={setRate} min={5} max={30} step={0.25} suffix="%" />
+              <EditableSliderInput label="Loan Tenure" value={tenure} onChange={setTenure} min={6} max={84} step={1} suffix=" mo" />
 
-              {/* What-If Simulator */}
               <WhatIfSlider
                 label="What if tenure changes?"
                 baseValue={tenure}
@@ -126,9 +109,7 @@ const EMICalculator = () => {
               />
             </motion.div>
 
-            {/* Results Panel */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-3 space-y-5">
-              {/* EMI Result Cards */}
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: "Monthly EMI", value: result.emi, highlight: true },
@@ -145,7 +126,6 @@ const EMICalculator = () => {
                 ))}
               </div>
 
-              {/* Charts Row */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-2xl border border-border bg-card p-4">
                   <p className="text-xs font-semibold text-muted-foreground mb-2">Payment Breakdown</p>
@@ -176,7 +156,6 @@ const EMICalculator = () => {
                 </div>
               </div>
 
-              {/* Financial Score */}
               <div className="grid grid-cols-2 gap-4">
                 <FinancialScore score={affordabilityScore} label="Loan Affordability" sublabel={rate <= 12 ? "Great interest rate!" : "Consider negotiating rate"} />
                 <div className="space-y-3">
@@ -189,10 +168,8 @@ const EMICalculator = () => {
                 </div>
               </div>
 
-              {/* Achievement */}
               <AchievementBadge type="smart_planner" show={showBadge} message="You've chosen an affordable loan structure!" />
 
-              {/* Actions */}
               <ResultActions
                 title="EMI Calculation Result"
                 data={{

@@ -6,6 +6,7 @@ import AnimatedCounter from "@/components/gamification/AnimatedCounter";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const CompoundInterestCalc = () => {
   const [principal, setPrincipal] = useState(100000);
@@ -33,19 +34,9 @@ const CompoundInterestCalc = () => {
       <StepIndicator steps={["Enter Amount", "Choose Rate", "View Growth"]} current={principal > 1000 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Principal Amount (₹)", value: principal, set: setPrincipal, min: 1000, max: 10000000, step: 1000 },
-            { label: "Annual Interest Rate (%)", value: rate, set: setRate, min: 1, max: 30, step: 0.5 },
-            { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold text-foreground">{f.label.includes("Rate") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
-              </div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Principal Amount" value={principal} onChange={setPrincipal} min={1000} max={10000000} step={1000} prefix="₹" />
+          <EditableSliderInput label="Annual Interest Rate" value={rate} onChange={setRate} min={1} max={30} step={0.5} suffix="%" />
+          <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
           <div>
             <span className="text-sm text-muted-foreground">Compounding Frequency</span>
             <div className="flex gap-2 mt-2">
