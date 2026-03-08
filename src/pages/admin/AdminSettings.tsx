@@ -129,12 +129,40 @@ const AdminSettings = () => {
     setSavingComingSoon(false);
   };
 
-  const toggleMaintenance = () => {
-    setMaintenance({ ...maintenance, enabled: !maintenance.enabled });
+  const toggleMaintenance = async () => {
+    const updated = { ...maintenance, enabled: !maintenance.enabled };
+    setMaintenance(updated);
+    setSaving(true);
+    const { error } = await supabase
+      .from("site_settings")
+      .upsert(
+        { key: "maintenance_mode", value: updated, updated_at: new Date().toISOString() },
+        { onConflict: "key" }
+      );
+    if (error) toast.error("Failed to toggle maintenance mode");
+    else toast.success(updated.enabled ? "Maintenance mode ON — site is now restricted" : "Maintenance mode OFF — site is live");
+    setSaving(false);
   };
 
-  const toggleComingSoon = () => {
-    setComingSoon({ ...comingSoon, enabled: !comingSoon.enabled });
+  const toggleComingSoon = async () => {
+    const updated = { ...comingSoon, enabled: !comingSoon.enabled };
+    setComingSoon(updated);
+    setSavingComingSoon(true);
+    const target = new Date(
+      Date.now() +
+      updated.countdown_days * 86400000 +
+      updated.countdown_hours * 3600000 +
+      updated.countdown_minutes * 60000
+    ).toISOString();
+    const { error } = await supabase
+      .from("site_settings")
+      .upsert(
+        { key: "coming_soon_mode", value: { ...updated, countdown_target: target }, updated_at: new Date().toISOString() },
+        { onConflict: "key" }
+      );
+    if (error) toast.error("Failed to toggle coming soon mode");
+    else toast.success(updated.enabled ? "Coming Soon mode ON — site redirects to launch page" : "Coming Soon mode OFF — site is live");
+    setSavingComingSoon(false);
   };
 
   const toggleCategoryCS = async (key: CategoryKey) => {
