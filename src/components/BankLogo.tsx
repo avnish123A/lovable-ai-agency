@@ -26,7 +26,7 @@ const BankLogo = ({ bankName, size = "md", className = "" }: BankLogoProps) => {
     .slice(0, 2)
     .toUpperCase();
 
-  if (imgError) {
+  if (imgError || !logoUrl) {
     return (
       <div className={`${s.container} rounded-xl bg-primary/10 flex items-center justify-center font-heading font-bold text-primary ${s.icon} ${className}`}>
         {initials}
