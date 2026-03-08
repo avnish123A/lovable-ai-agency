@@ -1,9 +1,8 @@
 import { useState, RefObject } from "react";
-import { Download, Share2, Bookmark, ShoppingCart, FileText, Image, Loader2 } from "lucide-react";
+import { Share2, Bookmark, ShoppingCart, FileText, Image, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import jsPDF from "jspdf";
 
 interface ResultActionsProps {
   title: string;
@@ -13,7 +12,7 @@ interface ResultActionsProps {
   captureRef?: RefObject<HTMLDivElement>;
 }
 
-/** Convert all SVG elements inside a container to inline canvas for html2canvas compatibility */
+/** Convert SVGs to canvas for proper capture */
 async function svgsToCanvas(container: HTMLElement) {
   const svgs = container.querySelectorAll("svg");
   const replacements: { svg: SVGSVGElement; canvas: HTMLCanvasElement }[] = [];
@@ -24,7 +23,7 @@ async function svgsToCanvas(container: HTMLElement) {
       if (rect.width === 0 || rect.height === 0) continue;
 
       const canvas = document.createElement("canvas");
-      const scale = 2;
+      const scale = 3;
       canvas.width = rect.width * scale;
       canvas.height = rect.height * scale;
       canvas.style.width = `${rect.width}px`;
@@ -33,12 +32,11 @@ async function svgsToCanvas(container: HTMLElement) {
       const ctx = canvas.getContext("2d")!;
       ctx.scale(scale, scale);
 
-      // Serialize SVG with computed styles
       const clonedSvg = svg.cloneNode(true) as SVGSVGElement;
       clonedSvg.setAttribute("width", String(rect.width));
       clonedSvg.setAttribute("height", String(rect.height));
-      
-      // Inline all computed styles
+
+      // Inline computed styles for accurate rendering
       const allEls = clonedSvg.querySelectorAll("*");
       const origEls = svg.querySelectorAll("*");
       allEls.forEach((el, i) => {
@@ -61,22 +59,18 @@ async function svgsToCanvas(container: HTMLElement) {
 
       ctx.drawImage(img, 0, 0, rect.width, rect.height);
       URL.revokeObjectURL(url);
-
       replacements.push({ svg: svg as SVGSVGElement, canvas });
     } catch {
-      // Skip SVGs that fail
+      // Skip failed SVGs
     }
   }
 
-  // Replace SVGs with canvases
   for (const { svg, canvas } of replacements) {
     svg.parentNode?.replaceChild(canvas, svg);
   }
-
   return replacements;
 }
 
-/** Restore SVGs after capture */
 function restoreSvgs(replacements: { svg: SVGSVGElement; canvas: HTMLCanvasElement }[]) {
   for (const { svg, canvas } of replacements) {
     canvas.parentNode?.replaceChild(svg, canvas);
@@ -84,74 +78,85 @@ function restoreSvgs(replacements: { svg: SVGSVGElement; canvas: HTMLCanvasEleme
 }
 
 async function captureElement(el: HTMLElement): Promise<HTMLCanvasElement> {
-  // Dynamically import html2canvas
   const html2canvas = (await import("html2canvas")).default;
-
-  // Pre-convert SVGs to canvas elements
   const replacements = await svgsToCanvas(el);
-
   try {
-    const canvas = await html2canvas(el, {
+    return await html2canvas(el, {
       backgroundColor: "#ffffff",
-      scale: 2,
+      scale: 3,
       useCORS: true,
       logging: false,
       allowTaint: true,
       removeContainer: true,
     });
-    return canvas;
   } finally {
     restoreSvgs(replacements);
   }
 }
 
-/** Add branded watermark to a canvas */
-function addWatermark(canvas: HTMLCanvasElement, title: string): HTMLCanvasElement {
-  const headerH = 60;
-  const footerH = 40;
-  const padding = 20;
+/** Add premium branded frame to captured canvas */
+function addBrandedFrame(canvas: HTMLCanvasElement, title: string): HTMLCanvasElement {
+  const pad = 40;
+  const headerH = 80;
+  const footerH = 50;
   const out = document.createElement("canvas");
-  out.width = canvas.width + padding * 2;
-  out.height = canvas.height + headerH + footerH + padding * 2;
+  out.width = canvas.width + pad * 2;
+  out.height = canvas.height + headerH + footerH + pad;
   const ctx = out.getContext("2d")!;
 
-  // Background
+  // White bg
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, out.width, out.height);
 
-  // Header bar
+  // Header gradient
   const grad = ctx.createLinearGradient(0, 0, out.width, 0);
-  grad.addColorStop(0, "#1e40af");
+  grad.addColorStop(0, "#0f172a");
+  grad.addColorStop(0.5, "#1e3a5f");
   grad.addColorStop(1, "#2563eb");
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, out.width, headerH);
 
-  // Brand name
+  // Brand
   ctx.fillStyle = "#ffffff";
-  ctx.font = "bold 28px system-ui, -apple-system, sans-serif";
-  ctx.fillText("ApniNivesh.in", padding + 10, 28);
-  ctx.font = "14px system-ui, sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,0.85)";
-  ctx.fillText(title, padding + 10, 48);
+  ctx.font = "bold 36px system-ui, -apple-system, sans-serif";
+  ctx.fillText("ApniNivesh.in", pad, 35);
+  ctx.font = "16px system-ui, sans-serif";
+  ctx.fillStyle = "rgba(255,255,255,0.8)";
+  ctx.fillText(title, pad, 60);
 
-  // Date on right
+  // Date
   const dateStr = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
   ctx.textAlign = "right";
-  ctx.fillText(dateStr, out.width - padding - 10, 48);
+  ctx.fillStyle = "rgba(255,255,255,0.7)";
+  ctx.font = "14px system-ui, sans-serif";
+  ctx.fillText(dateStr, out.width - pad, 60);
   ctx.textAlign = "left";
 
-  // Content
-  ctx.drawImage(canvas, padding, headerH + padding / 2);
+  // Content with subtle shadow
+  ctx.shadowColor = "rgba(0,0,0,0.08)";
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 4;
+  ctx.drawImage(canvas, pad, headerH + pad / 2);
+  ctx.shadowColor = "transparent";
 
   // Footer
-  const footerY = headerH + padding / 2 + canvas.height + padding;
-  ctx.fillStyle = "#f1f5f9";
+  const footerY = out.height - footerH;
+  ctx.fillStyle = "#f8fafc";
   ctx.fillRect(0, footerY, out.width, footerH);
+  ctx.strokeStyle = "#e2e8f0";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, footerY);
+  ctx.lineTo(out.width, footerY);
+  ctx.stroke();
+
   ctx.fillStyle = "#94a3b8";
-  ctx.font = "12px system-ui, sans-serif";
-  ctx.fillText("Generated on apninivesh.in | For informational purposes only", padding + 10, footerY + 25);
+  ctx.font = "13px system-ui, sans-serif";
+  ctx.fillText("Generated on apninivesh.in • For informational purposes only", pad, footerY + 30);
   ctx.textAlign = "right";
-  ctx.fillText("apninivesh.in", out.width - padding - 10, footerY + 25);
+  ctx.font = "bold 13px system-ui, sans-serif";
+  ctx.fillStyle = "#2563eb";
+  ctx.fillText("apninivesh.in", out.width - pad, footerY + 30);
 
   return out;
 }
@@ -163,112 +168,38 @@ const ResultActions = ({
   productLink = "/credit-cards",
   captureRef,
 }: ResultActionsProps) => {
-  const [downloading, setDownloading] = useState<"pdf" | "png" | null>(null);
+  const [downloading, setDownloading] = useState<"txt" | "png" | null>(null);
   const [sharing, setSharing] = useState(false);
 
-  const textSummary = `${title}\n${"─".repeat(30)}\n${Object.entries(data)
-    .map(([k, v]) => `${k}: ${v}`)
-    .join("\n")}\n\nGenerated on ApniNivesh.in | apninivesh.in`;
+  const textSummary = `════════════════════════════════════════
+  ${title}
+════════════════════════════════════════
+
+${Object.entries(data)
+  .map(([k, v]) => `  ${k.padEnd(20)} : ${v}`)
+  .join("\n")}
+
+────────────────────────────────────────
+Generated on ${new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+ApniNivesh.in | India's Trusted Finance Platform
+apninivesh.in
+════════════════════════════════════════`;
 
   const getTarget = () =>
     captureRef?.current || (document.querySelector("[data-result-capture]") as HTMLElement | null);
 
-  const handleDownloadPDF = async () => {
-    setDownloading("pdf");
+  const handleDownloadTXT = () => {
+    setDownloading("txt");
     try {
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-
-      // ── Header ──
-      pdf.setFillColor(30, 64, 175);
-      pdf.rect(0, 0, pageW, 30, "F");
-      // Gradient overlay
-      pdf.setFillColor(37, 99, 235);
-      pdf.rect(pageW / 2, 0, pageW / 2, 30, "F");
-
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(20);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("ApniNivesh.in", 14, 14);
-      pdf.setFontSize(9);
-      pdf.setFont("helvetica", "normal");
-      pdf.text("India's Trusted Finance Platform", 14, 22);
-      const dateStr = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
-      pdf.text(dateStr, pageW - 14, 22, { align: "right" });
-
-      // ── Title ──
-      pdf.setTextColor(15, 23, 42);
-      pdf.setFontSize(16);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(title, 14, 44);
-
-      // Divider
-      pdf.setDrawColor(226, 232, 240);
-      pdf.setLineWidth(0.5);
-      pdf.line(14, 48, pageW - 14, 48);
-
-      // ── Data Table ──
-      let y = 56;
-      const entries = Object.entries(data);
-      pdf.setFontSize(11);
-
-      entries.forEach(([k, v], i) => {
-        if (i % 2 === 0) {
-          pdf.setFillColor(248, 250, 252);
-          pdf.roundedRect(14, y - 5.5, pageW - 28, 11, 2, 2, "F");
-        }
-        pdf.setFont("helvetica", "normal");
-        pdf.setTextColor(100, 116, 139);
-        pdf.text(k, 20, y);
-        pdf.setFont("helvetica", "bold");
-        pdf.setTextColor(15, 23, 42);
-        pdf.text(v, pageW - 20, y, { align: "right" });
-        y += 12;
-      });
-
-      // ── Chart Image ──
-      const target = getTarget();
-      if (target) {
-        try {
-          const canvas = await captureElement(target);
-          const imgData = canvas.toDataURL("image/png");
-          const imgW = pageW - 28;
-          const imgH = (canvas.height / canvas.width) * imgW;
-
-          y += 6;
-          // Check if chart fits on current page
-          if (y + imgH > pageH - 25) {
-            pdf.addPage();
-            y = 20;
-          }
-
-          // Border around chart
-          pdf.setDrawColor(226, 232, 240);
-          pdf.setLineWidth(0.3);
-          pdf.roundedRect(13, y - 1, imgW + 2, imgH + 2, 3, 3, "S");
-          pdf.addImage(imgData, "PNG", 14, y, imgW, imgH);
-          y += imgH + 8;
-        } catch {
-          // Chart capture failed silently
-        }
-      }
-
-      // ── Footer ──
-      const footerY = pageH - 12;
-      pdf.setDrawColor(226, 232, 240);
-      pdf.line(14, footerY - 4, pageW - 14, footerY - 4);
-      pdf.setFontSize(7);
-      pdf.setFont("helvetica", "normal");
-      pdf.setTextColor(148, 163, 184);
-      pdf.text("This is for informational purposes only. Verify details with respective banks/institutions.", 14, footerY);
-      pdf.text("apninivesh.in", pageW - 14, footerY, { align: "right" });
-
-      pdf.save(`${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.pdf`);
-      toast.success("PDF downloaded successfully!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to generate PDF");
+      const blob = new Blob([textSummary], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.download = `${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.txt`;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      URL.revokeObjectURL(link.href);
+      toast.success("Text file downloaded!");
+    } catch {
+      toast.error("Download failed");
     }
     setDownloading(null);
   };
@@ -282,20 +213,18 @@ const ResultActions = ({
       if (target) {
         canvas = await captureElement(target);
       } else {
-        // Fallback: render data as styled HTML
+        // Fallback
         const fallback = document.createElement("div");
         fallback.style.cssText = "padding:32px;background:#fff;width:600px;font-family:system-ui";
-        fallback.innerHTML = `<h2 style="font-size:20px;font-weight:bold;color:#1e3a5f;margin-bottom:16px">${title}</h2>
-          <div>${Object.entries(data).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0"><span style="color:#64748b">${k}</span><strong style="color:#0f172a">${v}</strong></div>`).join("")}</div>`;
+        fallback.innerHTML = `<h2 style="font-size:20px;font-weight:bold;color:#0f172a;margin-bottom:16px">${title}</h2>
+          <div>${Object.entries(data).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e8f0"><span style="color:#64748b">${k}</span><strong style="color:#0f172a">${v}</strong></div>`).join("")}</div>`;
         document.body.appendChild(fallback);
         const html2canvas = (await import("html2canvas")).default;
-        canvas = await html2canvas(fallback, { backgroundColor: "#fff", scale: 2 });
+        canvas = await html2canvas(fallback, { backgroundColor: "#fff", scale: 3 });
         document.body.removeChild(fallback);
       }
 
-      // Add branded watermark
-      const branded = addWatermark(canvas, title);
-
+      const branded = addBrandedFrame(canvas, title);
       const link = document.createElement("a");
       link.download = `${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.png`;
       link.href = branded.toDataURL("image/png");
@@ -312,19 +241,14 @@ const ResultActions = ({
     setSharing(true);
     try {
       let files: File[] = [];
-
       const target = getTarget();
       if (target) {
         try {
           const canvas = await captureElement(target);
-          const branded = addWatermark(canvas, title);
-          const blob = await new Promise<Blob>((resolve) =>
-            branded.toBlob((b) => resolve(b!), "image/png")
-          );
+          const branded = addBrandedFrame(canvas, title);
+          const blob = await new Promise<Blob>((r) => branded.toBlob((b) => r(b!), "image/png"));
           files = [new File([blob], `${title.replace(/\s+/g, "-").toLowerCase()}.png`, { type: "image/png" })];
-        } catch {
-          // Continue without image
-        }
+        } catch { /* continue */ }
       }
 
       if (navigator.share) {
@@ -336,13 +260,13 @@ const ResultActions = ({
         toast.success("Shared successfully!");
       } else {
         await navigator.clipboard.writeText(textSummary);
-        toast.success("Result copied to clipboard!");
+        toast.success("Copied to clipboard!");
       }
     } catch (err: any) {
       if (err?.name !== "AbortError") {
         try {
           await navigator.clipboard.writeText(textSummary);
-          toast.success("Result copied to clipboard!");
+          toast.success("Copied to clipboard!");
         } catch {
           toast.error("Failed to share");
         }
@@ -355,14 +279,14 @@ const ResultActions = ({
     const saved = JSON.parse(localStorage.getItem("apninivesh_saved") || "[]");
     saved.push({ title, data, date: new Date().toISOString() });
     localStorage.setItem("apninivesh_saved", JSON.stringify(saved));
-    toast.success("Result saved locally!");
+    toast.success("Saved locally!");
   };
 
   return (
     <div className="flex flex-wrap gap-2 mt-4">
-      <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={downloading === "pdf"} className="rounded-xl text-xs gap-1.5">
-        {downloading === "pdf" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
-        PDF
+      <Button variant="outline" size="sm" onClick={handleDownloadTXT} disabled={downloading === "txt"} className="rounded-xl text-xs gap-1.5">
+        {downloading === "txt" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
+        TXT
       </Button>
       <Button variant="outline" size="sm" onClick={handleDownloadPNG} disabled={downloading === "png"} className="rounded-xl text-xs gap-1.5">
         {downloading === "png" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Image className="w-3.5 h-3.5" />}
