@@ -246,6 +246,32 @@ const CashbackTracker = () => {
                               </div>
                             </div>
 
+                            {/* Public Note / Rejection Reason */}
+                            {req.public_note && (
+                              <div className={`mt-4 p-3 rounded-xl border text-sm flex items-start gap-2 ${
+                                req.status === "rejected" 
+                                  ? "bg-red-500/5 border-red-500/20 text-red-700" 
+                                  : req.status === "approved" 
+                                    ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-700"
+                                    : "bg-muted/50 border-border text-muted-foreground"
+                              }`}>
+                                {req.status === "rejected" ? <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" /> : <MessageCircle className="w-4 h-4 shrink-0 mt-0.5" />}
+                                <div>
+                                  <p className="font-medium text-xs mb-0.5">{req.status === "rejected" ? "Reason" : "Note from ApniNivesh"}</p>
+                                  <p>{req.public_note}</p>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Estimated Payout Date */}
+                            {req.estimated_payout_date && req.status !== "paid" && req.status !== "rejected" && (
+                              <div className="mt-3 flex items-center gap-2 text-sm bg-primary/5 border border-primary/10 rounded-lg px-3 py-2">
+                                <CalendarClock className="w-4 h-4 text-primary shrink-0" />
+                                <span className="text-muted-foreground">Estimated payout:</span>
+                                <span className="font-semibold text-primary">{new Date(req.estimated_payout_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</span>
+                              </div>
+                            )}
+
                             {/* Timeline */}
                             {(req.approved_at || req.paid_at) && (
                               <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground flex-wrap">
