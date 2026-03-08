@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Tag, Users, MessageSquare, TrendingUp, Gift } from "lucide-react";
+import { CreditCard, Users, MessageSquare, TrendingUp, Gift } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface Stats {
   totalCards: number;
   totalLoans: number;
-  totalDeals: number;
   totalLeads: number;
   totalMessages: number;
   totalCashback: number;
@@ -16,16 +15,15 @@ interface Stats {
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState<Stats>({
-    totalCards: 0, totalLoans: 0, totalDeals: 0, totalLeads: 0, totalMessages: 0, totalCashback: 0,
+    totalCards: 0, totalLoans: 0, totalLeads: 0, totalMessages: 0, totalCashback: 0,
   });
   const [recentLeads, setRecentLeads] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [cards, loans, deals, leads, messages, cashback] = await Promise.all([
+      const [cards, loans, leads, messages, cashback] = await Promise.all([
         supabase.from("credit_cards").select("id", { count: "exact", head: true }),
         supabase.from("loan_products").select("id", { count: "exact", head: true }),
-        supabase.from("finance_deals").select("id", { count: "exact", head: true }),
         supabase.from("leads").select("id", { count: "exact", head: true }),
         supabase.from("contact_messages").select("id", { count: "exact", head: true }),
         supabase.from("cashback_offers").select("id", { count: "exact", head: true }),
@@ -34,7 +32,6 @@ const AdminDashboard = () => {
       setStats({
         totalCards: cards.count ?? 0,
         totalLoans: loans.count ?? 0,
-        totalDeals: deals.count ?? 0,
         totalLeads: leads.count ?? 0,
         totalMessages: messages.count ?? 0,
         totalCashback: cashback.count ?? 0,
@@ -57,7 +54,6 @@ const AdminDashboard = () => {
   const statCards = [
     { label: "Credit Cards", value: stats.totalCards, icon: CreditCard, color: "text-blue-500" },
     { label: "Loan Products", value: stats.totalLoans, icon: TrendingUp, color: "text-emerald-500" },
-    { label: "Finance Deals", value: stats.totalDeals, icon: Tag, color: "text-violet-500" },
     { label: "Leads", value: stats.totalLeads, icon: Users, color: "text-amber-500" },
     { label: "Messages", value: stats.totalMessages, icon: MessageSquare, color: "text-rose-500" },
     { label: "Cashback Offers", value: stats.totalCashback, icon: Gift, color: "text-teal-500" },
