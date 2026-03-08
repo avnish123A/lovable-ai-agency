@@ -7,9 +7,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { MaintenanceProvider, useMaintenanceMode } from "@/contexts/MaintenanceContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import KriyaAIChatbot from "./components/KriyaAIChatbot";
+import MaintenancePage from "./pages/Maintenance";
 
 // Lazy load pages
 const CreditCards = lazy(() => import("./pages/CreditCards"));
@@ -23,6 +25,7 @@ const CompareProducts = lazy(() => import("./pages/CompareProducts"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const FinanceTools = lazy(() => import("./pages/FinanceTools"));
+const ComingSoon = lazy(() => import("./pages/ComingSoon"));
 const CompoundInterestCalc = lazy(() => import("./pages/tools/CompoundInterestCalc"));
 const HomeLoanCalc = lazy(() => import("./pages/tools/HomeLoanCalc"));
 const PersonalLoanCalc = lazy(() => import("./pages/tools/PersonalLoanCalc"));
@@ -76,6 +79,17 @@ const Loading = () => (
 const AnimatedRoutes = () => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const { isMaintenanceMode, settings, loading } = useMaintenanceMode();
+
+  // Show maintenance page for non-admin routes when maintenance mode is enabled
+  if (!loading && isMaintenanceMode && !isAdmin) {
+    return (
+      <MaintenancePage 
+        message={settings.message} 
+        estimatedTime={settings.estimated_time} 
+      />
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">
@@ -94,6 +108,7 @@ const AnimatedRoutes = () => {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/tools" element={<FinanceTools />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/tools/compound-interest" element={<CompoundInterestCalc />} />
             <Route path="/tools/home-loan" element={<HomeLoanCalc />} />
             <Route path="/tools/personal-loan" element={<PersonalLoanCalc />} />
@@ -143,8 +158,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AnimatedRoutes />
-          <KriyaAIChatbot />
+          <MaintenanceProvider>
+            <AnimatedRoutes />
+            <KriyaAIChatbot />
+          </MaintenanceProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
