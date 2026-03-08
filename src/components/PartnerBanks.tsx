@@ -14,6 +14,10 @@ const brands = [
   { name: "PhonePe", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" },
   { name: "Razorpay", logo: "https://razorpay.com/assets/razorpay-logo.svg" },
   { name: "CRED", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/CRED_app_logo.png/480px-CRED_app_logo.png" },
+  { name: "Groww", logo: "https://companieslogo.com/img/orig/GROWW.NS-42862e53.png" },
+  { name: "Zerodha", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Zerodha_logo.svg/512px-Zerodha_logo.svg.png" },
+  { name: "PolicyBazaar", logo: "https://companieslogo.com/img/orig/POLICYBZR.NS-a04c0b4b.png" },
+  { name: "BankBazaar", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/BankBazaar_Logo.svg/512px-BankBazaar_Logo.svg.png" },
 ];
 
 const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
