@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Loader2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import ImageUpload from "@/components/admin/ImageUpload";
 
@@ -17,6 +17,7 @@ const AdminCreditCards = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
   const [form, setForm] = useState({
     card_name: "", bank_name: "", card_type: "rewards", annual_fee: 0, joining_fee: 0,
     reward_points: "", cashback_rate: "", welcome_bonus: "", apply_link: "",
@@ -64,6 +65,48 @@ const AdminCreditCards = () => {
       features: (card.features || []).join(", "), image_url: card.image_url || "",
     });
     setDialogOpen(true);
+  };
+
+  const handleAIEnhance = async () => {
+    if (!form.card_name.trim() || !form.bank_name.trim()) {
+      toast.error("Enter card name and bank name first");
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-product-enhance", {
+        body: {
+          product_type: "credit_card",
+          product_name: form.card_name,
+          bank_name: form.bank_name,
+          existing_data: {
+            annual_fee: form.annual_fee,
+            cashback_rate: form.cashback_rate,
+            reward_points: form.reward_points,
+            features: form.features.split(",").map(f => f.trim()).filter(Boolean),
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.data) {
+        const enhanced = data.data;
+        setForm(prev => ({
+          ...prev,
+          cashback_rate: enhanced.cashback_rate || prev.cashback_rate,
+          reward_points: enhanced.reward_points || prev.reward_points,
+          welcome_bonus: enhanced.welcome_bonus || prev.welcome_bonus,
+          features: enhanced.features?.join(", ") || prev.features,
+        }));
+        toast.success("AI enhanced product details!");
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "AI enhancement failed");
+    }
+    setAiLoading(false);
   };
 
   const handleSave = async () => {
@@ -128,14 +171,55 @@ const AdminCreditCards = () => {
                     value={form.image_url}
                     onChange={(url) => setForm({ ...form, image_url: url })}
                     folder="credit-cards"
+                    maxWidth={800}
+                    maxHeight={500}
                   />
                 </div>
+
+                {/* Basic fields */}
                 {[
                   { key: "card_name", label: "Card Name *", type: "text" },
                   { key: "bank_name", label: "Bank Name *", type: "text" },
                   { key: "card_type", label: "Card Type", type: "text" },
                   { key: "annual_fee", label: "Annual Fee (₹)", type: "number" },
                   { key: "joining_fee", label: "Joining Fee (₹)", type: "number" },
+                ].map((f) => (
+                  <div key={f.key} className="space-y-1">
+                    <Label className="text-xs">{f.label}</Label>
+                    <Input
+                      type={f.type}
+                      value={(form as any)[f.key]}
+                      onChange={(e) => setForm({ ...form, [f.key]: f.type === "number" ? Number(e.target.value) : e.target.value })}
+                    />
+                  </div>
+                ))}
+
+                {/* AI Enhancement Section */}
+                <div className="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold text-primary">AI Enhancement</span>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={handleAIEnhance}
+                      disabled={aiLoading}
+                      className="gap-2"
+                    >
+                      {aiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                      {aiLoading ? "Enhancing..." : "Enhance with AI"}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    AI will generate compelling descriptions, rewards info, and features based on the card details.
+                  </p>
+                </div>
+
+                {/* AI-enhanced fields */}
+                {[
                   { key: "reward_points", label: "Reward Points", type: "text" },
                   { key: "cashback_rate", label: "Cashback Rate", type: "text" },
                   { key: "welcome_bonus", label: "Welcome Bonus", type: "text" },
@@ -153,10 +237,16 @@ const AdminCreditCards = () => {
                     />
                   </div>
                 ))}
+
                 <div className="space-y-1">
                   <Label className="text-xs">Features (comma separated)</Label>
-                  <Textarea value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} />
+                  <Textarea 
+                    value={form.features} 
+                    onChange={(e) => setForm({ ...form, features: e.target.value })}
+                    rows={3}
+                  />
                 </div>
+
                 <Button onClick={handleSave} className="w-full">{editing ? "Update" : "Add"} Card</Button>
               </div>
             </DialogContent>
