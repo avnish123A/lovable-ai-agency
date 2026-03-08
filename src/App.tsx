@@ -118,6 +118,7 @@ const AnimatedRoutes = () => {
               <Route path="cashback" element={<AdminCashback />} />
               <Route path="leads" element={<AdminLeads />} />
               <Route path="messages" element={<AdminMessages />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="ai-tools" element={<AdminAITools />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
