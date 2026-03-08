@@ -42,6 +42,9 @@ const CreditScoreGuide = lazy(() => import("./pages/tools/CreditScoreGuide"));
 const CashbackCalc = lazy(() => import("./pages/tools/CashbackCalc"));
 const RewardPointsCalc = lazy(() => import("./pages/tools/RewardPointsCalc"));
 const CreditCardFinder = lazy(() => import("./pages/tools/CreditCardFinder"));
+const CreditScoreSimulator = lazy(() => import("./pages/tools/CreditScoreSimulator"));
+const ExpenseTracker = lazy(() => import("./pages/tools/ExpenseTracker"));
+const RetirementPlanner = lazy(() => import("./pages/tools/RetirementPlanner"));
 
 // Admin pages
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
@@ -126,6 +129,9 @@ const AnimatedRoutes = () => {
             <Route path="/tools/cashback-calc" element={<CashbackCalc />} />
             <Route path="/tools/reward-points" element={<RewardPointsCalc />} />
             <Route path="/tools/card-finder" element={<CreditCardFinder />} />
+            <Route path="/tools/credit-score-simulator" element={<CreditScoreSimulator />} />
+            <Route path="/tools/expense-tracker" element={<ExpenseTracker />} />
+            <Route path="/tools/retirement-planner" element={<RetirementPlanner />} />
             {/* Admin */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
