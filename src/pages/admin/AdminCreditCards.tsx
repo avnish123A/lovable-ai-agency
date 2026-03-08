@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2, Loader2, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ const AdminCreditCards = () => {
   const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [form, setForm] = useState({
     card_name: "", bank_name: "", card_type: "rewards", annual_fee: 0, joining_fee: 0,
     reward_points: "", cashback_rate: "", welcome_bonus: "", apply_link: "",
@@ -142,6 +144,16 @@ const AdminCreditCards = () => {
     fetchCards();
   };
 
+  const handleBulkDelete = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Delete ${selected.size} cards?`)) return;
+    for (const id of selected) { await supabase.from("credit_cards").delete().eq("id", id); }
+    toast.success(`${selected.size} cards deleted`); setSelected(new Set()); fetchCards();
+  };
+
+  const toggleSelect = (id: string) => setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const toggleAll = () => setSelected(prev => prev.size === filtered.length ? new Set() : new Set(filtered.map(c => c.id)));
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -258,10 +270,12 @@ const AdminCreditCards = () => {
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
       ) : (
         <div className="grid gap-3">
+          {filtered.length > 0 && <div className="flex items-center gap-2 text-sm text-muted-foreground"><Checkbox checked={selected.size === filtered.length && filtered.length > 0} onCheckedChange={toggleAll} /><span>Select All ({filtered.length})</span></div>}
           {filtered.map((card) => (
-            <Card key={card.id}>
+            <Card key={card.id} className={selected.has(card.id) ? "border-primary" : ""}>
               <CardContent className="flex items-center justify-between py-4">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <Checkbox checked={selected.has(card.id)} onCheckedChange={() => toggleSelect(card.id)} />
                   {card.image_url ? (
                     <img src={card.image_url} alt={card.card_name} className="w-16 h-10 object-contain rounded" />
                   ) : (
