@@ -34,7 +34,7 @@ const BankAccounts = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Best Bank Accounts in India 2026 | KriyaPay" description="Compare savings, current & salary accounts from top banks." canonical="https://kriyapay.lovable.app/bank-accounts" />
+      <SEOHead title="Best Bank Accounts in India 2026 | ApniNivesh" description="Compare savings, current & salary accounts from top banks." canonical="https://apninivesh.in/bank-accounts" />
       <Navbar />
       {isComingSoon ? (
         <CategoryComingSoon title="Bank Accounts" description="Best bank account comparisons are on the way!" />

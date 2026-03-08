@@ -31,7 +31,7 @@ serve(async (req) => {
       city: city || "",
       income: income || "",
       product: product || "",
-      source: "kriyapay.co.in",
+      source: "apninivesh.in",
       user_agent: req.headers.get("user-agent") || "",
       ip: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip") || "",
     };
