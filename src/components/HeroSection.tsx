@@ -1,11 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Play, TrendingUp, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-const CreditCard3D = lazy(() => import("@/components/CreditCard3D"));
+// Error boundary to catch dynamic import failures for 3D component
+class Card3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return null; // silently hide 3D card on error
+    return this.props.children;
+  }
+}
+
+const CreditCard3D = lazy(() =>
+  import("@/components/CreditCard3D").catch(() => ({
+    default: () => null, // fallback if chunk fails to load
+  }))
+);
 
 const rotatingWords = [
   { text: "Credit Cards", color: "from-primary to-accent" },
@@ -206,13 +220,15 @@ const HeroSection = () => {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-3xl scale-110" />
-              <Suspense fallback={
-                <div className="relative w-full h-[500px] flex items-center justify-center">
-                  <div className="w-80 h-48 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/10 animate-pulse" />
-                </div>
-              }>
-                <CreditCard3D />
-              </Suspense>
+              <Card3DErrorBoundary>
+                <Suspense fallback={
+                  <div className="relative w-full h-[500px] flex items-center justify-center">
+                    <div className="w-80 h-48 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/10 animate-pulse" />
+                  </div>
+                }>
+                  <CreditCard3D />
+                </Suspense>
+              </Card3DErrorBoundary>
             </div>
           </motion.div>
         </div>
