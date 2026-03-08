@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  LayoutDashboard, CreditCard, Tag, Users, Building, Settings, LogOut, Wallet, MessageSquare, Gift, Sparkles, BarChart3, Key
+  LayoutDashboard, CreditCard, Users, Building, Settings, LogOut, Wallet, MessageSquare, Gift, Sparkles, BarChart3, Key
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
