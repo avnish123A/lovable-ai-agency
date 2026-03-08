@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { BadgeDollarSign, ExternalLink, RefreshCw, Filter } from "lucide-react";
+import { BadgeDollarSign, ExternalLink, RefreshCw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
 const SUBCATEGORIES = [
   { value: "all", label: "All Deals" },
@@ -19,6 +20,8 @@ const FinanceDeals = () => {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [leadDeal, setLeadDeal] = useState<any>(null);
+  const [leadOpen, setLeadOpen] = useState(false);
 
   const fetchDeals = async () => {
     setLoading(true);
@@ -54,16 +57,18 @@ const FinanceDeals = () => {
     setSyncing(false);
   };
 
-  const trackClick = async (deal: any) => {
-    try {
-      await supabase.functions.invoke("track-click", {
-        body: { deal_id: deal.id },
-      });
-    } catch (e) {
-      console.error("Track error:", e);
-    }
-    if (deal.tracking_link) {
-      window.open(deal.tracking_link, "_blank", "noopener");
+  const handleApply = (deal: any) => {
+    setLeadDeal(deal);
+    setLeadOpen(true);
+  };
+
+  const handleLeadSuccess = () => {
+    // Track click and redirect
+    if (leadDeal) {
+      supabase.functions.invoke("track-click", { body: { deal_id: leadDeal.id } }).catch(() => {});
+      if (leadDeal.tracking_link) {
+        window.open(leadDeal.tracking_link, "_blank", "noopener");
+      }
     }
   };
 
@@ -81,7 +86,7 @@ const FinanceDeals = () => {
               Latest <span className="text-gradient">Finance Deals</span>
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">
-              Auto-updated finance offers from top banks and financial institutions via Cuelinks.
+              Auto-updated finance offers with AI-powered descriptions from top banks and financial institutions.
             </p>
             <Button
               variant="outline"
@@ -149,8 +154,19 @@ const FinanceDeals = () => {
                     </div>
                   </div>
 
-                  {deal.description && (
-                    <p className="text-xs text-muted-foreground mb-4 line-clamp-2">{deal.description}</p>
+                  {/* AI-generated description takes priority */}
+                  {(deal.ai_description || deal.description) && (
+                    <div className="mb-4">
+                      {deal.ai_description && (
+                        <div className="flex items-center gap-1 mb-1">
+                          <Sparkles className="w-3 h-3 text-primary" />
+                          <span className="text-[10px] text-primary font-medium uppercase tracking-wider">AI Summary</span>
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground line-clamp-3">
+                        {deal.ai_description || deal.description}
+                      </p>
+                    </div>
                   )}
 
                   <div className="space-y-2 mb-4">
@@ -174,16 +190,12 @@ const FinanceDeals = () => {
                         </span>
                       </div>
                     )}
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Type</span>
-                      <span className="text-foreground font-medium capitalize">{deal.offer_type}</span>
-                    </div>
                   </div>
 
                   <div className="mt-auto pt-4 border-t border-border">
                     <Button
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                      onClick={() => trackClick(deal)}
+                      onClick={() => handleApply(deal)}
                     >
                       Apply Now <ExternalLink className="w-3.5 h-3.5 ml-2" />
                     </Button>
@@ -195,6 +207,13 @@ const FinanceDeals = () => {
         </div>
       </section>
       <Footer />
+
+      <LeadCaptureDialog
+        open={leadOpen}
+        onOpenChange={setLeadOpen}
+        deal={leadDeal}
+        onSuccess={handleLeadSuccess}
+      />
     </div>
   );
 };
