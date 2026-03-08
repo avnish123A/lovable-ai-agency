@@ -1,11 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Component, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Play, TrendingUp, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-const CreditCard3D = lazy(() => import("@/components/CreditCard3D"));
+// Error boundary to catch dynamic import failures for 3D component
+class Card3DErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return null; // silently hide 3D card on error
+    return this.props.children;
+  }
+}
+
+const CreditCard3D = lazy(() =>
+  import("@/components/CreditCard3D").catch(() => ({
+    default: () => null, // fallback if chunk fails to load
+  }))
+);
 
 const rotatingWords = [
   { text: "Credit Cards", color: "from-primary to-accent" },
