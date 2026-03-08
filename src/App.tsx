@@ -28,6 +28,8 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const FinanceTools = lazy(() => import("./pages/FinanceTools"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
+const FinanceDeals = lazy(() => import("./pages/FinanceDeals"));
+const DealDetail = lazy(() => import("./pages/DealDetail"));
 const CompoundInterestCalc = lazy(() => import("./pages/tools/CompoundInterestCalc"));
 const HomeLoanCalc = lazy(() => import("./pages/tools/HomeLoanCalc"));
 const PersonalLoanCalc = lazy(() => import("./pages/tools/PersonalLoanCalc"));
@@ -115,6 +117,8 @@ const AnimatedRoutes = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/tools" element={<FinanceTools />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/finance-deals" element={<FinanceDeals />} />
+            <Route path="/finance-deals/:dealId" element={<DealDetail />} />
             <Route path="/tools/compound-interest" element={<CompoundInterestCalc />} />
             <Route path="/tools/home-loan" element={<HomeLoanCalc />} />
             <Route path="/tools/personal-loan" element={<PersonalLoanCalc />} />

@@ -86,7 +86,7 @@ const TypingDots = () => (
   </div>
 );
 
-const KriyaAIChatbot = () => {
+const NiveshAIChatbot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -266,11 +266,11 @@ const KriyaAIChatbot = () => {
                     {[
                       { label: "💳 Credit Cards", path: "/credit-cards" },
                       { label: "📊 EMI Calculator", path: "/emi-calculator" },
-                      { label: "🎯 Compare", path: "/compare" },
-                      { label: "⚖️ Compare", path: "/compare" },
+                      { label: "🎯 Compare Products", path: "/compare" },
+                      { label: "🏦 Bank Accounts", path: "/bank-accounts" },
                     ].map((nav) => (
                       <button
-                        key={nav.path}
+                        key={nav.label}
                         onClick={() => handleQuickNav(nav.path)}
                         className="text-[11px] px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
                       >
@@ -397,4 +397,4 @@ const KriyaAIChatbot = () => {
   );
 };
 
-export default KriyaAIChatbot;
+export default NiveshAIChatbot;

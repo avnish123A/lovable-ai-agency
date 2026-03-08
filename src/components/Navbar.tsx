@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Wallet, Search, Bot } from "lucide-react";
+import { Menu, X, Search, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-{ label: "Credit Cards", href: "/credit-cards" },
-{ label: "Loans", href: "/loans" },
-{ label: "Insurance", href: "/finance-deals" },
-{ label: "Finance Tools", href: "/tools" },
-{ label: "Deals", href: "/finance-deals" },
-{ label: "About", href: "/about" }];
-
+  { label: "Credit Cards", href: "/credit-cards" },
+  { label: "Loans", href: "/loans" },
+  { label: "Insurance", href: "/insurance" },
+  { label: "Finance Tools", href: "/tools" },
+  { label: "Cashback", href: "/cashback" },
+  { label: "About", href: "/about" },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,34 +35,37 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? "glass border-b border-border shadow-sm" : "bg-transparent"}`
-      }>
-      
+        scrolled ? "glass border-b border-border shadow-sm" : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-18">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow-sm">
-              <Wallet className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img
+              src="/logos/apninivesh-logo.png"
+              alt="ApniNivesh"
+              className="h-9 w-9 object-contain"
+              loading="eager"
+            />
             <span className="text-xl font-heading font-bold text-foreground">
-              Kriya<span className="text-primary">pay</span>
+              Apni<span className="text-primary">Nivesh</span>
             </span>
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {}
-
-
-
-
-
-
-
-
-
-
-
-            )}
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  location.pathname === link.href
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           <div className="hidden lg:flex items-center gap-2">
@@ -77,40 +80,40 @@ const Navbar = () => {
             </Button>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-foreground">
+          <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-foreground" aria-label="Toggle menu">
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       <AnimatePresence>
-        {isOpen &&
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          className="lg:hidden glass border-t border-border overflow-hidden">
-          
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden glass border-t border-border overflow-hidden"
+          >
             <div className="container mx-auto px-4 py-4 space-y-1">
-              {navLinks.map((link, i) =>
-            <motion.div
-              key={link.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}>
-              
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
                   <Link
-                to={link.href}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                location.pathname === link.href ?
-                "text-primary bg-primary/10" :
-                "text-muted-foreground hover:text-foreground hover:bg-secondary"}`
-                }>
-                
+                    to={link.href}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === link.href
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    }`}
+                  >
                     {link.label}
                   </Link>
                 </motion.div>
-            )}
+              ))}
               <div className="pt-3 flex gap-2">
                 <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
                   <Link to="/eligibility">Eligibility</Link>
@@ -121,10 +124,10 @@ const Navbar = () => {
               </div>
             </div>
           </motion.div>
-        }
+        )}
       </AnimatePresence>
-    </motion.nav>);
-
+    </motion.nav>
+  );
 };
 
 export default Navbar;
