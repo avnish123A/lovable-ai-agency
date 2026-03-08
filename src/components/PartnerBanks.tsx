@@ -2,22 +2,22 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const brands = [
-  { name: "HDFC Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/2/28/HDFC_Bank_Logo.svg" },
-  { name: "ICICI Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg" },
-  { name: "Axis Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Axis_Bank_logo.svg" },
-  { name: "SBI", logo: "https://upload.wikimedia.org/wikipedia/en/5/58/State_Bank_of_India_logo.svg" },
-  { name: "Kotak", logo: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Kotak_Mahindra_Bank_logo.svg" },
-  { name: "IndusInd", logo: "https://upload.wikimedia.org/wikipedia/commons/8/87/IndusInd_Bank_logo.svg" },
-  { name: "Yes Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Yes_Bank_SVG_Logo.svg" },
-  { name: "RBL Bank", logo: "https://upload.wikimedia.org/wikipedia/en/4/4f/RBL_Bank_SVG_Logo.svg" },
-  { name: "IDFC First", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/IDFC_First_Bank_logo.svg" },
-  { name: "Bajaj Finserv", logo: "https://upload.wikimedia.org/wikipedia/commons/3/39/Bajaj_Finserv_Logo.svg" },
-  { name: "Paytm", logo: "https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" },
-  { name: "PhonePe", logo: "https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" },
-  { name: "CRED", logo: "https://upload.wikimedia.org/wikipedia/en/3/3d/CRED_%28FinTech_company%29_logo.svg" },
-  { name: "Flipkart", logo: "https://upload.wikimedia.org/wikipedia/en/7/7a/Flipkart_logo.svg" },
-  { name: "Amazon", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
-  { name: "Swiggy", logo: "https://upload.wikimedia.org/wikipedia/en/1/12/Swiggy_logo.svg" },
+  { name: "HDFC Bank", logo: "/logos/hdfc.png" },
+  { name: "ICICI Bank", logo: "/logos/icici.png" },
+  { name: "Axis Bank", logo: "/logos/axis.png" },
+  { name: "SBI", logo: "/logos/sbi.png" },
+  { name: "Kotak", logo: "/logos/kotak.png" },
+  { name: "IndusInd", logo: "/logos/indusind.png" },
+  { name: "Yes Bank", logo: "/logos/yesbank.png" },
+  { name: "Bajaj Finserv", logo: "/logos/bajaj.png" },
+  { name: "Paytm", logo: "/logos/paytm.png" },
+  { name: "PhonePe", logo: "/logos/phonepe.png" },
+  { name: "Flipkart", logo: "/logos/flipkart.png" },
+  { name: "Amazon", logo: "/logos/amazon.png" },
+  { name: "Swiggy", logo: "/logos/swiggy.png" },
+  { name: "Meesho", logo: "/logos/meesho.png" },
+  { name: "BigBasket", logo: "/logos/bigbasket.png" },
+  { name: "Ola", logo: "/logos/ola.png" },
 ];
 
 const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
@@ -34,7 +34,6 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
             src={logo}
             alt={`${name} logo`}
             className="w-full h-full object-contain"
-            loading="lazy"
             onError={() => setError(true)}
           />
         )}
