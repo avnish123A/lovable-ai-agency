@@ -108,7 +108,7 @@ const BudgetPlanner = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-4">
+          <div ref={resultRef} data-result-capture className="rounded-2xl border border-border bg-card p-4">
             <ResponsiveContainer width="100%" height={180}>
               <PieChart>
                 <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} dataKey="value" strokeWidth={1}>

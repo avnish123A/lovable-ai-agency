@@ -35,7 +35,7 @@ const InterestRateCalc = () => {
           <EditableSliderInput label="Final Amount" value={finalAmount} onChange={setFinalAmount} min={principal} max={50000000} step={1000} prefix="₹" />
           <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 text-center">
               <p className="text-xs text-muted-foreground mb-1">Simple Interest Rate</p>

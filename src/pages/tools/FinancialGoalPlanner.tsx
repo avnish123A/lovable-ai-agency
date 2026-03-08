@@ -58,7 +58,7 @@ const FinancialGoalPlanner = () => {
             }}
           />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground">Monthly Investment Needed</p>
             <AnimatedCounter value={Math.max(0, Math.round(monthlyNeeded))} prefix="₹" className="text-3xl font-bold text-primary" />

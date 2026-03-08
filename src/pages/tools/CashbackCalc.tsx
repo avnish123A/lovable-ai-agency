@@ -35,7 +35,7 @@ const CashbackCalc = () => {
           <EditableSliderInput label="Cashback Rate" value={cashbackRate} onChange={setCashbackRate} min={0.5} max={10} step={0.5} suffix="%" />
           <EditableSliderInput label="Monthly Cap" value={cap} onChange={setCap} min={100} max={10000} step={100} prefix="₹" />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-border bg-card p-5 text-center">
               <p className="text-xs text-muted-foreground">Monthly</p>
