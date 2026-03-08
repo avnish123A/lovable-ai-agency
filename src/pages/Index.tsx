@@ -1,16 +1,47 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SEOHead from "@/components/SEOHead";
 import PartnerBanks from "@/components/PartnerBanks";
 import FeaturesSection from "@/components/FeaturesSection";
-
 import TopCardsSection from "@/components/TopCardsSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import AISearch from "@/components/AISearch";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Calculator, Users, Building, Award } from "lucide-react";
+
+const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?: string; label: string; icon: any }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const duration = 2000;
+    const step = Math.ceil(end / (duration / 16));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= end) { setCount(end); clearInterval(timer); }
+      else setCount(start);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, end]);
+
+  return (
+    <div ref={ref} className="text-center">
+      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+        <Icon className="w-6 h-6 text-primary" />
+      </div>
+      <p className="text-3xl md:text-4xl font-bold text-foreground">{count}{suffix}</p>
+      <p className="text-sm text-muted-foreground mt-1">{label}</p>
+    </div>
+  );
+};
 
 const Index = () => {
   return (
