@@ -23,34 +23,35 @@ serve(async (req) => {
     let userPrompt = "";
 
     if (product_type === "credit_card") {
-      systemPrompt = `You are an expert financial product copywriter for Indian credit cards. Generate compelling, accurate product descriptions and features. Be specific to Indian market context (mention INR, Indian banks, local benefits). Keep language professional yet accessible.`;
+      systemPrompt = `You are an official bank content writer for Indian financial institutions. Generate OFFICIAL-sounding terms, conditions, and offer details that sound like they come directly from the bank. Use formal banking language. Include specific regulatory references where appropriate (RBI guidelines, card network terms). Be precise with numbers and percentages.`;
 
-      userPrompt = `Generate enhanced content for this credit card:
+      userPrompt = `Generate official bank-style content for this credit card:
 
 Card Name: ${product_name}
 Bank: ${bank_name}
 ${existing_data?.annual_fee ? `Annual Fee: ₹${existing_data.annual_fee}` : ""}
 ${existing_data?.cashback_rate ? `Current Cashback: ${existing_data.cashback_rate}` : ""}
 ${existing_data?.reward_points ? `Current Rewards: ${existing_data.reward_points}` : ""}
-${existing_data?.features?.length ? `Existing Features: ${existing_data.features.join(", ")}` : ""}
 
-Please provide:
-1. An enhanced cashback_rate description (max 25 chars, e.g., "5% on dining & travel")
-2. An enhanced reward_points description (max 30 chars, e.g., "10X points on online shopping")
-3. An enhanced welcome_bonus (max 30 chars, e.g., "₹2,000 Amazon voucher")
-4. 5 compelling features (each max 40 chars, specific benefits)
+Generate OFFICIAL bank-style content:
+1. cashback_rate - Official rate description (e.g., "Up to 5% cashback on select categories*")
+2. reward_points - Official rewards description (e.g., "Earn 10 Reward Points per ₹100 spent")
+3. welcome_bonus - Official welcome offer (e.g., "Welcome Bonus of 2,500 Reward Points on first spend")
+4. features - 5 official bank features with T&C style language
+5. terms_conditions - 3 important T&Cs in official bank language
 
-Respond ONLY with valid JSON in this exact format:
+Respond ONLY with valid JSON:
 {
   "cashback_rate": "string",
-  "reward_points": "string", 
+  "reward_points": "string",
   "welcome_bonus": "string",
-  "features": ["feature1", "feature2", "feature3", "feature4", "feature5"]
+  "features": ["feature1", "feature2", "feature3", "feature4", "feature5"],
+  "terms_conditions": ["T&C 1", "T&C 2", "T&C 3"]
 }`;
     } else if (product_type === "loan") {
-      systemPrompt = `You are an expert financial product copywriter for Indian loan products. Generate compelling, accurate product descriptions and features. Be specific to Indian market context (mention INR, Indian regulations, local benefits). Keep language professional yet accessible.`;
+      systemPrompt = `You are an official bank content writer for Indian financial institutions. Generate OFFICIAL-sounding terms, conditions, and offer details that sound like they come directly from the bank. Use formal banking language. Include specific regulatory references where appropriate (RBI guidelines). Be precise with numbers and percentages.`;
 
-      userPrompt = `Generate enhanced content for this loan product:
+      userPrompt = `Generate official bank-style content for this loan product:
 
 Loan Name: ${product_name}
 Bank: ${bank_name}
@@ -58,19 +59,44 @@ ${existing_data?.interest_rate ? `Interest Rate: ${existing_data.interest_rate}%
 ${existing_data?.min_amount ? `Min Amount: ₹${existing_data.min_amount}` : ""}
 ${existing_data?.max_amount ? `Max Amount: ₹${existing_data.max_amount}` : ""}
 ${existing_data?.processing_fee ? `Processing Fee: ${existing_data.processing_fee}` : ""}
-${existing_data?.features?.length ? `Existing Features: ${existing_data.features.join(", ")}` : ""}
 
-Please provide:
-1. An enhanced processing_fee description (max 30 chars, e.g., "0.5% or ₹5,000 max")
-2. 5 compelling features (each max 50 chars, specific benefits like quick disbursal, minimal docs, etc.)
+Generate OFFICIAL bank-style content:
+1. processing_fee - Official fee description (e.g., "Processing fee: 1% of loan amount or ₹10,000, whichever is lower")
+2. features - 5 official bank features with proper T&C language
+3. terms_conditions - 3 important T&Cs in official bank language
 
-Respond ONLY with valid JSON in this exact format:
+Respond ONLY with valid JSON:
 {
   "processing_fee": "string",
-  "features": ["feature1", "feature2", "feature3", "feature4", "feature5"]
+  "features": ["feature1", "feature2", "feature3", "feature4", "feature5"],
+  "terms_conditions": ["T&C 1", "T&C 2", "T&C 3"]
+}`;
+    } else if (product_type === "deal" || product_type === "finance_deal") {
+      systemPrompt = `You are an official bank/merchant content writer for Indian financial offers. Generate OFFICIAL-sounding offer descriptions, benefits, eligibility criteria, and terms & conditions that sound like they come directly from the bank or merchant. Use formal language with specific details. Include asterisks (*) for terms that apply.`;
+
+      userPrompt = `Generate official bank/merchant-style content for this financial offer:
+
+Offer Title: ${product_name}
+Merchant/Bank: ${bank_name}
+${existing_data?.cashback ? `Cashback: ${existing_data.cashback}` : ""}
+${existing_data?.description ? `Current Description: ${existing_data.description}` : ""}
+${existing_data?.offer_type ? `Offer Type: ${existing_data.offer_type}` : ""}
+
+Generate OFFICIAL content in formal bank/merchant language:
+1. ai_description - 2-3 sentences official description of the offer
+2. ai_benefits - 5 bullet points of key benefits (official language)
+3. ai_eligibility - 4 eligibility criteria (official language)
+4. ai_terms - 4 terms & conditions (official legal language with *)
+
+Respond ONLY with valid JSON:
+{
+  "ai_description": "string",
+  "ai_benefits": "• Benefit 1\\n• Benefit 2\\n• Benefit 3\\n• Benefit 4\\n• Benefit 5",
+  "ai_eligibility": "• Criteria 1\\n• Criteria 2\\n• Criteria 3\\n• Criteria 4",
+  "ai_terms": "• *T&C 1\\n• *T&C 2\\n• *T&C 3\\n• *T&C 4"
 }`;
     } else {
-      throw new Error("Invalid product_type");
+      throw new Error("Invalid product_type. Use: credit_card, loan, or deal");
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
