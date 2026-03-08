@@ -19,7 +19,7 @@ const CreditCardFinder = () => {
     setLoading(true);
     setResult("");
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/kriya-chat`, {
+      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nivesh-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

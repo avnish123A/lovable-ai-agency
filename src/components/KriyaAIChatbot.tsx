@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/kriya-chat`;
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nivesh-chat`;
 
 const QUICK_ACTIONS = [
   { icon: CreditCard, label: "Compare Credit Cards", query: "Compare the best credit cards available on ApniNivesh right now. Show me top options with their fees and benefits.", color: "from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400" },
