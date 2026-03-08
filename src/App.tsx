@@ -90,8 +90,20 @@ const pageTransition = {
 };
 
 const Loading = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+  <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      className="w-10 h-10 border-3 border-primary/20 border-t-primary rounded-full"
+    />
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="text-sm text-muted-foreground font-medium"
+    >
+      Loading...
+    </motion.p>
   </div>
 );
 
