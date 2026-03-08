@@ -236,6 +236,7 @@ const AdminSettings = () => {
               <Switch
                 checked={comingSoon.enabled}
                 onCheckedChange={toggleComingSoon}
+                disabled={savingComingSoon}
               />
             )}
           </div>
@@ -335,6 +336,7 @@ const AdminSettings = () => {
               <Switch
                 checked={maintenance.enabled}
                 onCheckedChange={toggleMaintenance}
+                disabled={saving}
               />
             )}
           </div>
