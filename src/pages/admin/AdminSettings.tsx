@@ -85,7 +85,7 @@ const AdminSettings = () => {
     const { error } = await supabase
       .from("site_settings")
       .upsert(
-        { key: "maintenance_mode", value: valueToSave, updated_at: new Date().toISOString() },
+        { key: "maintenance_mode", value: valueToSave as any, updated_at: new Date().toISOString() } as any,
         { onConflict: "key" }
       );
 
@@ -118,7 +118,7 @@ const AdminSettings = () => {
       const { error } = await supabase
         .from("site_settings")
         .upsert(
-          { key: "coming_soon_mode", value: valueToSave as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { key: "coming_soon_mode", value: valueToSave as any, updated_at: new Date().toISOString() } as any,
           { onConflict: "key" }
         );
 
@@ -144,7 +144,7 @@ const AdminSettings = () => {
       const { error } = await supabase
         .from("site_settings")
         .upsert(
-          { key: "maintenance_mode", value: updated as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { key: "maintenance_mode", value: updated as any, updated_at: new Date().toISOString() } as any,
           { onConflict: "key" }
         );
       if (error) {
@@ -177,7 +177,7 @@ const AdminSettings = () => {
       const { error } = await supabase
         .from("site_settings")
         .upsert(
-          { key: "coming_soon_mode", value: { ...updated, countdown_target: target } as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { key: "coming_soon_mode", value: { ...updated, countdown_target: target } as any, updated_at: new Date().toISOString() } as any,
           { onConflict: "key" }
         );
       if (error) {
