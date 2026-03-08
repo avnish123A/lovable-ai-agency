@@ -6,48 +6,87 @@ import AnimatedCounter from "@/components/gamification/AnimatedCounter";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getTaxInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
-const slabs = [
-  { min: 0, max: 300000, rate: 0 },
-  { min: 300001, max: 700000, rate: 5 },
-  { min: 700001, max: 1000000, rate: 10 },
-  { min: 1000001, max: 1200000, rate: 15 },
-  { min: 1200001, max: 1500000, rate: 20 },
-  { min: 1500001, max: Infinity, rate: 30 },
+// FY 2025-26 New Regime slabs (Budget 2025)
+const newSlabs = [
+  { min: 0, max: 400000, rate: 0 },
+  { min: 400001, max: 800000, rate: 5 },
+  { min: 800001, max: 1200000, rate: 10 },
+  { min: 1200001, max: 1600000, rate: 15 },
+  { min: 1600001, max: 2000000, rate: 20 },
+  { min: 2000001, max: 2400000, rate: 25 },
+  { min: 2400001, max: Infinity, rate: 30 },
 ];
 
-const TaxEstimator = () => {
-  const [income, setIncome] = useState(1000000);
-  const [deductions, setDeductions] = useState(150000);
-  const [regime, setRegime] = useState<"new" | "old">("new");
+// FY 2025-26 Old Regime slabs
+const oldSlabs = [
+  { min: 0, max: 250000, rate: 0 },
+  { min: 250001, max: 500000, rate: 5 },
+  { min: 500001, max: 1000000, rate: 20 },
+  { min: 1000001, max: Infinity, rate: 30 },
+];
 
-  const taxable = regime === "new" ? income : Math.max(0, income - deductions);
-
-  const { tax, slabBreakdown } = useMemo(() => {
-    let t = 0;
-    const breakdown: { slab: string; tax: number; rate: number }[] = [];
-    for (const slab of slabs) {
-      if (taxable > slab.min) {
-        const taxableInSlab = Math.min(taxable, slab.max) - slab.min;
-        const slabTax = taxableInSlab * slab.rate / 100;
-        t += slabTax;
-        if (slabTax > 0) {
-          breakdown.push({
-            slab: slab.max === Infinity ? `Above ₹${(slab.min - 1).toLocaleString("en-IN")}` : `₹${slab.min.toLocaleString("en-IN")} - ₹${slab.max.toLocaleString("en-IN")}`,
-            tax: Math.round(slabTax),
-            rate: slab.rate,
-          });
-        }
+function calcTax(taxable: number, slabs: typeof newSlabs) {
+  let t = 0;
+  const breakdown: { slab: string; tax: number; rate: number }[] = [];
+  for (const slab of slabs) {
+    if (taxable > slab.min) {
+      const taxableInSlab = Math.min(taxable, slab.max) - slab.min;
+      const slabTax = taxableInSlab * slab.rate / 100;
+      t += slabTax;
+      if (slabTax > 0) {
+        breakdown.push({
+          slab: slab.max === Infinity ? `Above ₹${(slab.min - 1).toLocaleString("en-IN")}` : `₹${slab.min.toLocaleString("en-IN")} - ₹${slab.max.toLocaleString("en-IN")}`,
+          tax: Math.round(slabTax),
+          rate: slab.rate,
+        });
       }
     }
-    return { tax: t, slabBreakdown: breakdown };
-  }, [taxable]);
+  }
+  return { tax: t, breakdown };
+}
+
+const TaxEstimator = () => {
+  const [income, setIncome] = useState(1200000);
+  const [deductions, setDeductions] = useState(150000);
+  const [regime, setRegime] = useState<"new" | "old">("new");
+  const standardDeduction = INDIAN_BENCHMARKS.standardDeduction; // ₹75,000
+
+  // New regime: Standard deduction applies, no 80C etc.
+  // Old regime: Standard deduction (₹50K for old) + user deductions
+  const taxableNew = Math.max(0, income - standardDeduction);
+  const taxableOld = Math.max(0, income - 50000 - deductions);
+  const taxable = regime === "new" ? taxableNew : taxableOld;
+  const slabs = regime === "new" ? newSlabs : oldSlabs;
+
+  const { tax, slabBreakdown } = useMemo(() => {
+    const result = calcTax(taxable, slabs);
+    // Section 87A rebate: New regime - if taxable <= ₹7L, full rebate up to ₹25K
+    if (regime === "new" && taxable <= 700000) {
+      const rebate = Math.min(result.tax, 25000);
+      return { tax: Math.max(0, result.tax - rebate), slabBreakdown: result.breakdown };
+    }
+    // Old regime - if taxable <= ₹5L, rebate up to ₹12,500
+    if (regime === "old" && taxable <= 500000) {
+      const rebate = Math.min(result.tax, 12500);
+      return { tax: Math.max(0, result.tax - rebate), slabBreakdown: result.breakdown };
+    }
+    return { tax: result.tax, slabBreakdown: result.breakdown };
+  }, [taxable, regime, slabs]);
 
   const cess = tax * 0.04;
-  const totalTax = tax + cess;
+  const surcharge = income > 5000000 ? tax * 0.10 : income > 10000000 ? tax * 0.15 : 0;
+  const totalTax = tax + cess + surcharge;
   const effectiveRate = income > 0 ? (totalTax / income) * 100 : 0;
   const monthlyTax = totalTax / 12;
   const takeHome = income - totalTax;
+
+  // Compare regimes
+  const { tax: altTax } = calcTax(regime === "new" ? taxableOld : taxableNew, regime === "new" ? oldSlabs : newSlabs);
+  const altCess = altTax * 0.04;
+  const altTotal = altTax + altCess;
+  const regimeSavings = altTotal - totalTax;
 
   const pieData = [
     { name: "Take Home", value: Math.round(takeHome) },
@@ -57,15 +96,17 @@ const TaxEstimator = () => {
 
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getTaxInsights(income, regime, deductions, totalTax, effectiveRate), [income, regime, deductions, totalTax, effectiveRate]);
+
   return (
-    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2025-26)" icon={<Landmark className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2025-26, Budget 2025 slabs)" icon={<Landmark className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Choose Regime", "Enter Income", "View Tax"]} current={income > 0 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           <div className="flex gap-2 mb-2">
             {(["new", "old"] as const).map((r) => (
               <button key={r} onClick={() => setRegime(r)} className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${regime === r ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground hover:text-foreground"}`}>
-                {r === "new" ? "New Regime" : "Old Regime"}
+                {r === "new" ? "New Regime (Default)" : "Old Regime"}
               </button>
             ))}
           </div>
@@ -75,18 +116,34 @@ const TaxEstimator = () => {
           </div>
           {regime === "old" && (
             <div>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Deductions (80C, 80D etc.)</span><span className="font-semibold">{fmt(deductions)}</span></div>
+              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Deductions (80C, 80D, HRA etc.)</span><span className="font-semibold">{fmt(deductions)}</span></div>
               <input type="range" min={0} max={500000} step={10000} value={deductions} onChange={(e) => setDeductions(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           )}
+
+          {/* Regime comparison */}
+          <div className={`rounded-xl border p-4 ${regimeSavings > 0 ? "border-accent/30 bg-accent/5" : regimeSavings < 0 ? "border-amber-500/30 bg-amber-500/5" : "border-border bg-secondary/50"}`}>
+            <p className="text-xs font-semibold text-foreground mb-1">📊 Regime Comparison</p>
+            <p className="text-xs text-muted-foreground">
+              {regimeSavings > 0
+                ? `✅ ${regime === "new" ? "New" : "Old"} Regime saves you ${fmt(Math.abs(regimeSavings))} more than ${regime === "new" ? "Old" : "New"} Regime.`
+                : regimeSavings < 0
+                ? `⚠️ ${regime === "new" ? "Old" : "New"} Regime would save you ${fmt(Math.abs(regimeSavings))} more. Consider switching.`
+                : "Both regimes result in the same tax."}
+            </p>
+          </div>
+
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
-            <p className="font-semibold text-foreground mb-2">Tax Slabs (New Regime FY 2025-26)</p>
+            <p className="font-semibold text-foreground mb-2">Tax Slabs ({regime === "new" ? "New" : "Old"} Regime FY 2025-26)</p>
             {slabs.map((s) => (
               <div key={s.min} className="flex justify-between text-muted-foreground">
                 <span>{s.max === Infinity ? `Above ₹${(s.min - 1).toLocaleString("en-IN")}` : `₹${s.min.toLocaleString("en-IN")} - ₹${s.max.toLocaleString("en-IN")}`}</span>
                 <span className="font-semibold">{s.rate}%</span>
               </div>
             ))}
+            <p className="text-muted-foreground/60 mt-2">
+              {regime === "new" ? `Standard Deduction: ₹${standardDeduction.toLocaleString("en-IN")} • 87A Rebate up to ₹7L taxable` : "Standard Deduction: ₹50,000 • 87A Rebate up to ₹5L taxable"}
+            </p>
           </div>
         </div>
         <div className="space-y-4">
@@ -113,14 +170,15 @@ const TaxEstimator = () => {
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-4 text-[10px] mt-1">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent" />Take Home</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-destructive" />Tax</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent" />Take Home ({(100 - effectiveRate).toFixed(1)}%)</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-destructive" />Tax ({effectiveRate.toFixed(1)}%)</span>
             </div>
           </div>
 
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
             <p className="text-xs text-muted-foreground">Effective Tax Rate</p>
             <p className="text-2xl font-bold text-primary">{effectiveRate.toFixed(1)}%</p>
+            <p className="text-[10px] text-muted-foreground">Taxable Income: {fmt(taxable)}</p>
           </div>
 
           {slabBreakdown.length > 0 && (
@@ -136,18 +194,22 @@ const TaxEstimator = () => {
                 <span className="text-muted-foreground">Health & Edu Cess (4%)</span>
                 <span className="font-semibold">{fmt(cess)}</span>
               </div>
+              {surcharge > 0 && (
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">Surcharge</span>
+                  <span className="font-semibold">{fmt(surcharge)}</span>
+                </div>
+              )}
             </div>
           )}
 
-          <AIInsight type="ai" title="AI Tax Tip"
-            message={regime === "new" && deductions > 150000
-              ? `With ₹${deductions.toLocaleString("en-IN")} in deductions, Old Regime might save you more. Try switching above to compare!`
-              : effectiveRate < 10
-                ? `Your effective tax rate is just ${effectiveRate.toFixed(1)}%. You're in a good tax bracket.`
-                : `At ${effectiveRate.toFixed(1)}% effective rate, consider maximizing 80C deductions and NPS contributions in Old Regime.`
-            }
+          <AIInsight
+            type="ai"
+            title="AI Tax Strategy (FY 2025-26)"
+            message={aiInsights[0] || "Adjust income to see personalized tax-saving tips."}
+            insights={aiInsights.slice(1)}
           />
-          <ResultActions title="Tax Estimate" data={{ "Income": fmt(income), "Regime": regime === "new" ? "New" : "Old", "Taxable": fmt(taxable), "Tax": fmt(totalTax), "Effective Rate": `${effectiveRate.toFixed(1)}%`, "Take Home": fmt(takeHome) }} productLink="/bank-accounts" />
+          <ResultActions title="Tax Estimate" data={{ "Income": fmt(income), "Regime": regime === "new" ? "New" : "Old", "Taxable": fmt(taxable), "Tax": fmt(totalTax), "Effective Rate": `${effectiveRate.toFixed(1)}%`, "Take Home": fmt(takeHome), "Regime Savings": fmt(Math.abs(regimeSavings)) }} productLink="/bank-accounts" />
         </div>
       </div>
     </ToolLayout>

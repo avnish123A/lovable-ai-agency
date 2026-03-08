@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getInvestmentInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const InvestmentReturnCalc = () => {
   const [initial, setInitial] = useState(100000);
@@ -24,6 +25,11 @@ const InvestmentReturnCalc = () => {
   const totalInvested = initial + monthly * n;
   const returns = totalValue - totalInvested;
   const multiplier = totalInvested > 0 ? totalValue / totalInvested : 0;
+  const xirr = totalInvested > 0 ? ((Math.pow(totalValue / totalInvested, 1 / years) - 1) * 100) : 0;
+
+  // Real return after inflation
+  const realReturn = rate - INDIAN_BENCHMARKS.avgInflation;
+  const realValue = totalValue / Math.pow(1 + INDIAN_BENCHMARKS.avgInflation / 100, years);
 
   const growthScore = useMemo(() => Math.min(100, Math.round(multiplier * 25)), [multiplier]);
 
@@ -37,22 +43,42 @@ const InvestmentReturnCalc = () => {
 
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getInvestmentInsights(initial, monthly, rate, years, totalValue, returns), [initial, monthly, rate, years, totalValue, returns]);
+
   return (
-    <ToolLayout title="Investment Return Calculator" description="Estimate returns on lump sum + SIP investments" icon={<LineChartIcon className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Investment Return Calculator" description="Estimate returns with real market benchmarks and inflation adjustment" icon={<LineChartIcon className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Investment Setup", "View Returns", "Plan Strategy"]} current={totalInvested > 0 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
             { label: "Initial Investment (₹)", value: initial, set: setInitial, min: 0, max: 10000000, step: 10000 },
             { label: "Monthly SIP (₹)", value: monthly, set: setMonthly, min: 0, max: 200000, step: 500 },
-            { label: "Expected Return (%)", value: rate, set: setRate, min: 1, max: 30, step: 0.5 },
+            { label: `Expected Return (Nifty 10yr: ${INDIAN_BENCHMARKS.sipReturns.nifty50_10yr}%)`, value: rate, set: setRate, min: 1, max: 30, step: 0.5 },
             { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
           ].map((f) => (
             <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Return") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span></div>
+              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Return") || f.label.includes("Nifty") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span></div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
+
+          {/* Benchmark comparison */}
+          <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
+            <p className="font-semibold text-foreground mb-2">📊 Benchmark Returns (10-Year CAGR)</p>
+            {[
+              { name: "Nifty 50", ret: INDIAN_BENCHMARKS.sipReturns.nifty50_10yr },
+              { name: "Midcap Index", ret: INDIAN_BENCHMARKS.sipReturns.midcap_10yr },
+              { name: "Debt Funds", ret: INDIAN_BENCHMARKS.sipReturns.debt_10yr },
+              { name: "PPF", ret: INDIAN_BENCHMARKS.ppfRate },
+              { name: "Gold (SGBs)", ret: INDIAN_BENCHMARKS.goldReturn10yr },
+            ].map((b) => (
+              <div key={b.name} className="flex justify-between text-muted-foreground">
+                <span>{b.name}</span>
+                <span className={`font-semibold ${b.ret >= rate ? "text-accent" : ""}`}>{b.ret}%</span>
+              </div>
+            ))}
+          </div>
+
           <WhatIfSlider label="What if SIP amount changes?" baseValue={monthly} min={0} max={200000} step={500}
             onResult={(delta) => {
               if (delta === 0) return "";
@@ -77,6 +103,13 @@ const InvestmentReturnCalc = () => {
             ))}
           </div>
 
+          {/* Inflation-adjusted value */}
+          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-center">
+            <p className="text-xs text-muted-foreground">Inflation-Adjusted Value (Real Worth)</p>
+            <p className="text-xl font-bold text-amber-600">{fmt(realValue)}</p>
+            <p className="text-[10px] text-muted-foreground">At {INDIAN_BENCHMARKS.avgInflation}% inflation, real return: {realReturn.toFixed(1)}%</p>
+          </div>
+
           <div className="rounded-2xl border border-border bg-card p-4">
             <p className="text-xs font-semibold text-muted-foreground mb-2">Investment Growth</p>
             <ResponsiveContainer width="100%" height={180}>
@@ -93,16 +126,28 @@ const InvestmentReturnCalc = () => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-accent/20 bg-accent/5 p-4 text-center">
-            <p className="text-xs text-muted-foreground">Growth Multiplier</p>
-            <p className="text-2xl font-bold text-accent">{multiplier.toFixed(2)}x</p>
-            <p className="text-xs text-muted-foreground">your investment</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-xl border border-accent/20 bg-accent/5 p-4 text-center">
+              <p className="text-xs text-muted-foreground">Growth Multiplier</p>
+              <p className="text-2xl font-bold text-accent">{multiplier.toFixed(2)}x</p>
+            </div>
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-center">
+              <p className="text-xs text-muted-foreground">Effective CAGR</p>
+              <p className="text-2xl font-bold text-primary">{xirr.toFixed(1)}%</p>
+            </div>
           </div>
 
           <FinancialScore score={growthScore} label="Investment Score" sublabel={multiplier >= 3 ? "Excellent growth potential!" : "Consider longer horizon"} />
-          <AIInsight type="ai" title="AI Investment Insight" message={years >= 10 && rate >= 12 ? `${multiplier.toFixed(1)}x growth in ${years} years! SIP of ${fmt(monthly)} monthly compounds powerfully over time.` : years < 5 ? "For serious wealth building, consider 10+ year horizon. Compounding accelerates after year 7." : `Good plan! ${fmt(monthly)} SIP at ${rate}% will build ${fmt(totalValue)} corpus.`} />
+          
+          <AIInsight
+            type="ai"
+            title="AI Investment Strategy (Real Benchmarks)"
+            message={aiInsights[0] || "Adjust values to see investment insights."}
+            insights={aiInsights.slice(1)}
+          />
+          
           <AchievementBadge type="savvy_saver" show={growthScore >= 60} message="Smart investment strategy!" />
-          <ResultActions title="Investment Plan" data={{ "Lump Sum": fmt(initial), "SIP": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total Value": fmt(totalValue), "Returns": fmt(returns), "Multiplier": `${multiplier.toFixed(2)}x` }} productLink="/demat-accounts" />
+          <ResultActions title="Investment Plan" data={{ "Lump Sum": fmt(initial), "SIP": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total Value": fmt(totalValue), "Real Value": fmt(realValue), "Returns": fmt(returns), "Multiplier": `${multiplier.toFixed(2)}x` }} productLink="/demat-accounts" />
         </div>
       </div>
     </ToolLayout>

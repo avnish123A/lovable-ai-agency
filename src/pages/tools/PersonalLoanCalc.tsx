@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getPersonalLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const PersonalLoanCalc = () => {
   const [amount, setAmount] = useState(500000);
@@ -50,24 +51,35 @@ const PersonalLoanCalc = () => {
 
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getPersonalLoanInsights(amount, rate, years, emi, interest), [amount, rate, years, emi, interest]);
+
   return (
-    <ToolLayout title="Personal Loan Calculator" description="Estimate your personal loan EMI and total cost" icon={<Wallet className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Personal Loan Calculator" description="Estimate your personal loan EMI with real bank rate comparisons" icon={<Wallet className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Enter Details", "View EMI", "Compare Options"]} current={amount > 10000 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
             { label: "Loan Amount (₹)", value: amount, set: setAmount, min: 10000, max: 5000000, step: 10000 },
-            { label: "Interest Rate (%)", value: rate, set: setRate, min: 8, max: 30, step: 0.5 },
+            { label: `Interest Rate (Avg: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`, value: rate, set: setRate, min: 8, max: 30, step: 0.5 },
             { label: "Tenure (Years)", value: years, set: setYears, min: 1, max: 7, step: 1 },
           ].map((f) => (
             <div key={f.label}>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold">{f.label.includes("Rate") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
+                <span className="font-semibold">{f.label.includes("Rate") || f.label.includes("Avg") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
               </div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
+
+          {/* Rate comparison */}
+          <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
+            <p className="font-semibold text-foreground mb-2">🏦 Personal Loan Rate Range (2025)</p>
+            <div className="flex justify-between text-muted-foreground"><span>Best (750+ CIBIL)</span><span className="font-semibold text-accent">{INDIAN_BENCHMARKS.personalLoanRates.low}%</span></div>
+            <div className="flex justify-between text-muted-foreground"><span>Average</span><span className="font-semibold">{INDIAN_BENCHMARKS.personalLoanRates.mid}%</span></div>
+            <div className="flex justify-between text-muted-foreground"><span>High Risk</span><span className="font-semibold text-destructive">{INDIAN_BENCHMARKS.personalLoanRates.high}%</span></div>
+          </div>
+
           <WhatIfSlider label="What if rate changes?" baseValue={rate} min={8} max={30} step={0.5}
             format={(v) => `${v}%`}
             onResult={(delta) => {
@@ -119,7 +131,14 @@ const PersonalLoanCalc = () => {
           </div>
 
           <FinancialScore score={score} label="Loan Affordability" sublabel={rate <= 12 ? "Competitive rate!" : "Shop for lower rates"} />
-          <AIInsight type="ai" title="AI Loan Advice" message={rate >= 18 ? `At ${rate}%, you're paying high interest. A credit score above 750 can help you get rates under 12%.` : `${fmt(emi)} monthly EMI is ${emi < 15000 ? "very manageable" : "moderate"}. Keep loan EMIs under 40% of monthly income.`} />
+          
+          <AIInsight
+            type="ai"
+            title="AI Loan Analysis (Real Market Data)"
+            message={aiInsights[0] || "Adjust values to see loan insights."}
+            insights={aiInsights.slice(1)}
+          />
+          
           <AchievementBadge type="smart_planner" show={score >= 70} message="Good loan planning!" />
           <ResultActions title="Personal Loan Plan" data={{ "Amount": fmt(amount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Interest": fmt(interest), "Total": fmt(total) }} productLink="/loans" />
         </div>

@@ -8,6 +8,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import AnimatedCounter from "@/components/gamification/AnimatedCounter";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getRetirementInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const RetirementPlanner = () => {
   const [age, setAge] = useState(30);
@@ -15,25 +16,35 @@ const RetirementPlanner = () => {
   const [monthly, setMonthly] = useState(15000);
   const [existing, setExisting] = useState(200000);
   const [returnRate, setReturnRate] = useState(12);
-  const [inflation, setInflation] = useState(6);
+  const [inflation, setInflation] = useState(INDIAN_BENCHMARKS.avgInflation);
   const [monthlyExpense, setMonthlyExpense] = useState(40000);
+  const [stepUpRate, setStepUpRate] = useState(10); // Annual SIP step-up
 
   const result = useMemo(() => {
     const years = retireAge - age;
-    if (years <= 0) return { corpus: 0, needed: 0, gap: 0, chartData: [], readiness: 0 };
+    if (years <= 0) return { corpus: 0, needed: 0, gap: 0, chartData: [], readiness: 0, stepUpCorpus: 0 };
 
-    const realReturn = (returnRate - inflation) / 100;
     const monthlyRate = returnRate / 100 / 12;
 
     // Future value of existing savings
     const fvExisting = existing * Math.pow(1 + returnRate / 100, years);
 
-    // Future value of monthly SIP
+    // Future value of monthly SIP (standard)
     const fvSIP = monthly * ((Math.pow(1 + monthlyRate, years * 12) - 1) / monthlyRate) * (1 + monthlyRate);
 
-    const corpus = fvExisting + fvSIP;
+    // Step-up SIP calculation
+    let stepUpValue = 0;
+    for (let y = 0; y < years; y++) {
+      const yearlyMonthly = monthly * Math.pow(1 + stepUpRate / 100, y);
+      for (let m = 0; m < 12; m++) {
+        stepUpValue = (stepUpValue + yearlyMonthly) * (1 + monthlyRate);
+      }
+    }
 
-    // Corpus needed (25x annual expenses adjusted for inflation)
+    const corpus = fvExisting + fvSIP;
+    const stepUpCorpus = fvExisting + stepUpValue;
+
+    // Corpus needed: Using 4% rule (25x annual expenses adjusted for inflation)
     const futureExpense = monthlyExpense * 12 * Math.pow(1 + inflation / 100, years);
     const needed = futureExpense * 25;
 
@@ -42,7 +53,7 @@ const RetirementPlanner = () => {
 
     // Chart data
     const chartData = [];
-    for (let y = 0; y <= years; y++) {
+    for (let y = 0; y <= years; y += Math.max(1, Math.floor(years / 20))) {
       const fvE = existing * Math.pow(1 + returnRate / 100, y);
       const fvS = monthly * ((Math.pow(1 + monthlyRate, y * 12) - 1) / monthlyRate) * (1 + monthlyRate);
       const neededAtY = monthlyExpense * 12 * Math.pow(1 + inflation / 100, y) * 25;
@@ -53,8 +64,8 @@ const RetirementPlanner = () => {
       });
     }
 
-    return { corpus: Math.round(corpus), needed: Math.round(needed), gap: Math.round(gap), chartData, readiness };
-  }, [age, retireAge, monthly, existing, returnRate, inflation, monthlyExpense]);
+    return { corpus: Math.round(corpus), needed: Math.round(needed), gap: Math.round(gap), chartData, readiness, stepUpCorpus: Math.round(stepUpCorpus) };
+  }, [age, retireAge, monthly, existing, returnRate, inflation, monthlyExpense, stepUpRate]);
 
   const fmt = (v: number) => {
     if (v >= 10000000) return `₹${(v / 10000000).toFixed(2)} Cr`;
@@ -62,18 +73,23 @@ const RetirementPlanner = () => {
     return `₹${v.toLocaleString("en-IN")}`;
   };
 
+  const aiInsights = useMemo(() => getRetirementInsights(
+    age, retireAge, monthly, result.corpus, result.needed, result.readiness
+  ), [age, retireAge, monthly, result]);
+
   return (
-    <ToolLayout title="Retirement Planner" description="Plan your retirement corpus and track readiness" icon={<Landmark className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Retirement Planner" description="Plan your retirement corpus with real market benchmarks" icon={<Landmark className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Enter Details", "View Projection", "Plan Action"]} current={result.corpus > 0 ? 2 : 1} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-4">
           {[
             { label: "Current Age", value: age, set: setAge, min: 18, max: 55, step: 1, suffix: " yrs" },
             { label: "Retirement Age", value: retireAge, set: setRetireAge, min: 45, max: 70, step: 1, suffix: " yrs" },
-            { label: "Monthly Investment (SIP)", value: monthly, set: setMonthly, min: 1000, max: 200000, step: 1000, fmt: true },
-            { label: "Existing Savings", value: existing, set: setExisting, min: 0, max: 10000000, step: 50000, fmt: true },
-            { label: "Expected Return (%)", value: returnRate, set: setReturnRate, min: 6, max: 18, step: 0.5, suffix: "%" },
-            { label: "Inflation Rate (%)", value: inflation, set: setInflation, min: 3, max: 10, step: 0.5, suffix: "%" },
+            { label: "Monthly SIP (₹)", value: monthly, set: setMonthly, min: 1000, max: 200000, step: 1000, fmt: true },
+            { label: "Annual SIP Step-up (%)", value: stepUpRate, set: setStepUpRate, min: 0, max: 25, step: 1, suffix: "%" },
+            { label: "Existing Savings (₹)", value: existing, set: setExisting, min: 0, max: 10000000, step: 50000, fmt: true },
+            { label: `Expected Return (Nifty 50 avg: ${INDIAN_BENCHMARKS.sipReturns.nifty50_10yr}%)`, value: returnRate, set: setReturnRate, min: 6, max: 18, step: 0.5, suffix: "%" },
+            { label: `Inflation Rate (CPI: ${INDIAN_BENCHMARKS.cpiInflation}%)`, value: inflation, set: setInflation, min: 3, max: 10, step: 0.5, suffix: "%" },
             { label: "Monthly Expenses (Today)", value: monthlyExpense, set: setMonthlyExpense, min: 10000, max: 300000, step: 5000, fmt: true },
           ].map((s) => (
             <div key={s.label}>
@@ -89,14 +105,23 @@ const RetirementPlanner = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-border bg-card p-4 text-center">
-              <p className="text-[10px] text-muted-foreground mb-1">Your Corpus</p>
+              <p className="text-[10px] text-muted-foreground mb-1">Your Corpus (Standard SIP)</p>
               <AnimatedCounter value={result.corpus} prefix="₹" className="text-lg font-bold text-primary" />
             </div>
             <div className="rounded-xl border border-border bg-card p-4 text-center">
-              <p className="text-[10px] text-muted-foreground mb-1">Corpus Needed</p>
+              <p className="text-[10px] text-muted-foreground mb-1">Corpus Needed (4% Rule)</p>
               <AnimatedCounter value={result.needed} prefix="₹" className="text-lg font-bold text-foreground" />
             </div>
           </div>
+
+          {/* Step-up comparison */}
+          {stepUpRate > 0 && (
+            <div className="rounded-xl border border-accent/30 bg-accent/5 p-3 text-center">
+              <p className="text-[10px] text-muted-foreground">With {stepUpRate}% Step-up SIP</p>
+              <p className="text-lg font-bold text-accent">{fmt(result.stepUpCorpus)}</p>
+              <p className="text-[10px] text-accent">+{fmt(result.stepUpCorpus - result.corpus)} extra</p>
+            </div>
+          )}
 
           <div className={`rounded-xl border p-4 text-center ${result.gap <= 0 ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950" : "border-destructive/30 bg-destructive/5"}`}>
             <p className="text-xs text-muted-foreground mb-1">{result.gap <= 0 ? "🎉 Surplus" : "⚠️ Shortfall"}</p>
@@ -117,7 +142,7 @@ const RetirementPlanner = () => {
               </ResponsiveContainer>
               <div className="flex gap-4 mt-2 text-[10px] text-muted-foreground">
                 <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-primary inline-block" /> Your Corpus</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-destructive inline-block border-dashed" /> Required</span>
+                <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-destructive inline-block" /> Required (4% Rule)</span>
               </div>
             </div>
           )}
@@ -126,12 +151,9 @@ const RetirementPlanner = () => {
 
           <AIInsight
             type="ai"
-            title="AI Retirement Tip"
-            message={
-              result.gap > 0
-                ? `You need an additional ${fmt(Math.round(result.gap / ((retireAge - age) * 12)))} per month to meet your retirement goal. Consider increasing your SIP or exploring equity-heavy funds.`
-                : `Congratulations! Your current plan exceeds the retirement target by ${fmt(Math.abs(result.gap))}. You're well-prepared!`
-            }
+            title="AI Retirement Strategy (Real Data)"
+            message={aiInsights[0] || "Adjust values to see retirement insights."}
+            insights={aiInsights.slice(1)}
           />
 
           <AchievementBadge type="investment_planner" show={result.readiness >= 80} message="Retirement ready — On track for financial freedom!" />
@@ -142,7 +164,9 @@ const RetirementPlanner = () => {
               "Current Age": `${age} yrs`,
               "Retirement Age": `${retireAge} yrs`,
               "Monthly SIP": fmt(monthly),
+              "Step-up Rate": `${stepUpRate}%`,
               "Projected Corpus": fmt(result.corpus),
+              "Step-up Corpus": fmt(result.stepUpCorpus),
               "Required Corpus": fmt(result.needed),
               "Readiness": `${result.readiness}%`,
             }}
