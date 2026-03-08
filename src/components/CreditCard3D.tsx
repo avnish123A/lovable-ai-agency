@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { RoundedBox, Text, Float } from "@react-three/drei";
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, forwardRef } from "react";
 import * as THREE from "three";
 
 const Card = () => {
@@ -72,9 +72,9 @@ const Card = () => {
   );
 };
 
-const CreditCard3D = () => {
+const CreditCard3D = forwardRef<HTMLDivElement>((_, ref) => {
   return (
-    <div className="w-full h-[350px] md:h-[450px]">
+    <div ref={ref} className="w-full h-[350px] md:h-[450px]">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 45 }}
         dpr={[1, 2]}
@@ -91,6 +91,8 @@ const CreditCard3D = () => {
       </Canvas>
     </div>
   );
-};
+});
+
+CreditCard3D.displayName = "CreditCard3D";
 
 export default CreditCard3D;
