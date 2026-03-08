@@ -1,49 +1,43 @@
 import { motion } from "framer-motion";
-import { CreditCard, Landmark, Gift, Calculator, CheckCircle, BookOpen } from "lucide-react";
+import { CreditCard, Landmark, Shield, Gift, Calculator, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const features = [
   {
     icon: CreditCard,
     title: "Credit Cards",
-    desc: "Compare 100+ credit cards from top banks with instant approval options.",
+    desc: "Compare 100+ credit cards from HDFC, ICICI, Axis, SBI & more with instant approval.",
     href: "/credit-cards",
-    color: "text-primary",
   },
   {
     icon: Landmark,
     title: "Personal Loans",
-    desc: "Find the best interest rates and get pre-approved in minutes.",
+    desc: "Find the best interest rates from top banks and get pre-approved in minutes.",
     href: "/loans",
-    color: "text-primary",
+  },
+  {
+    icon: Shield,
+    title: "Insurance",
+    desc: "Compare health, life, and vehicle insurance plans from trusted providers.",
+    href: "/finance-deals?filter=insurance",
   },
   {
     icon: Gift,
-    title: "Cashback Offers",
-    desc: "Exclusive cashback deals from 500+ partner stores and brands.",
+    title: "Cashback Deals",
+    desc: "Exclusive cashback offers from 500+ partner stores and financial products.",
     href: "/cashback",
-    color: "text-primary",
   },
   {
     icon: Calculator,
     title: "EMI Calculator",
-    desc: "Plan your finances with our advanced EMI calculator tool.",
+    desc: "Plan your finances with our advanced EMI calculator for loans and purchases.",
     href: "/emi-calculator",
-    color: "text-primary",
   },
   {
     icon: CheckCircle,
     title: "Eligibility Check",
-    desc: "Instantly check your eligibility for cards and loans. No credit impact.",
+    desc: "Instantly check your eligibility for credit cards and loans. No credit impact.",
     href: "/eligibility",
-    color: "text-primary",
-  },
-  {
-    icon: BookOpen,
-    title: "Financial Guides",
-    desc: "Expert advice and guides to help you make smarter financial decisions.",
-    href: "#",
-    color: "text-primary",
   },
 ];
 
@@ -67,7 +61,7 @@ const FeaturesSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-foreground">
             Everything You Need to{" "}
             <span className="text-gradient">Save More</span>
           </h2>
@@ -89,8 +83,8 @@ const FeaturesSection = () => {
                 to={f.href}
                 className="block p-6 rounded-xl border border-border bg-card card-hover group"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <f.icon className={`w-6 h-6 ${f.color}`} />
+                <div className="w-12 h-12 rounded-lg bg-primary/8 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
+                  <f.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-heading font-semibold text-foreground mb-2">{f.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
