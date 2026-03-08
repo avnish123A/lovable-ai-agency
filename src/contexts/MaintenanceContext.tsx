@@ -42,7 +42,7 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
         .single();
 
       if (data?.value) {
-        setSettings(data.value as MaintenanceSettings);
+        setSettings(data.value as unknown as MaintenanceSettings);
       }
     } catch (error) {
       console.error("Error fetching maintenance settings:", error);
