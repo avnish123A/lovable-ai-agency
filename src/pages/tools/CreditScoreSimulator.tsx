@@ -160,6 +160,7 @@ const CreditScoreSimulator = () => {
               "Hard Inquiries": `${values[4]}`,
             }}
             productLink="/credit-cards"
+            captureRef={resultRef}
           />
         </div>
       </div>
