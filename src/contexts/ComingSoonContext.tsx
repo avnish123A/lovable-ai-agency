@@ -51,6 +51,11 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
 
       if (data?.value) {
         const val = data.value as Record<string, unknown>;
+        // Support both old launch_date and new countdown_target formats
+        let target = val.countdown_target as string | undefined;
+        if (!target && val.launch_date) {
+          target = new Date((val.launch_date as string) + "T00:00:00").toISOString();
+        }
         setSettings({
           enabled: !!val.enabled,
           headline: (val.headline as string) || defaultSettings.headline,
@@ -58,7 +63,7 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
           countdown_days: (val.countdown_days as number) ?? 30,
           countdown_hours: (val.countdown_hours as number) ?? 0,
           countdown_minutes: (val.countdown_minutes as number) ?? 0,
-          countdown_target: (val.countdown_target as string) || defaultSettings.countdown_target,
+          countdown_target: target || defaultSettings.countdown_target,
         });
       }
     } catch (error) {
