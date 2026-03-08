@@ -1,73 +1,68 @@
 import { motion } from "framer-motion";
-import { CreditCard, Sparkles, Shield, Calculator, Gift, TrendingUp, ArrowRight } from "lucide-react";
+import { CreditCard, Sparkles, Shield, Calculator, Gift, TrendingUp, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const features = [
   {
     icon: CreditCard,
-    title: "Smart Product Comparison",
-    desc: "Compare credit cards, loans, and insurance from HDFC, ICICI, Axis, SBI & more banks side by side.",
+    title: "Smart Comparison",
+    desc: "Compare credit cards and loans from top banks side by side with detailed insights.",
     href: "/credit-cards",
-    gradient: "from-emerald-500/10 to-teal-500/10",
-    iconGradient: "from-emerald-500 to-teal-500",
+    color: "bg-blue-500",
   },
   {
     icon: Sparkles,
-    title: "AI Financial Assistant",
-    desc: "Get personalized recommendations powered by AI based on your spending habits and preferences.",
+    title: "AI Assistant",
+    desc: "Get personalized recommendations powered by AI based on your profile.",
     href: "/tools/card-finder",
-    gradient: "from-violet-500/10 to-purple-500/10",
-    iconGradient: "from-violet-500 to-purple-500",
+    color: "bg-violet-500",
   },
   {
     icon: Shield,
-    title: "Verified Partner Banks",
-    desc: "All offers are directly sourced from verified banking partners and financial institutions.",
+    title: "Verified Partners",
+    desc: "All offers from verified banking partners and financial institutions.",
     href: "/about",
-    gradient: "from-blue-500/10 to-indigo-500/10",
-    iconGradient: "from-blue-500 to-indigo-500",
+    color: "bg-emerald-500",
   },
   {
     icon: Calculator,
-    title: "Financial Calculators",
-    desc: "17+ smart tools including EMI calculator, loan eligibility checker, and savings planner.",
+    title: "Financial Tools",
+    desc: "17+ calculators for EMI, loans, savings, investments and more.",
     href: "/tools",
-    gradient: "from-amber-500/10 to-orange-500/10",
-    iconGradient: "from-amber-500 to-orange-500",
+    color: "bg-amber-500",
   },
   {
     icon: Gift,
-    title: "Exclusive Cashback Deals",
-    desc: "Access special cashback offers and rewards from partner banks and financial products.",
+    title: "Cashback Deals",
+    desc: "Exclusive cashback offers from partner banks and stores.",
     href: "/cashback",
-    gradient: "from-rose-500/10 to-pink-500/10",
-    iconGradient: "from-rose-500 to-pink-500",
+    color: "bg-rose-500",
   },
   {
     icon: TrendingUp,
-    title: "Easy Application Process",
-    desc: "Apply directly to banks with a seamless process. We guide you to official bank pages.",
+    title: "Easy Apply",
+    desc: "Seamless application process with direct bank redirects.",
     href: "/credit-cards",
-    gradient: "from-cyan-500/10 to-sky-500/10",
-    iconGradient: "from-cyan-500 to-sky-500",
+    color: "bg-cyan-500",
   },
 ];
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.08 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 const FeaturesSection = () => {
   return (
-    <section className="py-28 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-3xl" />
+    <section className="py-32 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-secondary/40" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
@@ -76,15 +71,20 @@ const FeaturesSection = () => {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+          <motion.span 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-block px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6"
+          >
             Platform Features
-          </span>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold mb-5 text-foreground">
-            Everything You Need to{" "}
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold mb-6 text-foreground tracking-tight">
+            Everything to{" "}
             <span className="text-gradient">Save Smarter</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A complete suite of tools designed to help you find, compare, and apply for the best financial products.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Complete suite of tools to find, compare, and apply for the best financial products.
           </p>
         </motion.div>
 
@@ -93,22 +93,22 @@ const FeaturesSection = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {features.map((f) => (
             <motion.div key={f.title} variants={item}>
               <Link
                 to={f.href}
-                className={`block p-8 rounded-3xl bg-gradient-to-br ${f.gradient} border border-border/50 group hover:border-primary/30 transition-all duration-300 hover:shadow-elegant h-full`}
+                className="block p-8 rounded-3xl bg-card border border-border group hover:border-primary/40 hover:shadow-elegant transition-all duration-300 h-full"
               >
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.iconGradient} flex items-center justify-center mb-6 shadow-lg`}>
+                <div className={`w-14 h-14 rounded-2xl ${f.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <f.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-3">{f.title}</h3>
-                <p className="text-muted-foreground leading-relaxed mb-4">{f.desc}</p>
-                <div className="flex items-center text-primary font-semibold text-sm group-hover:gap-2 transition-all">
-                  Learn more <ArrowRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
+                <h3 className="text-xl font-heading font-bold text-foreground mb-3 flex items-center justify-between">
+                  {f.title}
+                  <ArrowUpRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
               </Link>
             </motion.div>
           ))}
