@@ -3,19 +3,19 @@ import { Quote } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "Nexus AI transformed our customer support overnight. We went from 24-hour response times to instant, intelligent conversations that our customers actually prefer over human agents.",
+    quote: "Nexus AI transformed our customer support overnight. Response times dropped from 24 hours to instant, and our customers actually prefer the AI experience.",
     name: "Sarah Chen",
     title: "CTO, Meridian Health",
     metric: "85% faster response",
   },
   {
-    quote: "The ROI was immediate. Within the first month, our AI agent was qualifying leads better than our sales team, and the conversion rate jumped by 40%.",
+    quote: "The ROI was immediate. Within the first month, our AI agent was qualifying leads better than our sales team, and conversions jumped by 40%.",
     name: "Marcus Rivera",
     title: "VP Sales, TechFlow",
     metric: "40% more conversions",
   },
   {
-    quote: "What impressed us most was the speed — from first call to production deployment in just 12 days. The team at Nexus AI operates at a level we haven't seen elsewhere.",
+    quote: "From first call to production in just 12 days. The professional developers at Nexus AI operate at a level we haven't seen elsewhere.",
     name: "Emily Zhang",
     title: "Founder, DataScale",
     metric: "12-day deployment",
@@ -24,26 +24,24 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="testimonials" className="py-32 relative">
-      <div className="absolute inset-0 bg-gradient-hero opacity-20" />
-      <div className="container mx-auto px-6 relative z-10">
+    <section className="py-28 relative">
+      <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-20"
+          className="text-center max-w-2xl mx-auto mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.2em] text-primary font-medium mb-4">Testimonials</p>
-          <h2 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight mb-5">
-            Voices of <span className="text-gradient italic">Trust</span>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Testimonials</p>
+          <h2 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Trusted by <span className="text-gradient">Leaders</span>
           </h2>
-          <div className="gold-line w-16 mx-auto mb-6" />
           <p className="text-muted-foreground text-lg leading-relaxed font-light">
-            Hear from the leaders who chose to build with Nexus AI.
+            Hear from the companies who chose to build with our expert team.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -51,19 +49,19 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
-              className="p-8 rounded-sm bg-gradient-card border-gradient hover:shadow-glow-sm transition-all duration-500 flex flex-col"
+              className="p-7 rounded-2xl bg-gradient-card border border-border/50 hover:border-primary/20 transition-all duration-500 flex flex-col"
             >
-              <Quote size={24} className="text-primary/40 mb-5" />
-              <p className="text-foreground/90 leading-relaxed mb-8 flex-1 font-light italic">
+              <Quote size={20} className="text-primary/40 mb-4" />
+              <p className="text-foreground/90 leading-relaxed mb-6 flex-1 font-light text-[15px]">
                 "{t.quote}"
               </p>
-              <div className="gold-line w-full mb-6" />
+              <div className="divider-line w-full mb-5" />
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-heading font-semibold text-foreground">{t.name}</p>
+                  <p className="font-heading font-semibold text-foreground text-sm">{t.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{t.title}</p>
                 </div>
-                <span className="text-xs uppercase tracking-wider text-primary font-medium">{t.metric}</span>
+                <span className="text-[11px] font-semibold text-primary">{t.metric}</span>
               </div>
             </motion.div>
           ))}
