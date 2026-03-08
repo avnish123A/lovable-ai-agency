@@ -44,9 +44,14 @@ const AdminSettings = () => {
 
   const handleSave = async () => {
     setSaving(true);
+    const valueToSave = {
+      enabled: maintenance.enabled,
+      message: maintenance.message,
+      estimated_time: maintenance.estimated_time,
+    };
     const { error } = await supabase
       .from("site_settings")
-      .update({ value: maintenance as unknown as Record<string, unknown>, updated_at: new Date().toISOString() })
+      .update({ value: valueToSave, updated_at: new Date().toISOString() })
       .eq("key", "maintenance_mode");
 
     if (error) {
