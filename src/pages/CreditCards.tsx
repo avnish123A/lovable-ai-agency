@@ -11,12 +11,15 @@ import TrustBadge from "@/components/TrustBadge";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 import SEOHead from "@/components/SEOHead";
+import CategoryComingSoon from "@/components/CategoryComingSoon";
+import { useCategoryComingSoon } from "@/hooks/useCategoryComingSoon";
 
 const CreditCards = () => {
   const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCard, setSelectedCard] = useState<any>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { isComingSoon } = useCategoryComingSoon("credit_cards");
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -60,6 +63,10 @@ const CreditCards = () => {
         canonical="https://kriyapay.co.in/credit-cards"
       />
       <Navbar />
+      {isComingSoon ? (
+        <CategoryComingSoon title="Credit Cards" description="Best credit card comparisons are coming soon!" />
+      ) : (
+      <>
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
@@ -179,6 +186,8 @@ const CreditCards = () => {
         deal={selectedCard}
         onSuccess={handleDialogSuccess}
       />
+      </>
+      )}
     </div>
   );
 };

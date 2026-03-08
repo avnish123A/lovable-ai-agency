@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { AlertTriangle, Wrench, Loader2, Rocket, Calendar } from "lucide-react";
+import { AlertTriangle, Wrench, Loader2, Rocket, Calendar, Eye } from "lucide-react";
+import { CategoryKey } from "@/hooks/useCategoryComingSoon";
 
 interface MaintenanceSettings {
   enabled: boolean;
@@ -39,13 +40,18 @@ const AdminSettings = () => {
     description: "We're building the future of financial comparison. Be the first to know.",
     launch_date: "2025-04-15",
   });
+  const [categoryCS, setCategoryCS] = useState<Record<CategoryKey, boolean>>({
+    credit_cards: false, loans: false, insurance: false, bank_accounts: false,
+    demat_accounts: false, fixed_deposits: false, cashback: false,
+  });
+  const [savingCS, setSavingCS] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
       const { data } = await supabase
         .from("site_settings")
         .select("key, value")
-        .in("key", ["maintenance_mode", "coming_soon_mode"]);
+        .in("key", ["maintenance_mode", "coming_soon_mode", "category_coming_soon"]);
 
       if (data) {
         data.forEach((item) => {
@@ -54,6 +60,9 @@ const AdminSettings = () => {
           }
           if (item.key === "coming_soon_mode" && item.value) {
             setComingSoon(item.value as unknown as ComingSoonSettings);
+          }
+          if (item.key === "category_coming_soon" && item.value) {
+            setCategoryCS(prev => ({ ...prev, ...(item.value as Record<string, boolean>) }));
           }
         });
       }
@@ -115,9 +124,55 @@ const AdminSettings = () => {
     setComingSoon({ ...comingSoon, enabled: !comingSoon.enabled });
   };
 
+  const toggleCategoryCS = async (key: CategoryKey) => {
+    const updated = { ...categoryCS, [key]: !categoryCS[key] };
+    setCategoryCS(updated);
+    setSavingCS(true);
+    const { error } = await supabase
+      .from("site_settings")
+      .upsert({ key: "category_coming_soon", value: updated, updated_at: new Date().toISOString() }, { onConflict: "key" });
+    if (error) toast.error("Failed to update");
+    else toast.success(`${key.replace(/_/g, " ")} ${updated[key] ? "set to Coming Soon" : "is now Live"}`);
+    setSavingCS(false);
+  };
+
+  const categoryLabels: Record<CategoryKey, string> = {
+    credit_cards: "Credit Cards", loans: "Loans", insurance: "Insurance",
+    bank_accounts: "Bank Accounts", demat_accounts: "Demat Accounts",
+    fixed_deposits: "Fixed Deposits", cashback: "Cashback",
+  };
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-heading font-bold">Settings</h1>
+
+      {/* Category Coming Soon Toggles */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Eye className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="font-heading text-lg">Category Visibility</CardTitle>
+              <CardDescription>Toggle "Coming Soon" for individual product categories</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {(Object.keys(categoryLabels) as CategoryKey[]).map(key => (
+              <div key={key} className="flex items-center justify-between p-3 rounded-lg border border-border">
+                <div>
+                  <p className="text-sm font-medium text-foreground">{categoryLabels[key]}</p>
+                  <p className="text-xs text-muted-foreground">{categoryCS[key] ? "Coming Soon" : "Live"}</p>
+                </div>
+                <Switch checked={categoryCS[key]} onCheckedChange={() => toggleCategoryCS(key)} disabled={savingCS} />
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Coming Soon Mode Card */}
       <Card className={comingSoon.enabled ? "border-primary/50" : ""}>

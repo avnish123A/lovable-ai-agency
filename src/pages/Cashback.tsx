@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CategoryComingSoon from "@/components/CategoryComingSoon";
+import { useCategoryComingSoon } from "@/hooks/useCategoryComingSoon";
 
 const Cashback = () => {
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isComingSoon } = useCategoryComingSoon("cashback");
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -26,6 +29,9 @@ const Cashback = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      {isComingSoon ? (
+        <CategoryComingSoon title="Cashback" description="Best cashback offers are coming soon!" />
+      ) : (
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
@@ -85,6 +91,7 @@ const Cashback = () => {
           )}
         </div>
       </section>
+      )}
       <Footer />
     </div>
   );
