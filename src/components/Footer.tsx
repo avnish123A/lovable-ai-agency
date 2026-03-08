@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { TrendingUp } from "lucide-react";
+import { useEffect } from "react";
 
 const footerLinks = {
   Products: [
     { label: "Credit Cards", href: "/credit-cards" },
     { label: "Personal Loans", href: "/loans" },
+    { label: "Finance Deals", href: "/finance-deals" },
     { label: "Cashback Offers", href: "/cashback" },
   ],
   Tools: [
@@ -19,6 +21,27 @@ const footerLinks = {
 };
 
 const Footer = () => {
+  useEffect(() => {
+    // Load Cuelinks smart link tracking script
+    if (!document.getElementById("cuelinks-script")) {
+      const cIdScript = document.createElement("script");
+      cIdScript.id = "cuelinks-cid";
+      cIdScript.type = "text/javascript";
+      cIdScript.textContent = "var cId = '211481';";
+      document.body.appendChild(cIdScript);
+
+      const s = document.createElement("script");
+      s.id = "cuelinks-script";
+      s.type = "text/javascript";
+      s.async = true;
+      s.src =
+        document.location.protocol === "https:"
+          ? "https://cdn0.cuelinks.com/js/cuelinksv2.js"
+          : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
+      document.body.appendChild(s);
+    }
+  }, []);
+
   return (
     <footer className="border-t border-border bg-card">
       <div className="container mx-auto px-4 md:px-8 py-16">
