@@ -86,6 +86,57 @@ export type Database = {
         }
         Relationships: []
       }
+      bank_accounts: {
+        Row: {
+          account_name: string
+          account_type: string
+          apply_link: string | null
+          bank_name: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          image_url: string | null
+          interest_rate: number | null
+          is_active: boolean | null
+          min_balance: string | null
+          rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          account_name: string
+          account_type?: string
+          apply_link?: string | null
+          bank_name: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          interest_rate?: number | null
+          is_active?: boolean | null
+          min_balance?: string | null
+          rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          account_name?: string
+          account_type?: string
+          apply_link?: string | null
+          bank_name?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          interest_rate?: number | null
+          is_active?: boolean | null
+          min_balance?: string | null
+          rating?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       banks: {
         Row: {
           created_at: string
@@ -286,6 +337,57 @@ export type Database = {
           },
         ]
       }
+      demat_accounts: {
+        Row: {
+          account_opening_fee: string | null
+          account_type: string
+          annual_maintenance: string | null
+          apply_link: string | null
+          brokerage: string | null
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          platform_name: string
+          rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          account_opening_fee?: string | null
+          account_type?: string
+          annual_maintenance?: string | null
+          apply_link?: string | null
+          brokerage?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          platform_name: string
+          rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          account_opening_fee?: string | null
+          account_type?: string
+          annual_maintenance?: string | null
+          apply_link?: string | null
+          brokerage?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          platform_name?: string
+          rating?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       finance_deals: {
         Row: {
           ai_benefits: string | null
@@ -349,6 +451,123 @@ export type Database = {
           subcategory?: string | null
           title?: string
           tracking_link?: string | null
+        }
+        Relationships: []
+      }
+      fixed_deposits: {
+        Row: {
+          apply_link: string | null
+          bank_name: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          image_url: string | null
+          interest_rate: number
+          is_active: boolean | null
+          max_amount: number | null
+          max_tenure: string | null
+          min_amount: number | null
+          min_tenure: string | null
+          rating: number | null
+          scheme_name: string
+          senior_citizen_rate: number | null
+          updated_at: string
+        }
+        Insert: {
+          apply_link?: string | null
+          bank_name: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          interest_rate: number
+          is_active?: boolean | null
+          max_amount?: number | null
+          max_tenure?: string | null
+          min_amount?: number | null
+          min_tenure?: string | null
+          rating?: number | null
+          scheme_name: string
+          senior_citizen_rate?: number | null
+          updated_at?: string
+        }
+        Update: {
+          apply_link?: string | null
+          bank_name?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          interest_rate?: number
+          is_active?: boolean | null
+          max_amount?: number | null
+          max_tenure?: string | null
+          min_amount?: number | null
+          min_tenure?: string | null
+          rating?: number | null
+          scheme_name?: string
+          senior_citizen_rate?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      insurance_products: {
+        Row: {
+          apply_link: string | null
+          company_name: string
+          coverage_amount: string | null
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          image_url: string | null
+          insurance_type: string
+          is_active: boolean | null
+          max_age: number | null
+          min_age: number | null
+          premium_starting: string | null
+          product_name: string
+          rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          apply_link?: string | null
+          company_name: string
+          coverage_amount?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          insurance_type?: string
+          is_active?: boolean | null
+          max_age?: number | null
+          min_age?: number | null
+          premium_starting?: string | null
+          product_name: string
+          rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          apply_link?: string | null
+          company_name?: string
+          coverage_amount?: string | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          image_url?: string | null
+          insurance_type?: string
+          is_active?: boolean | null
+          max_age?: number | null
+          min_age?: number | null
+          premium_starting?: string | null
+          product_name?: string
+          rating?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
