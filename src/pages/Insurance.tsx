@@ -34,7 +34,7 @@ const Insurance = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Best Insurance Plans in India 2026 | KriyaPay" description="Compare top health, life, motor insurance plans from India's leading insurers." canonical="https://kriyapay.lovable.app/insurance" />
+      <SEOHead title="Best Insurance Plans in India 2026 | ApniNivesh" description="Compare top health, life, motor insurance plans from India's leading insurers." canonical="https://apninivesh.in/insurance" />
       <Navbar />
       {isComingSoon ? (
         <CategoryComingSoon title="Insurance" description="Best insurance comparison platform coming soon!" />

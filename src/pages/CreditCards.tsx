@@ -59,8 +59,8 @@ const CreditCards = () => {
     <div className="min-h-screen bg-background">
       <SEOHead 
         title="Best Credit Cards in India 2026 – Compare & Apply | ApniNivesh"
-        description="Compare best credit cards from HDFC, SBI, ICICI, Axis Bank & more. Check rewards, cashback, fees & apply online. Free comparison by Kriyapay."
-        canonical="https://kriyapay.co.in/credit-cards"
+        description="Compare best credit cards from HDFC, SBI, ICICI, Axis Bank & more. Check rewards, cashback, fees & apply online. Free comparison by ApniNivesh."
+        canonical="https://apninivesh.in/credit-cards"
       />
       <Navbar />
       {isComingSoon ? (
