@@ -43,6 +43,7 @@ function calculateCIBILScore(vals: number[]) {
 }
 
 const CreditScoreSimulator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [values, setValues] = useState(factors.map((f) => f.default));
 
   const score = useMemo(() => calculateCIBILScore(values), [values]);
