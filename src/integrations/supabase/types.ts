@@ -177,7 +177,10 @@ export type Database = {
       }
       finance_deals: {
         Row: {
+          ai_benefits: string | null
           ai_description: string | null
+          ai_eligibility: string | null
+          ai_terms: string | null
           cashback: string | null
           category: string
           clicks: number | null
@@ -195,7 +198,10 @@ export type Database = {
           tracking_link: string | null
         }
         Insert: {
+          ai_benefits?: string | null
           ai_description?: string | null
+          ai_eligibility?: string | null
+          ai_terms?: string | null
           cashback?: string | null
           category?: string
           clicks?: number | null
@@ -213,7 +219,10 @@ export type Database = {
           tracking_link?: string | null
         }
         Update: {
+          ai_benefits?: string | null
           ai_description?: string | null
+          ai_eligibility?: string | null
+          ai_terms?: string | null
           cashback?: string | null
           category?: string
           clicks?: number | null
