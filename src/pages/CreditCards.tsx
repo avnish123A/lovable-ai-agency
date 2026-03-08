@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Star, Check, Shield } from "lucide-react";
+import { Star, Check, Shield, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -9,10 +9,13 @@ import BankLogo from "@/components/BankLogo";
 import CreditCardVisual from "@/components/CreditCardVisual";
 import TrustBadge from "@/components/TrustBadge";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
+import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
 const CreditCards = () => {
   const [cards, setCards] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCard, setSelectedCard] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -29,6 +32,24 @@ const CreditCards = () => {
 
   const fmt = (n: number) =>
     n === 0 ? "Free" : `₹${n.toLocaleString("en-IN")}`;
+
+  const handleApply = (card: any) => {
+    // Convert credit card to deal-like object for LeadCaptureDialog
+    const dealLike = {
+      id: card.id,
+      title: card.card_name,
+      merchant: card.bank_name,
+      subcategory: "credit_cards",
+      tracking_link: card.apply_link || null,
+    };
+    setSelectedCard(dealLike);
+    setDialogOpen(true);
+  };
+
+  const handleDialogSuccess = () => {
+    setDialogOpen(false);
+    setSelectedCard(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,7 +104,11 @@ const CreditCards = () => {
 
                   {/* Card visual */}
                   <div className="px-6 py-3">
-                    <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
+                    {card.image_url ? (
+                      <img src={card.image_url} alt={card.card_name} className="w-full h-32 object-contain rounded-lg" />
+                    ) : (
+                      <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
+                    )}
                   </div>
 
                   {/* Product details */}
@@ -119,8 +144,11 @@ const CreditCards = () => {
                     </div>
 
                     <div className="mt-auto pt-4 border-t border-border flex items-center gap-3">
-                      <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
-                        Apply Now
+                      <Button 
+                        className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                        onClick={() => handleApply(card)}
+                      >
+                        Apply Now <ExternalLink className="w-4 h-4 ml-2" />
                       </Button>
                       <div className="flex items-center gap-1 text-accent">
                         <Shield className="w-3.5 h-3.5" />
@@ -137,6 +165,14 @@ const CreditCards = () => {
         </div>
       </section>
       <Footer />
+
+      {/* Lead Capture Dialog */}
+      <LeadCaptureDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        deal={selectedCard}
+        onSuccess={handleDialogSuccess}
+      />
     </div>
   );
 };
