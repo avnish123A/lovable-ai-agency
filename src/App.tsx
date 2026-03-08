@@ -18,6 +18,7 @@ import CompareProducts from "./pages/CompareProducts";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import KriyaAIChatbot from "./components/KriyaAIChatbot";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AnimatedRoutes />
+        <KriyaAIChatbot />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
