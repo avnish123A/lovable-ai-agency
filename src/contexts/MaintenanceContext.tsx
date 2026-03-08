@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useRef, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface MaintenanceSettings {
@@ -32,8 +32,9 @@ export const useMaintenanceMode = () => useContext(MaintenanceContext);
 export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<MaintenanceSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
+  const lastValueRef = useRef<string>("");
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const { data } = await supabase
         .from("site_settings")
@@ -42,6 +43,9 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (data?.value) {
+        const raw = JSON.stringify(data.value);
+        if (raw === lastValueRef.current) return;
+        lastValueRef.current = raw;
         setSettings(data.value as unknown as MaintenanceSettings);
       }
     } catch (error) {
@@ -49,21 +53,16 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchSettings();
 
-    // Realtime subscription for instant updates
     const channel = supabase
       .channel("maintenance-mode-rt")
       .on(
         "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "site_settings",
-        },
+        { event: "*", schema: "public", table: "site_settings" },
         (payload: any) => {
           const row = payload.new || payload.old;
           if (row?.key === "maintenance_mode") fetchSettings();
@@ -71,10 +70,14 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
       )
       .subscribe();
 
+    // Fallback: Poll every 3 seconds
+    const pollId = setInterval(fetchSettings, 3000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(pollId);
     };
-  }, []);
+  }, [fetchSettings]);
 
   return (
     <MaintenanceContext.Provider
