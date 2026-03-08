@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Star, CreditCard } from "lucide-react";
+import { Star, CreditCard, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import BankLogo from "@/components/BankLogo";
+import CreditCardVisual from "@/components/CreditCardVisual";
+import TrustBadge from "@/components/TrustBadge";
 
 const TopCardsSection = () => {
   const [cards, setCards] = useState<any[]>([]);
@@ -53,41 +56,48 @@ const TopCardsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="rounded-2xl border border-border bg-card shadow-card p-6 card-hover"
+              className="rounded-2xl border border-border bg-card shadow-card card-hover overflow-hidden"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <CreditCard className="w-6 h-6 text-primary" />
+              {/* Bank header */}
+              <div className="flex items-center justify-between px-6 pt-5 pb-2">
+                <div className="flex items-center gap-2.5">
+                  <BankLogo bankName={card.bank_name} size="sm" />
+                  <span className="text-xs font-semibold text-foreground">{card.bank_name}</span>
                 </div>
-                <div>
-                  <h3 className="font-heading font-semibold text-foreground text-sm">{card.card_name}</h3>
-                  <p className="text-xs text-muted-foreground">{card.bank_name}</p>
-                </div>
+                <TrustBadge variant="verified" />
               </div>
-              <div className="space-y-3 mb-5">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Welcome Bonus</span>
-                  <span className="text-foreground font-medium">{card.welcome_bonus || "—"}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Annual Fee</span>
-                  <span className="text-foreground font-medium">{fmt(card.annual_fee)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Cashback</span>
-                  <span className="text-primary font-medium">{card.cashback_rate || "—"}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Rewards</span>
-                  <span className="text-foreground font-medium">{card.reward_points || "—"}</span>
-                </div>
+
+              {/* Card visual */}
+              <div className="px-6 py-3">
+                <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
               </div>
-              <div className="flex items-center justify-between pt-4 border-t border-border">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 text-primary fill-primary" />
-                  <span className="text-sm font-medium text-foreground">{card.rating}</span>
+
+              {/* Details */}
+              <div className="px-6 pb-6">
+                <h3 className="font-heading font-bold text-foreground text-sm mb-3">{card.card_name}</h3>
+                <div className="space-y-2.5 mb-4">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Welcome Bonus</span>
+                    <span className="text-foreground font-medium">{card.welcome_bonus || "—"}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Annual Fee</span>
+                    <span className="text-foreground font-medium">{fmt(card.annual_fee)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Cashback</span>
+                    <span className="text-primary font-semibold">{card.cashback_rate || "—"}</span>
+                  </div>
                 </div>
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">Apply Now</Button>
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-primary fill-primary" />
+                    <span className="text-sm font-bold text-foreground">{card.rating}</span>
+                  </div>
+                  <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
+                    Apply Now
+                  </Button>
+                </div>
               </div>
             </motion.div>
           ))}

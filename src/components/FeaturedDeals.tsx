@@ -4,6 +4,7 @@ import { BadgeDollarSign, ExternalLink, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import TrustBadge from "@/components/TrustBadge";
 
 const FeaturedDeals = () => {
   const [deals, setDeals] = useState<any[]>([]);
@@ -24,7 +25,7 @@ const FeaturedDeals = () => {
   if (deals.length === 0) return null;
 
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-24 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,7 +41,7 @@ const FeaturedDeals = () => {
               Top finance offers with AI-powered descriptions, updated every 12 hours.
             </p>
           </div>
-          <Button asChild variant="outline" className="mt-4 md:mt-0 border-border">
+          <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
             <Link to="/finance-deals">View All Deals</Link>
           </Button>
         </motion.div>
@@ -53,18 +54,19 @@ const FeaturedDeals = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="rounded-xl border border-border bg-card p-6 card-hover flex flex-col"
+              className="rounded-2xl border border-border bg-card shadow-card p-6 card-hover flex flex-col"
             >
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/8 flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
                   <BadgeDollarSign className="w-5 h-5 text-primary" />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <h3 className="font-heading font-semibold text-foreground text-sm leading-tight line-clamp-2">
                     {deal.title}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1">{deal.merchant}</p>
                 </div>
+                <TrustBadge variant="verified" />
               </div>
 
               {deal.ai_description && (
@@ -80,12 +82,12 @@ const FeaturedDeals = () => {
               {deal.cashback && (
                 <div className="flex justify-between text-sm mb-3">
                   <span className="text-muted-foreground">Reward</span>
-                  <span className="text-primary font-medium">{deal.cashback}</span>
+                  <span className="text-primary font-semibold">{deal.cashback}</span>
                 </div>
               )}
 
               <div className="mt-auto pt-4 border-t border-border">
-                <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90" size="sm">
+                <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl" size="sm">
                   <Link to="/finance-deals">
                     View Deal <ExternalLink className="w-3.5 h-3.5 ml-2" />
                   </Link>
