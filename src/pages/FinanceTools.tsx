@@ -26,6 +26,9 @@ const tools = [
   { icon: Sparkles, title: "Credit Score Guide", desc: "Understand and improve your score", path: "/tools/credit-score", color: "from-yellow-500/15 to-amber-500/15", iconColor: "text-yellow-500" },
   { icon: Gift, title: "Cashback Calculator", desc: "Maximize your cashback earnings", path: "/tools/cashback-calc", color: "from-emerald-500/15 to-teal-500/15", iconColor: "text-emerald-500" },
   { icon: Star, title: "Reward Points Calculator", desc: "Calculate reward points value", path: "/tools/reward-points", color: "from-purple-500/15 to-violet-500/15", iconColor: "text-purple-500" },
+  { icon: Shield, title: "Credit Score Simulator", desc: "Simulate how habits affect your score", path: "/tools/credit-score-simulator", color: "from-cyan-500/15 to-sky-500/15", iconColor: "text-cyan-500", ai: true },
+  { icon: Calculator, title: "Expense Tracker", desc: "Track and analyze your spending", path: "/tools/expense-tracker", color: "from-rose-500/15 to-red-500/15", iconColor: "text-rose-500" },
+  { icon: Landmark, title: "Retirement Planner", desc: "Plan your retirement corpus", path: "/tools/retirement-planner", color: "from-indigo-500/15 to-blue-500/15", iconColor: "text-indigo-500", ai: true },
 ];
 
 const FinanceTools = () => (
