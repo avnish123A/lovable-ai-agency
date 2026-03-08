@@ -555,12 +555,33 @@ const AdminCashback = () => {
               )}
             </div>
 
-            {/* Admin Notes */}
-            <div>
-              <Label>Admin Notes</Label>
-              <Textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} placeholder="Add internal notes about this request..." rows={3} />
-              <Button size="sm" className="mt-2" onClick={() => saveAdminNote(viewReq.id)}>Save Note</Button>
+            {/* Public Note (visible to user on tracker) */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Public Note (Visible to User)</h4>
+              <div className="flex gap-2 flex-wrap mb-2">
+                {["Transaction not verified", "Duplicate request", "Invalid UPI ID", "Cashback confirmed — processing soon", "Payout sent via UPI"].map(preset => (
+                  <button key={preset} onClick={() => setPublicNote(preset)} className="text-[10px] px-2 py-1 rounded-md bg-muted border border-border hover:bg-muted/80 text-muted-foreground">
+                    {preset}
+                  </button>
+                ))}
+              </div>
+              <Textarea value={publicNote} onChange={e => setPublicNote(e.target.value)} placeholder="This note will be shown to the user on the tracking page..." rows={2} />
             </div>
+
+            {/* Estimated Payout Date */}
+            <div>
+              <Label>Estimated Payout Date</Label>
+              <Input type="date" value={estimatedDate} onChange={e => setEstimatedDate(e.target.value)} />
+              <p className="text-[10px] text-muted-foreground mt-1">Shown to user if status is pending or approved</p>
+            </div>
+
+            {/* Admin Notes (internal only) */}
+            <div>
+              <Label>Admin Notes (Internal Only)</Label>
+              <Textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} placeholder="Internal notes — not visible to user..." rows={3} />
+            </div>
+
+            <Button className="w-full" onClick={() => saveAdminNote(viewReq.id)}>Save All Notes & Details</Button>
           </div>}
         </DialogContent>
       </Dialog>
