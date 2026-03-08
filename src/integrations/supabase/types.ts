@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_links: {
+        Row: {
+          clicks: number | null
+          created_at: string
+          cuelinks_url: string | null
+          earnkaro_url: string | null
+          id: string
+          is_active: boolean | null
+          original_url: string
+          platform: string | null
+          product_id: string | null
+          product_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          clicks?: number | null
+          created_at?: string
+          cuelinks_url?: string | null
+          earnkaro_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_url: string
+          platform?: string | null
+          product_id?: string | null
+          product_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          clicks?: number | null
+          created_at?: string
+          cuelinks_url?: string | null
+          earnkaro_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          original_url?: string
+          platform?: string | null
+          product_id?: string | null
+          product_type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       banks: {
         Row: {
           created_at: string
@@ -504,6 +546,36 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: Json
+        }
+        Relationships: []
+      }
+      sync_logs: {
+        Row: {
+          completed_at: string | null
+          details: Json | null
+          id: string
+          records_processed: number | null
+          started_at: string
+          status: string
+          sync_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          details?: Json | null
+          id?: string
+          records_processed?: number | null
+          started_at?: string
+          status: string
+          sync_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          details?: Json | null
+          id?: string
+          records_processed?: number | null
+          started_at?: string
+          status?: string
+          sync_type?: string
         }
         Relationships: []
       }
