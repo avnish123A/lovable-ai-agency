@@ -1,39 +1,28 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Star, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-const cards = [
-  {
-    name: "Platinum Rewards Card",
-    bank: "HDFC Bank",
-    bonus: "₹500 Welcome Bonus",
-    annualFee: "₹499",
-    cashback: "5% on Dining",
-    rewards: "2X Reward Points",
-    rating: 4.8,
-  },
-  {
-    name: "SimplyCLICK Card",
-    bank: "SBI Cards",
-    bonus: "₹500 Amazon Voucher",
-    annualFee: "₹499",
-    cashback: "10X on Partner Sites",
-    rewards: "1.25% Cashback",
-    rating: 4.6,
-  },
-  {
-    name: "Ace Credit Card",
-    bank: "Axis Bank",
-    bonus: "Lifetime Free",
-    annualFee: "₹0",
-    cashback: "5% on Bills",
-    rewards: "2% on Everything",
-    rating: 4.7,
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const TopCardsSection = () => {
+  const [cards, setCards] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      const { data } = await supabase
+        .from("credit_cards")
+        .select("*")
+        .eq("is_active", true)
+        .order("rating", { ascending: false })
+        .limit(3);
+      setCards(data || []);
+    };
+    fetchCards();
+  }, []);
+
+  const fmt = (n: number) => (n === 0 ? "Free" : `₹${n.toLocaleString("en-IN")}`);
+
   return (
     <section className="py-24 bg-card/50">
       <div className="container mx-auto px-4 md:px-8">
@@ -59,7 +48,7 @@ const TopCardsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {cards.map((card, i) => (
             <motion.div
-              key={card.name}
+              key={card.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -71,38 +60,34 @@ const TopCardsSection = () => {
                   <CreditCard className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-semibold text-foreground text-sm">{card.name}</h3>
-                  <p className="text-xs text-muted-foreground">{card.bank}</p>
+                  <h3 className="font-heading font-semibold text-foreground text-sm">{card.card_name}</h3>
+                  <p className="text-xs text-muted-foreground">{card.bank_name}</p>
                 </div>
               </div>
-
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Welcome Bonus</span>
-                  <span className="text-foreground font-medium">{card.bonus}</span>
+                  <span className="text-foreground font-medium">{card.welcome_bonus || "—"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Annual Fee</span>
-                  <span className="text-foreground font-medium">{card.annualFee}</span>
+                  <span className="text-foreground font-medium">{fmt(card.annual_fee)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Cashback</span>
-                  <span className="text-primary font-medium">{card.cashback}</span>
+                  <span className="text-primary font-medium">{card.cashback_rate || "—"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Rewards</span>
-                  <span className="text-foreground font-medium">{card.rewards}</span>
+                  <span className="text-foreground font-medium">{card.reward_points || "—"}</span>
                 </div>
               </div>
-
               <div className="flex items-center justify-between pt-4 border-t border-border">
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-primary fill-primary" />
                   <span className="text-sm font-medium text-foreground">{card.rating}</span>
                 </div>
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  Apply Now
-                </Button>
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">Apply Now</Button>
               </div>
             </motion.div>
           ))}

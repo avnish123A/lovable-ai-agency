@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      cashback_offers: {
+        Row: {
+          cashback_value: string
+          category: string
+          claim_instructions: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          store_name: string
+          validity: string | null
+        }
+        Insert: {
+          cashback_value: string
+          category: string
+          claim_instructions?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          store_name: string
+          validity?: string | null
+        }
+        Update: {
+          cashback_value?: string
+          category?: string
+          claim_instructions?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          store_name?: string
+          validity?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -44,6 +80,66 @@ export type Database = {
           name?: string
           phone?: string | null
           service?: string | null
+        }
+        Relationships: []
+      }
+      credit_cards: {
+        Row: {
+          annual_fee: number
+          apply_link: string | null
+          bank_name: string
+          card_name: string
+          card_type: string | null
+          cashback_rate: string | null
+          created_at: string
+          features: string[] | null
+          id: string
+          is_active: boolean | null
+          joining_fee: number
+          min_age: number | null
+          min_salary: number | null
+          rating: number | null
+          reward_points: string | null
+          updated_at: string
+          welcome_bonus: string | null
+        }
+        Insert: {
+          annual_fee?: number
+          apply_link?: string | null
+          bank_name: string
+          card_name: string
+          card_type?: string | null
+          cashback_rate?: string | null
+          created_at?: string
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          joining_fee?: number
+          min_age?: number | null
+          min_salary?: number | null
+          rating?: number | null
+          reward_points?: string | null
+          updated_at?: string
+          welcome_bonus?: string | null
+        }
+        Update: {
+          annual_fee?: number
+          apply_link?: string | null
+          bank_name?: string
+          card_name?: string
+          card_type?: string | null
+          cashback_rate?: string | null
+          created_at?: string
+          features?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          joining_fee?: number
+          min_age?: number | null
+          min_salary?: number | null
+          rating?: number | null
+          reward_points?: string | null
+          updated_at?: string
+          welcome_bonus?: string | null
         }
         Relationships: []
       }
@@ -86,6 +182,66 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      loan_products: {
+        Row: {
+          apply_link: string | null
+          bank_name: string
+          created_at: string
+          employment_type: string[] | null
+          features: string[] | null
+          id: string
+          interest_rate: number
+          is_active: boolean | null
+          loan_name: string
+          max_amount: number
+          max_tenure: number | null
+          min_age: number | null
+          min_amount: number
+          min_salary: number | null
+          min_tenure: number | null
+          processing_fee: string | null
+          updated_at: string
+        }
+        Insert: {
+          apply_link?: string | null
+          bank_name: string
+          created_at?: string
+          employment_type?: string[] | null
+          features?: string[] | null
+          id?: string
+          interest_rate: number
+          is_active?: boolean | null
+          loan_name: string
+          max_amount?: number
+          max_tenure?: number | null
+          min_age?: number | null
+          min_amount?: number
+          min_salary?: number | null
+          min_tenure?: number | null
+          processing_fee?: string | null
+          updated_at?: string
+        }
+        Update: {
+          apply_link?: string | null
+          bank_name?: string
+          created_at?: string
+          employment_type?: string[] | null
+          features?: string[] | null
+          id?: string
+          interest_rate?: number
+          is_active?: boolean | null
+          loan_name?: string
+          max_amount?: number
+          max_tenure?: number | null
+          min_age?: number | null
+          min_amount?: number
+          min_salary?: number | null
+          min_tenure?: number | null
+          processing_fee?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
