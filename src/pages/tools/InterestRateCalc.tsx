@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Percent } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,6 +9,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const InterestRateCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [principal, setPrincipal] = useState(100000);
   const [finalAmount, setFinalAmount] = useState(150000);
   const [years, setYears] = useState(3);
@@ -72,7 +73,7 @@ const InterestRateCalc = () => {
           </div>
 
           <AIInsight type="ai" title="AI Rate Analysis" message={compoundRate > 10 ? `${compoundRate.toFixed(1)}% compound return is excellent — better than most FDs. This could be equity-like growth.` : `${compoundRate.toFixed(1)}% compound return is moderate. FDs offer 6-8%, mutual funds can give 12%+.`} />
-          <ResultActions title="Interest Rate Analysis" data={{ "Principal": fmt(principal), "Final": fmt(finalAmount), "Years": `${years}`, "Simple Rate": `${simpleRate.toFixed(2)}%`, "Compound Rate": `${compoundRate.toFixed(2)}%`, "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
+          <ResultActions title="Interest Rate Analysis" data={{ "Principal": fmt(principal), "Final": fmt(finalAmount), "Years": `${years}`, "Simple Rate": `${simpleRate.toFixed(2)}%`, "Compound Rate": `${compoundRate.toFixed(2)}%`, "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

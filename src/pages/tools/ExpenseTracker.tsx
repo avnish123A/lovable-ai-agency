@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Receipt, Plus, Trash2 } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ const CATEGORIES = [
 type Expense = { id: number; name: string; amount: number; category: string };
 
 const ExpenseTracker = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [income, setIncome] = useState(50000);
   const [expenses, setExpenses] = useState<Expense[]>([
     { id: 1, name: "Rent", amount: 15000, category: "Bills" },
@@ -117,7 +118,7 @@ const ExpenseTracker = () => {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl border border-border bg-card p-3 text-center">
               <p className="text-[10px] text-muted-foreground">Income</p>
@@ -175,6 +176,7 @@ const ExpenseTracker = () => {
             title="Expense Report"
             data={{ Income: fmt(income), Expenses: fmt(totalExpenses), Savings: fmt(savings), "Savings Rate": `${savingsRate}%` }}
             productLink="/bank-accounts"
+            captureRef={resultRef}
           />
         </div>
       </div>

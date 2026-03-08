@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Target } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -12,6 +12,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const FinancialGoalPlanner = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [goal, setGoal] = useState(1000000);
   const [current, setCurrent] = useState(100000);
   const [years, setYears] = useState(5);
@@ -88,7 +89,7 @@ const FinancialGoalPlanner = () => {
           <FinancialScore score={goalScore} label="Goal Feasibility" sublabel={monthlyNeeded <= 0 ? "Already on track!" : `${fmt(monthlyNeeded)}/mo needed`} />
           <AIInsight type="ai" title="AI Goal Strategy" message={monthlyNeeded <= 0 ? "Congratulations! Your existing savings will grow beyond your goal. Consider setting a higher target." : `Save ${fmt(monthlyNeeded)} monthly for ${years} years at ${rate}% return to reach ${fmt(goal)}. SIP in mutual funds can help achieve this.`} />
           <AchievementBadge type="goal_setter" show={goalScore >= 60} message="Your financial goal is achievable!" />
-          <ResultActions title="Goal Plan" data={{ "Goal": fmt(goal), "Current": fmt(current), "Monthly": fmt(monthlyNeeded), "Years": `${years}`, "Return": `${rate}%` }} productLink="/fixed-deposits" />
+          <ResultActions title="Goal Plan" data={{ "Goal": fmt(goal), "Current": fmt(current), "Monthly": fmt(monthlyNeeded), "Years": `${years}`, "Return": `${rate}%` }} productLink="/fixed-deposits" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

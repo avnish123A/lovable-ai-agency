@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Shield, TrendingUp, TrendingDown } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import FinancialScore from "@/components/gamification/FinancialScore";
@@ -97,7 +97,7 @@ const CreditScoreSimulator = () => {
           ))}
         </div>
 
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground mb-2">Estimated CIBIL Score</p>
             <div className="text-5xl font-bold text-primary mb-1">{score}</div>
