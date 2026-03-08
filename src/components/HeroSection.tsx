@@ -85,17 +85,25 @@ const HeroSection = () => {
               className="mt-16"
             >
               <p className="text-sm text-muted-foreground mb-4 font-medium">Trusted by leading banks</p>
-              <div className="flex flex-wrap gap-3">
-                {["HDFC", "ICICI", "Axis", "SBI", "Kotak"].map((bank, i) => (
+              <div className="flex flex-wrap items-center gap-4">
+                {[
+                  { name: "HDFC", logo: "/logos/hdfc.png" },
+                  { name: "ICICI", logo: "/logos/icici.png" },
+                  { name: "Axis", logo: "/logos/axis.png" },
+                  { name: "SBI", logo: "/logos/sbi.png" },
+                  { name: "Kotak", logo: "/logos/kotak.png" },
+                ].map((bank, i) => (
                   <motion.div
-                    key={bank}
+                    key={bank.name}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.6 + i * 0.1 }}
-                    className="px-5 py-2.5 rounded-xl bg-card border border-border text-sm font-semibold text-foreground shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default"
+                    className="px-4 py-2.5 rounded-xl bg-card border border-border shadow-sm hover:shadow-md hover:border-primary/30 transition-all cursor-default flex items-center gap-2"
                   >
-                    {bank}
+                    <img src={bank.logo} alt={bank.name} className="h-5 w-auto object-contain" />
+                    <span className="text-sm font-semibold text-foreground">{bank.name}</span>
                   </motion.div>
+                ))}
                 ))}
               </div>
             </motion.div>
