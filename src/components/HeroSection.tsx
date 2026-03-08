@@ -98,10 +98,9 @@ const HeroSection = () => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.6 + i * 0.1 }}
-                    className="px-5 py-3 rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg hover:border-primary/30 hover:scale-105 transition-all cursor-default flex items-center gap-3"
+                    className="px-4 py-3 rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg hover:border-primary/30 hover:scale-105 transition-all cursor-default flex items-center justify-center"
                   >
                     <img src={bank.logo} alt={bank.name} className="h-8 w-auto object-contain drop-shadow-sm" loading="eager" />
-                    <span className="text-base font-bold text-foreground">{bank.name}</span>
                   </motion.div>
                 ))}
               </div>
