@@ -6,7 +6,10 @@ const footerLinks = {
   Products: [
     { label: "Credit Cards", href: "/credit-cards" },
     { label: "Personal Loans", href: "/loans" },
-    { label: "Compare Products", href: "/compare" },
+    { label: "Insurance", href: "/insurance" },
+    { label: "Bank Accounts", href: "/bank-accounts" },
+    { label: "Demat Accounts", href: "/demat-accounts" },
+    { label: "Fixed Deposits", href: "/fixed-deposits" },
     { label: "Cashback Offers", href: "/cashback" },
   ],
   Company: [
@@ -15,6 +18,7 @@ const footerLinks = {
     { label: "Finance Tools", href: "/tools" },
     { label: "EMI Calculator", href: "/emi-calculator" },
     { label: "Eligibility Checker", href: "/eligibility" },
+    { label: "Compare Products", href: "/compare" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
@@ -38,10 +42,9 @@ const Footer = () => {
       s.id = "cuelinks-script";
       s.type = "text/javascript";
       s.async = true;
-      s.src =
-        document.location.protocol === "https:"
-          ? "https://cdn0.cuelinks.com/js/cuelinksv2.js"
-          : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
+      s.src = document.location.protocol === "https:"
+        ? "https://cdn0.cuelinks.com/js/cuelinksv2.js"
+        : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
       document.body.appendChild(s);
     }
 
@@ -70,7 +73,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-              Compare the best credit cards, loans, and insurance offers from India's top banks.
+              Compare the best credit cards, loans, insurance & investment products from India's top banks.
             </p>
             <p className="text-xs text-muted-foreground">
               A product by <strong className="text-foreground">Inspirex Technologies</strong>

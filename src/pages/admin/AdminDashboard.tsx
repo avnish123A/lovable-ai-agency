@@ -1,84 +1,69 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Users, MessageSquare, TrendingUp, Gift, RefreshCw } from "lucide-react";
+import { CreditCard, Users, MessageSquare, TrendingUp, Gift, RefreshCw, Shield, Landmark, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface Stats {
-  totalCards: number;
-  totalLoans: number;
-  totalLeads: number;
-  totalMessages: number;
-  totalCashback: number;
+  totalCards: number; totalLoans: number; totalInsurance: number;
+  totalBankAccounts: number; totalDemat: number; totalFD: number;
+  totalLeads: number; totalMessages: number; totalCashback: number;
 }
 
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState<Stats>({
-    totalCards: 0, totalLoans: 0, totalLeads: 0, totalMessages: 0, totalCashback: 0,
+    totalCards: 0, totalLoans: 0, totalInsurance: 0, totalBankAccounts: 0,
+    totalDemat: 0, totalFD: 0, totalLeads: 0, totalMessages: 0, totalCashback: 0,
   });
   const [recentLeads, setRecentLeads] = useState<any[]>([]);
 
   const fetchStats = useCallback(async () => {
-    const [cards, loans, leads, messages, cashback] = await Promise.all([
+    const [cards, loans, insurance, bankAcc, demat, fd, leads, messages, cashback] = await Promise.all([
       supabase.from("credit_cards").select("id", { count: "exact", head: true }),
       supabase.from("loan_products").select("id", { count: "exact", head: true }),
+      supabase.from("insurance_products").select("id", { count: "exact", head: true }),
+      supabase.from("bank_accounts").select("id", { count: "exact", head: true }),
+      supabase.from("demat_accounts").select("id", { count: "exact", head: true }),
+      supabase.from("fixed_deposits").select("id", { count: "exact", head: true }),
       supabase.from("leads").select("id", { count: "exact", head: true }),
       supabase.from("contact_messages").select("id", { count: "exact", head: true }),
       supabase.from("cashback_offers").select("id", { count: "exact", head: true }),
     ]);
-
     setStats({
-      totalCards: cards.count ?? 0,
-      totalLoans: loans.count ?? 0,
-      totalLeads: leads.count ?? 0,
-      totalMessages: messages.count ?? 0,
+      totalCards: cards.count ?? 0, totalLoans: loans.count ?? 0,
+      totalInsurance: insurance.count ?? 0, totalBankAccounts: bankAcc.count ?? 0,
+      totalDemat: demat.count ?? 0, totalFD: fd.count ?? 0,
+      totalLeads: leads.count ?? 0, totalMessages: messages.count ?? 0,
       totalCashback: cashback.count ?? 0,
     });
   }, []);
 
   const fetchRecentLeads = useCallback(async () => {
-    const { data } = await supabase
-      .from("leads")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(5);
+    const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(5);
     setRecentLeads(data ?? []);
   }, []);
 
   useEffect(() => {
-    fetchStats();
-    fetchRecentLeads();
-
-    // Realtime: auto-refresh when leads/messages change
-    const leadsChannel = supabase
-      .channel("dashboard-leads")
-      .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, () => {
-        fetchStats();
-        fetchRecentLeads();
-      })
+    fetchStats(); fetchRecentLeads();
+    const ch = supabase.channel("dashboard-rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, () => { fetchStats(); fetchRecentLeads(); })
+      .on("postgres_changes", { event: "*", schema: "public", table: "contact_messages" }, () => fetchStats())
       .subscribe();
-
-    const messagesChannel = supabase
-      .channel("dashboard-messages")
-      .on("postgres_changes", { event: "*", schema: "public", table: "contact_messages" }, () => {
-        fetchStats();
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(leadsChannel);
-      supabase.removeChannel(messagesChannel);
-    };
+    return () => { supabase.removeChannel(ch); };
   }, [fetchStats, fetchRecentLeads]);
 
   const statCards = [
     { label: "Credit Cards", value: stats.totalCards, icon: CreditCard, color: "text-blue-500" },
-    { label: "Loan Products", value: stats.totalLoans, icon: TrendingUp, color: "text-emerald-500" },
+    { label: "Loans", value: stats.totalLoans, icon: TrendingUp, color: "text-emerald-500" },
+    { label: "Insurance", value: stats.totalInsurance, icon: Shield, color: "text-violet-500" },
+    { label: "Bank Accounts", value: stats.totalBankAccounts, icon: Landmark, color: "text-cyan-500" },
+    { label: "Demat", value: stats.totalDemat, icon: TrendingUp, color: "text-orange-500" },
+    { label: "Fixed Deposits", value: stats.totalFD, icon: Percent, color: "text-indigo-500" },
     { label: "Leads", value: stats.totalLeads, icon: Users, color: "text-amber-500" },
     { label: "Messages", value: stats.totalMessages, icon: MessageSquare, color: "text-rose-500" },
-    { label: "Cashback Offers", value: stats.totalCashback, icon: Gift, color: "text-teal-500" },
+    { label: "Cashback", value: stats.totalCashback, icon: Gift, color: "text-teal-500" },
   ];
 
   return (
@@ -108,9 +93,7 @@ const AdminDashboard = () => {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="font-heading text-lg">Recent Leads</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle className="font-heading text-lg">Recent Leads</CardTitle></CardHeader>
         <CardContent>
           {recentLeads.length === 0 ? (
             <p className="text-sm text-muted-foreground">No leads yet.</p>
@@ -121,7 +104,6 @@ const AdminDashboard = () => {
                   <tr className="border-b border-border">
                     <th className="text-left py-2 font-medium text-muted-foreground">Name</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Email</th>
-                    <th className="text-left py-2 font-medium text-muted-foreground">Phone</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Product</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Status</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
@@ -132,16 +114,11 @@ const AdminDashboard = () => {
                     <tr key={lead.id} className="border-b border-border/50">
                       <td className="py-2.5 text-foreground">{lead.name}</td>
                       <td className="py-2.5 text-muted-foreground">{lead.email}</td>
-                      <td className="py-2.5 text-muted-foreground">{lead.phone || "—"}</td>
                       <td className="py-2.5 text-muted-foreground">{lead.product_name || lead.service || "—"}</td>
                       <td className="py-2.5">
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent/15 text-accent">
-                          {lead.status}
-                        </span>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent/15 text-accent">{lead.status}</span>
                       </td>
-                      <td className="py-2.5 text-muted-foreground">
-                        {new Date(lead.created_at).toLocaleDateString()}
-                      </td>
+                      <td className="py-2.5 text-muted-foreground text-xs">{new Date(lead.created_at).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>

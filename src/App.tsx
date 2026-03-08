@@ -16,11 +16,13 @@ import MaintenancePage from "./pages/Maintenance";
 // Lazy load pages
 const CreditCards = lazy(() => import("./pages/CreditCards"));
 const Loans = lazy(() => import("./pages/Loans"));
+const Insurance = lazy(() => import("./pages/Insurance"));
+const BankAccounts = lazy(() => import("./pages/BankAccounts"));
+const DematAccounts = lazy(() => import("./pages/DematAccounts"));
+const FixedDeposits = lazy(() => import("./pages/FixedDeposits"));
 const Cashback = lazy(() => import("./pages/Cashback"));
 const EMICalculator = lazy(() => import("./pages/EMICalculator"));
 const EligibilityChecker = lazy(() => import("./pages/EligibilityChecker"));
-
-
 const CompareProducts = lazy(() => import("./pages/CompareProducts"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -47,7 +49,10 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminCreditCards = lazy(() => import("./pages/admin/AdminCreditCards"));
 const AdminLoans = lazy(() => import("./pages/admin/AdminLoans"));
-
+const AdminInsurance = lazy(() => import("./pages/admin/AdminInsurance"));
+const AdminBankAccounts = lazy(() => import("./pages/admin/AdminBankAccounts"));
+const AdminDemat = lazy(() => import("./pages/admin/AdminDemat"));
+const AdminFixedDeposits = lazy(() => import("./pages/admin/AdminFixedDeposits"));
 const AdminCashback = lazy(() => import("./pages/admin/AdminCashback"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
@@ -55,6 +60,7 @@ const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const AdminAITools = lazy(() => import("./pages/admin/AdminAITools"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
 const AdminAPIKeys = lazy(() => import("./pages/admin/AdminAPIKeys"));
+const AdminContactSettings = lazy(() => import("./pages/admin/AdminContactSettings"));
 
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
@@ -82,14 +88,8 @@ const AnimatedRoutes = () => {
   const isAdmin = location.pathname.startsWith("/admin");
   const { isMaintenanceMode, settings, loading } = useMaintenanceMode();
 
-  // Show maintenance page for non-admin routes when maintenance mode is enabled
   if (!loading && isMaintenanceMode && !isAdmin) {
-    return (
-      <MaintenancePage 
-        message={settings.message} 
-        estimatedTime={settings.estimated_time} 
-      />
-    );
+    return <MaintenancePage message={settings.message} estimatedTime={settings.estimated_time} />;
   }
 
   return (
@@ -100,11 +100,13 @@ const AnimatedRoutes = () => {
             <Route path="/" element={<Index />} />
             <Route path="/credit-cards" element={<CreditCards />} />
             <Route path="/loans" element={<Loans />} />
+            <Route path="/insurance" element={<Insurance />} />
+            <Route path="/bank-accounts" element={<BankAccounts />} />
+            <Route path="/demat-accounts" element={<DematAccounts />} />
+            <Route path="/fixed-deposits" element={<FixedDeposits />} />
             <Route path="/cashback" element={<Cashback />} />
             <Route path="/emi-calculator" element={<EMICalculator />} />
             <Route path="/eligibility" element={<EligibilityChecker />} />
-            
-            
             <Route path="/compare" element={<CompareProducts />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -130,11 +132,15 @@ const AnimatedRoutes = () => {
               <Route index element={<AdminDashboard />} />
               <Route path="credit-cards" element={<AdminCreditCards />} />
               <Route path="loans" element={<AdminLoans />} />
-              
+              <Route path="insurance" element={<AdminInsurance />} />
+              <Route path="bank-accounts" element={<AdminBankAccounts />} />
+              <Route path="demat" element={<AdminDemat />} />
+              <Route path="fixed-deposits" element={<AdminFixedDeposits />} />
               <Route path="cashback" element={<AdminCashback />} />
               <Route path="leads" element={<AdminLeads />} />
               <Route path="messages" element={<AdminMessages />} />
               <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="contact-settings" element={<AdminContactSettings />} />
               <Route path="ai-tools" element={<AdminAITools />} />
               <Route path="api-keys" element={<AdminAPIKeys />} />
               <Route path="settings" element={<AdminSettings />} />
