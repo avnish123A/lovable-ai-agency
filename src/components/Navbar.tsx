@@ -41,11 +41,11 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-18">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow-sm">
               <Wallet className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-heading font-bold text-foreground">
-              Kriya<span className="text-primary">pay</span>
+              Kriya<span className="text-gradient">pay</span>
             </span>
           </Link>
 
@@ -54,7 +54,7 @@ const Navbar = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   location.pathname === link.href
                     ? "text-primary bg-primary/8"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -66,10 +66,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-3">
-            <Button asChild variant="outline" size="sm" className="text-muted-foreground border-border">
+            <Button asChild variant="outline" size="sm" className="text-muted-foreground border-border rounded-xl">
               <Link to="/eligibility">Check Eligibility</Link>
             </Button>
-            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl shadow-glow-sm">
               <Link to="/finance-deals">Explore Deals</Link>
             </Button>
           </div>
@@ -109,10 +109,10 @@ const Navbar = () => {
                 </motion.div>
               ))}
               <div className="pt-3 flex gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1">
+                <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
                   <Link to="/eligibility">Eligibility</Link>
                 </Button>
-                <Button asChild size="sm" className="flex-1">
+                <Button asChild size="sm" className="flex-1 rounded-xl">
                   <Link to="/finance-deals">Explore Deals</Link>
                 </Button>
               </div>

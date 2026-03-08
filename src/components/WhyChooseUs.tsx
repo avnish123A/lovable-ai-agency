@@ -26,7 +26,7 @@ const reasons = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-24">
+    <section className="py-24 bg-secondary/50">
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -50,9 +50,9 @@ const WhyChooseUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="text-center p-6 rounded-xl border border-border bg-card card-hover"
+              className="text-center p-6 rounded-2xl border border-border bg-card shadow-card card-hover"
             >
-              <div className="w-14 h-14 rounded-xl bg-primary/8 flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-primary/8 flex items-center justify-center mx-auto mb-4">
                 <r.icon className="w-7 h-7 text-primary" />
               </div>
               <h3 className="font-heading font-semibold text-foreground mb-2">{r.title}</h3>

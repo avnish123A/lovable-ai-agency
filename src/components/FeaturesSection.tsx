@@ -47,7 +47,7 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
@@ -81,9 +81,9 @@ const FeaturesSection = () => {
             <motion.div key={f.title} variants={item}>
               <Link
                 to={f.href}
-                className="block p-6 rounded-xl border border-border bg-card card-hover group"
+                className="block p-6 rounded-2xl border border-border bg-card shadow-card card-hover group"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/8 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-primary/8 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
                   <f.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-heading font-semibold text-foreground mb-2">{f.title}</h3>
