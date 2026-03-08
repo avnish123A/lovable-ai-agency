@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { AlertTriangle, Wrench, Loader2 } from "lucide-react";
+import { AlertTriangle, Wrench, Loader2, Rocket, Calendar } from "lucide-react";
 
 interface MaintenanceSettings {
   enabled: boolean;
@@ -16,26 +16,46 @@ interface MaintenanceSettings {
   estimated_time: string;
 }
 
+interface ComingSoonSettings {
+  enabled: boolean;
+  headline: string;
+  description: string;
+  launch_date: string;
+}
+
 const AdminSettings = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingComingSoon, setSavingComingSoon] = useState(false);
   const [maintenance, setMaintenance] = useState<MaintenanceSettings>({
     enabled: false,
     message: "We are currently upgrading our platform to serve you better.",
     estimated_time: "2 hours",
+  });
+  const [comingSoon, setComingSoon] = useState<ComingSoonSettings>({
+    enabled: false,
+    headline: "Something Powerful is Coming",
+    description: "We're building the future of financial comparison. Be the first to know.",
+    launch_date: "2025-04-15",
   });
 
   useEffect(() => {
     const fetchSettings = async () => {
       const { data } = await supabase
         .from("site_settings")
-        .select("value")
-        .eq("key", "maintenance_mode")
-        .single();
+        .select("key, value")
+        .in("key", ["maintenance_mode", "coming_soon_mode"]);
 
-      if (data?.value) {
-        setMaintenance(data.value as unknown as MaintenanceSettings);
+      if (data) {
+        data.forEach((item) => {
+          if (item.key === "maintenance_mode" && item.value) {
+            setMaintenance(item.value as unknown as MaintenanceSettings);
+          }
+          if (item.key === "coming_soon_mode" && item.value) {
+            setComingSoon(item.value as unknown as ComingSoonSettings);
+          }
+        });
       }
       setLoading(false);
     };
@@ -62,13 +82,115 @@ const AdminSettings = () => {
     setSaving(false);
   };
 
+  const handleSaveComingSoon = async () => {
+    setSavingComingSoon(true);
+    const valueToSave = {
+      enabled: comingSoon.enabled,
+      headline: comingSoon.headline,
+      description: comingSoon.description,
+      launch_date: comingSoon.launch_date,
+    };
+
+    // Upsert: insert if not exists, update if exists
+    const { error } = await supabase
+      .from("site_settings")
+      .upsert(
+        { key: "coming_soon_mode", value: valueToSave, updated_at: new Date().toISOString() },
+        { onConflict: "key" }
+      );
+
+    if (error) {
+      toast.error("Failed to save coming soon settings");
+    } else {
+      toast.success(comingSoon.enabled ? "Coming Soon mode enabled!" : "Coming Soon settings saved!");
+    }
+    setSavingComingSoon(false);
+  };
+
   const toggleMaintenance = () => {
     setMaintenance({ ...maintenance, enabled: !maintenance.enabled });
+  };
+
+  const toggleComingSoon = () => {
+    setComingSoon({ ...comingSoon, enabled: !comingSoon.enabled });
   };
 
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-heading font-bold">Settings</h1>
+
+      {/* Coming Soon Mode Card */}
+      <Card className={comingSoon.enabled ? "border-primary/50" : ""}>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${comingSoon.enabled ? "bg-primary/20" : "bg-muted"}`}>
+                <Rocket className={`w-5 h-5 ${comingSoon.enabled ? "text-primary" : "text-muted-foreground"}`} />
+              </div>
+              <div>
+                <CardTitle className="font-heading text-lg">Coming Soon Mode</CardTitle>
+                <CardDescription>Redirect all public pages to the Coming Soon page</CardDescription>
+              </div>
+            </div>
+            {loading ? (
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            ) : (
+              <Switch
+                checked={comingSoon.enabled}
+                onCheckedChange={toggleComingSoon}
+              />
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          {comingSoon.enabled && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/10 text-primary text-sm">
+              <Rocket className="w-4 h-4 shrink-0" />
+              <span className="font-medium">Coming Soon mode is active! All public pages redirect to the launch page.</span>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="cs-headline">Headline</Label>
+            <Input
+              id="cs-headline"
+              value={comingSoon.headline}
+              onChange={(e) => setComingSoon({ ...comingSoon, headline: e.target.value })}
+              placeholder="Something Powerful is Coming"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="cs-description">Description</Label>
+            <Textarea
+              id="cs-description"
+              value={comingSoon.description}
+              onChange={(e) => setComingSoon({ ...comingSoon, description: e.target.value })}
+              placeholder="We're building the future..."
+              rows={2}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="cs-date">Launch Date</Label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                id="cs-date"
+                type="date"
+                value={comingSoon.launch_date}
+                onChange={(e) => setComingSoon({ ...comingSoon, launch_date: e.target.value })}
+                className="pl-10"
+              />
+            </div>
+          </div>
+
+          <Button onClick={handleSaveComingSoon} disabled={savingComingSoon} className="w-full">
+            {savingComingSoon ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Save Coming Soon Settings
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Maintenance Mode Card */}
       <Card className={maintenance.enabled ? "border-destructive/50" : ""}>
