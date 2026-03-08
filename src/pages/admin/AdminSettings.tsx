@@ -100,18 +100,18 @@ const AdminSettings = () => {
   const handleSaveComingSoon = async () => {
     setSavingComingSoon(true);
     try {
+      const days = Number(comingSoon.countdown_days) || 0;
+      const hours = Number(comingSoon.countdown_hours) || 0;
+      const minutes = Number(comingSoon.countdown_minutes) || 0;
       const valueToSave = {
         enabled: comingSoon.enabled,
         headline: comingSoon.headline,
         description: comingSoon.description,
-        countdown_days: comingSoon.countdown_days,
-        countdown_hours: comingSoon.countdown_hours,
-        countdown_minutes: comingSoon.countdown_minutes,
+        countdown_days: days,
+        countdown_hours: hours,
+        countdown_minutes: minutes,
         countdown_target: new Date(
-          Date.now() +
-          comingSoon.countdown_days * 86400000 +
-          comingSoon.countdown_hours * 3600000 +
-          comingSoon.countdown_minutes * 60000
+          Date.now() + days * 86400000 + hours * 3600000 + minutes * 60000
         ).toISOString(),
       };
 
