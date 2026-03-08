@@ -20,20 +20,21 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
   const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex flex-col items-center gap-2 flex-shrink-0 px-6">
-      <div className="h-14 w-14 rounded-2xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 p-2">
+    <div className="flex flex-col items-center gap-3 flex-shrink-0 px-8">
+      <div className="h-20 w-20 rounded-2xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 p-3">
         {error ? (
-          <span className="text-xs font-heading font-bold text-primary">{initials}</span>
+          <span className="text-sm font-heading font-bold text-primary">{initials}</span>
         ) : (
           <img
             src={logo}
             alt={`${name} logo`}
             className="w-full h-full object-contain"
+            loading="eager"
             onError={() => setError(true)}
           />
         )}
       </div>
-      <span className="text-[11px] text-muted-foreground font-medium whitespace-nowrap">{name}</span>
+      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap">{name}</span>
     </div>
   );
 };
