@@ -5,20 +5,39 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
-import CreditCards from "./pages/CreditCards";
-import Loans from "./pages/Loans";
-import Cashback from "./pages/Cashback";
-import EMICalculator from "./pages/EMICalculator";
-import EligibilityChecker from "./pages/EligibilityChecker";
-import FinanceDeals from "./pages/FinanceDeals";
-import DealDetail from "./pages/DealDetail";
-import { PrivacyPolicy, TermsConditions, AffiliateDisclosure, Disclaimer, CookiePolicy } from "./pages/PolicyPages";
-import CompareProducts from "./pages/CompareProducts";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import KriyaAIChatbot from "./components/KriyaAIChatbot";
+
+// Lazy load pages
+const CreditCards = lazy(() => import("./pages/CreditCards"));
+const Loans = lazy(() => import("./pages/Loans"));
+const Cashback = lazy(() => import("./pages/Cashback"));
+const EMICalculator = lazy(() => import("./pages/EMICalculator"));
+const EligibilityChecker = lazy(() => import("./pages/EligibilityChecker"));
+const FinanceDeals = lazy(() => import("./pages/FinanceDeals"));
+const DealDetail = lazy(() => import("./pages/DealDetail"));
+const CompareProducts = lazy(() => import("./pages/CompareProducts"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const FinanceTools = lazy(() => import("./pages/FinanceTools"));
+const CompoundInterestCalc = lazy(() => import("./pages/tools/CompoundInterestCalc"));
+const HomeLoanCalc = lazy(() => import("./pages/tools/HomeLoanCalc"));
+const PersonalLoanCalc = lazy(() => import("./pages/tools/PersonalLoanCalc"));
+const InterestRateCalc = lazy(() => import("./pages/tools/InterestRateCalc"));
+const SavingsCalc = lazy(() => import("./pages/tools/SavingsCalc"));
+const InvestmentReturnCalc = lazy(() => import("./pages/tools/InvestmentReturnCalc"));
+const FinancialGoalPlanner = lazy(() => import("./pages/tools/FinancialGoalPlanner"));
+const BudgetPlanner = lazy(() => import("./pages/tools/BudgetPlanner"));
+const DebtPayoffCalc = lazy(() => import("./pages/tools/DebtPayoffCalc"));
+const TaxEstimator = lazy(() => import("./pages/tools/TaxEstimator"));
+const CreditScoreGuide = lazy(() => import("./pages/tools/CreditScoreGuide"));
+const CashbackCalc = lazy(() => import("./pages/tools/CashbackCalc"));
+const RewardPointsCalc = lazy(() => import("./pages/tools/RewardPointsCalc"));
+const CreditCardFinder = lazy(() => import("./pages/tools/CreditCardFinder"));
+
+const { PrivacyPolicy, TermsConditions, AffiliateDisclosure, Disclaimer, CookiePolicy } = await import("./pages/PolicyPages");
 
 const queryClient = new QueryClient();
 
@@ -29,30 +48,53 @@ const pageTransition = {
   transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] as const },
 };
 
+const Loading = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} {...pageTransition}>
-        <Routes location={location}>
-          <Route path="/" element={<Index />} />
-          <Route path="/credit-cards" element={<CreditCards />} />
-          <Route path="/loans" element={<Loans />} />
-          <Route path="/cashback" element={<Cashback />} />
-          <Route path="/emi-calculator" element={<EMICalculator />} />
-          <Route path="/eligibility" element={<EligibilityChecker />} />
-          <Route path="/finance-deals" element={<FinanceDeals />} />
-          <Route path="/deal/:id" element={<DealDetail />} />
-          <Route path="/compare" element={<CompareProducts />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsConditions />} />
-          <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
-          <Route path="/cookie-policy" element={<CookiePolicy />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<Loading />}>
+          <Routes location={location}>
+            <Route path="/" element={<Index />} />
+            <Route path="/credit-cards" element={<CreditCards />} />
+            <Route path="/loans" element={<Loans />} />
+            <Route path="/cashback" element={<Cashback />} />
+            <Route path="/emi-calculator" element={<EMICalculator />} />
+            <Route path="/eligibility" element={<EligibilityChecker />} />
+            <Route path="/finance-deals" element={<FinanceDeals />} />
+            <Route path="/deal/:id" element={<DealDetail />} />
+            <Route path="/compare" element={<CompareProducts />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/tools" element={<FinanceTools />} />
+            <Route path="/tools/compound-interest" element={<CompoundInterestCalc />} />
+            <Route path="/tools/home-loan" element={<HomeLoanCalc />} />
+            <Route path="/tools/personal-loan" element={<PersonalLoanCalc />} />
+            <Route path="/tools/interest-rate" element={<InterestRateCalc />} />
+            <Route path="/tools/savings" element={<SavingsCalc />} />
+            <Route path="/tools/investment-return" element={<InvestmentReturnCalc />} />
+            <Route path="/tools/goal-planner" element={<FinancialGoalPlanner />} />
+            <Route path="/tools/budget-planner" element={<BudgetPlanner />} />
+            <Route path="/tools/debt-payoff" element={<DebtPayoffCalc />} />
+            <Route path="/tools/tax-estimator" element={<TaxEstimator />} />
+            <Route path="/tools/credit-score" element={<CreditScoreGuide />} />
+            <Route path="/tools/cashback-calc" element={<CashbackCalc />} />
+            <Route path="/tools/reward-points" element={<RewardPointsCalc />} />
+            <Route path="/tools/card-finder" element={<CreditCardFinder />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsConditions />} />
+            <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </motion.div>
     </AnimatePresence>
   );
