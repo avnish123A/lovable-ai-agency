@@ -18,6 +18,10 @@ function categorizeFinanceDeal(title: string, description: string): string {
   return "financial_offers";
 }
 
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 async function fetchCuelinksOffers(apiKey: string, page = 1): Promise<any[]> {
   const url = `${CUELINKS_BASE}/offers.json?categories=${FINANCE_CATEGORY_ID}&per_page=100&page=${page}`;
   const res = await fetch(url, {
@@ -30,8 +34,14 @@ async function fetchCuelinksOffers(apiKey: string, page = 1): Promise<any[]> {
     const body = await res.text();
     throw new Error(`Cuelinks Offers API error [${res.status}]: ${body}`);
   }
-  const data = await res.json();
-  return data.offers || data || [];
+  const text = await res.text();
+  if (!text || text.trim() === "") return [];
+  try {
+    const data = JSON.parse(text);
+    return data.offers || data || [];
+  } catch {
+    return [];
+  }
 }
 
 async function fetchCuelinksCampaigns(apiKey: string, page = 1): Promise<any[]> {
@@ -46,8 +56,14 @@ async function fetchCuelinksCampaigns(apiKey: string, page = 1): Promise<any[]> 
     const body = await res.text();
     throw new Error(`Cuelinks Campaigns API error [${res.status}]: ${body}`);
   }
-  const data = await res.json();
-  return data.campaigns || data || [];
+  const text = await res.text();
+  if (!text || text.trim() === "") return [];
+  try {
+    const data = JSON.parse(text);
+    return data.campaigns || data || [];
+  } catch {
+    return [];
+  }
 }
 
 async function generateAIDescription(
@@ -81,8 +97,17 @@ async function generateAIDescription(
       }),
     });
 
+    if (res.status === 429) {
+      console.log("AI rate limited, skipping this deal");
+      return "";
+    }
+    if (res.status === 402) {
+      console.log("AI payment required, skipping AI generation");
+      return "";
+    }
     if (!res.ok) {
-      console.error(`AI generation failed [${res.status}]`);
+      const t = await res.text();
+      console.error(`AI generation failed [${res.status}]: ${t}`);
       return "";
     }
 
@@ -104,7 +129,6 @@ Deno.serve(async (req) => {
     if (!apiKey) throw new Error("CUELINKS_API_KEY is not configured");
 
     const lovableApiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!lovableApiKey) throw new Error("LOVABLE_API_KEY is not configured");
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -169,50 +193,32 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Upsert deals + generate AI descriptions for new ones
+    // Upsert deals first (without AI), then generate AI descriptions separately
     let inserted = 0;
     let updated = 0;
-    let aiGenerated = 0;
+    const newDealIds: string[] = [];
 
     for (const deal of allDeals) {
       const { data: existing } = await supabase
         .from("finance_deals")
-        .select("id, ai_description")
+        .select("id")
         .eq("deal_id", deal.deal_id)
         .maybeSingle();
 
       if (existing) {
-        // Update existing, keep ai_description if already generated
         await supabase
           .from("finance_deals")
           .update(deal)
           .eq("deal_id", deal.deal_id);
         updated++;
-
-        // Generate AI description if missing
-        if (!existing.ai_description) {
-          const aiDesc = await generateAIDescription(
-            lovableApiKey, deal.title, deal.merchant, deal.subcategory, deal.cashback, deal.description
-          );
-          if (aiDesc) {
-            await supabase
-              .from("finance_deals")
-              .update({ ai_description: aiDesc })
-              .eq("deal_id", deal.deal_id);
-            aiGenerated++;
-          }
-        }
       } else {
-        // Generate AI description for new deal
-        const aiDesc = await generateAIDescription(
-          lovableApiKey, deal.title, deal.merchant, deal.subcategory, deal.cashback, deal.description
-        );
-        await supabase.from("finance_deals").insert({
-          ...deal,
-          ai_description: aiDesc || null,
-        });
+        const { data: inserted_deal } = await supabase
+          .from("finance_deals")
+          .insert(deal)
+          .select("deal_id")
+          .single();
         inserted++;
-        if (aiDesc) aiGenerated++;
+        if (inserted_deal) newDealIds.push(inserted_deal.deal_id);
       }
     }
 
@@ -223,6 +229,37 @@ Deno.serve(async (req) => {
       .lt("expiry_date", new Date().toISOString().split("T")[0])
       .not("expiry_date", "is", null)
       .select("id", { count: "exact", head: true });
+
+    // Generate AI descriptions for deals missing them (max 10 per sync, with delays)
+    let aiGenerated = 0;
+    if (lovableApiKey) {
+      const { data: missingAI } = await supabase
+        .from("finance_deals")
+        .select("deal_id, title, merchant, subcategory, cashback, description")
+        .is("ai_description", null)
+        .eq("is_active", true)
+        .limit(10);
+
+      for (const deal of missingAI || []) {
+        const aiDesc = await generateAIDescription(
+          lovableApiKey,
+          deal.title,
+          deal.merchant,
+          deal.subcategory || "finance",
+          deal.cashback,
+          deal.description || ""
+        );
+        if (aiDesc) {
+          await supabase
+            .from("finance_deals")
+            .update({ ai_description: aiDesc })
+            .eq("deal_id", deal.deal_id);
+          aiGenerated++;
+        }
+        // Wait 3 seconds between AI calls to avoid rate limiting
+        await sleep(3000);
+      }
+    }
 
     const result = {
       success: true,
