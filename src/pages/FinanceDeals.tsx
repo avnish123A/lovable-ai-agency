@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
+import TrustBadge from "@/components/TrustBadge";
+import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 
 const SUBCATEGORIES = [
   { value: "all", label: "All Deals" },
@@ -63,7 +65,6 @@ const FinanceDeals = () => {
   };
 
   const handleLeadSuccess = () => {
-    // Track click for analytics (redirect is handled by LeadCaptureDialog)
     if (leadDeal) {
       supabase.functions.invoke("track-click", { body: { deal_id: leadDeal.id } }).catch(() => {});
     }
@@ -82,19 +83,25 @@ const FinanceDeals = () => {
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
               Latest <span className="text-gradient">Finance Deals</span>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto mb-6">
+            <p className="text-muted-foreground max-w-xl mx-auto mb-4">
               Auto-updated finance offers with AI-powered descriptions from top banks and financial institutions.
             </p>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <TrustBadge variant="verified" />
+              <TrustBadge variant="secure" />
+            </div>
             <Button
               variant="outline"
               onClick={syncDeals}
               disabled={syncing}
-              className="border-primary/30 hover:bg-primary/10"
+              className="border-primary/30 hover:bg-primary/10 rounded-xl"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? "animate-spin" : ""}`} />
               {syncing ? "Syncing..." : "Sync Latest Deals"}
             </Button>
           </motion.div>
+
+          <AffiliateDisclaimer variant="banner" className="mb-8" />
 
           {/* Filter tabs */}
           <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -104,8 +111,8 @@ const FinanceDeals = () => {
                 onClick={() => setFilter(cat.value)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   filter === cat.value
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    ? "bg-primary text-primary-foreground shadow-glow-sm"
+                    : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-primary/30"
                 }`}
               >
                 {cat.label}
@@ -116,15 +123,15 @@ const FinanceDeals = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="rounded-xl border border-border bg-card p-6 animate-pulse h-56" />
+                <div key={i} className="rounded-2xl border border-border bg-card p-6 animate-pulse h-56" />
               ))}
             </div>
           ) : deals.length === 0 ? (
             <div className="text-center py-20">
               <BadgeDollarSign className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
               <h3 className="text-xl font-heading font-semibold text-foreground mb-2">No deals found</h3>
-              <p className="text-muted-foreground mb-6">Click "Sync Latest Deals" to fetch offers from Cuelinks.</p>
-              <Button onClick={syncDeals} disabled={syncing}>
+              <p className="text-muted-foreground mb-6">Click "Sync Latest Deals" to fetch offers.</p>
+              <Button onClick={syncDeals} disabled={syncing} className="rounded-xl">
                 <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? "animate-spin" : ""}`} />
                 Sync Now
               </Button>
@@ -137,27 +144,27 @@ const FinanceDeals = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="rounded-xl border border-border bg-card p-6 card-hover flex flex-col"
+                  className="rounded-2xl border border-border bg-card shadow-card card-hover flex flex-col p-6"
                 >
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                       <BadgeDollarSign className="w-5 h-5 text-primary" />
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <h3 className="font-heading font-semibold text-foreground text-sm leading-tight line-clamp-2">
                         {deal.title}
                       </h3>
                       <p className="text-xs text-muted-foreground mt-1">{deal.merchant}</p>
                     </div>
+                    <TrustBadge variant="verified" />
                   </div>
 
-                  {/* AI-generated description takes priority */}
                   {(deal.ai_description || deal.description) && (
                     <div className="mb-4">
                       {deal.ai_description && (
                         <div className="flex items-center gap-1 mb-1">
-                          <Sparkles className="w-3 h-3 text-primary" />
-                          <span className="text-[10px] text-primary font-medium uppercase tracking-wider">AI Summary</span>
+                          <Sparkles className="w-3 h-3 text-accent" />
+                          <span className="text-[10px] text-accent font-semibold uppercase tracking-wider">AI Summary</span>
                         </div>
                       )}
                       <p className="text-xs text-muted-foreground line-clamp-3">
@@ -170,7 +177,7 @@ const FinanceDeals = () => {
                     {deal.cashback && (
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Cashback/Reward</span>
-                        <span className="text-primary font-medium">{deal.cashback}</span>
+                        <span className="text-primary font-semibold">{deal.cashback}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-sm">
@@ -191,7 +198,7 @@ const FinanceDeals = () => {
 
                   <div className="mt-auto pt-4 border-t border-border">
                     <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
                       onClick={() => handleApply(deal)}
                     >
                       Apply Now <ExternalLink className="w-3.5 h-3.5 ml-2" />
@@ -201,6 +208,8 @@ const FinanceDeals = () => {
               ))}
             </div>
           )}
+
+          <AffiliateDisclaimer variant="inline" className="mt-8" />
         </div>
       </section>
       <Footer />
