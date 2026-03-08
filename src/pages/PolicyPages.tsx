@@ -110,7 +110,8 @@ export const TermsConditions = () => (
       <li>Comparison of credit cards, loans, and insurance products from partner banks</li>
       <li>AI-powered product recommendations via NiveshAI (powered by Google Gemini and OpenAI)</li>
       <li>EMI calculators, eligibility checkers, and financial planning tools</li>
-      <li>Cashback offer aggregation and deal tracking</li>
+      <li>Cashback rewards program — users earn cashback via UPI by completing purchases through tracked affiliate links</li>
+      <li>Deal aggregation from affiliate networks including Hiqmobi</li>
       <li>Lead submission to partner banks on your behalf</li>
     </ul>
 
@@ -284,5 +285,193 @@ export const CookiePolicy = () => (
 
     <h2>6. Contact</h2>
     <p>For questions about our use of cookies, contact us at <strong>support@apninivesh.in</strong>.</p>
+  </PolicyLayout>
+);
+
+export const CashbackPolicy = () => (
+  <PolicyLayout title="Cashback Policy">
+    <p>Last updated: March 8, 2026</p>
+    <p>This Cashback Policy outlines the terms and conditions governing the cashback rewards program operated by <strong>ApniNivesh</strong> (a product of <strong>Inspirex Technologies INC</strong>) through the domain <strong>apninivesh.in</strong>.</p>
+
+    <h2>1. Eligibility</h2>
+    <ul>
+      <li>Cashback offers are available to all users who complete a qualifying transaction through an ApniNivesh tracked affiliate link</li>
+      <li>Users must provide a valid UPI ID, name, email, and phone number to claim cashback</li>
+      <li>Only one cashback claim per deal per user (identified by email + phone combination) is allowed</li>
+      <li>Users must be Indian residents with a valid Indian UPI-enabled bank account</li>
+    </ul>
+
+    <h2>2. How Cashback Works</h2>
+    <ul>
+      <li><strong>Step 1:</strong> Browse available cashback deals on ApniNivesh</li>
+      <li><strong>Step 2:</strong> Click "Get Cashback" and fill in your details (Name, Email, Phone, UPI ID)</li>
+      <li><strong>Step 3:</strong> You will be redirected to the merchant's website via our tracking link</li>
+      <li><strong>Step 4:</strong> Complete your purchase on the merchant's website</li>
+      <li><strong>Step 5:</strong> Once the transaction is confirmed by our affiliate network, your cashback will be approved</li>
+      <li><strong>Step 6:</strong> Approved cashback is sent directly to your UPI ID</li>
+    </ul>
+
+    <h2>3. Cashback Amount & Calculation</h2>
+    <ul>
+      <li>Cashback amounts are displayed on each deal card (either a fixed amount like ₹200 or a percentage like 10%)</li>
+      <li>The final cashback amount depends on the affiliate network's confirmed commission for your transaction</li>
+      <li>ApniNivesh reserves the right to adjust cashback amounts based on affiliate commission changes</li>
+      <li>Cashback is calculated on the net purchase amount (excluding taxes, shipping, and any returns/cancellations)</li>
+    </ul>
+
+    <h2>4. Cashback Processing Timeline</h2>
+    <ul>
+      <li><strong>Pending:</strong> Your request is recorded immediately upon form submission</li>
+      <li><strong>Approval:</strong> Cashback is approved within 30-90 days after the affiliate network confirms the transaction (this varies by merchant)</li>
+      <li><strong>Payout:</strong> Approved cashback is processed within 7 business days via UPI transfer</li>
+    </ul>
+
+    <h2>5. Cashback Rejection Reasons</h2>
+    <p>Cashback may be rejected in the following cases:</p>
+    <ul>
+      <li>Transaction was cancelled, returned, or refunded on the merchant's website</li>
+      <li>User did not complete the purchase through the ApniNivesh tracking link</li>
+      <li>Ad blockers or VPN were active during the purchase (may prevent tracking)</li>
+      <li>Coupon code used was not authorized by the affiliate network</li>
+      <li>Duplicate or fraudulent claim detected</li>
+      <li>The affiliate network did not attribute the transaction to ApniNivesh</li>
+    </ul>
+
+    <h2>6. Minimum Payout</h2>
+    <p>There is no minimum payout threshold. All approved cashback amounts, regardless of value, will be sent to your registered UPI ID.</p>
+
+    <h2>7. Disputes</h2>
+    <p>If you believe your cashback was incorrectly rejected, you may raise a dispute by emailing <strong>support@apninivesh.in</strong> with your tracking ID, transaction details, and payment proof within 30 days of the rejection.</p>
+
+    <h2>8. Modifications</h2>
+    <p>ApniNivesh reserves the right to modify, suspend, or discontinue the cashback program at any time without prior notice. Any pending approved cashback will still be processed.</p>
+
+    <h2>9. Contact</h2>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
+  </PolicyLayout>
+);
+
+export const RefundPolicy = () => (
+  <PolicyLayout title="Refund Policy">
+    <p>Last updated: March 8, 2026</p>
+    <p>This Refund Policy applies to the cashback rewards program operated by <strong>ApniNivesh</strong> (a product of <strong>Inspirex Technologies INC</strong>).</p>
+
+    <h2>1. Nature of Service</h2>
+    <p>ApniNivesh is a <strong>free-to-use</strong> cashback and financial product comparison platform. Users do not pay any fee to use our services. Cashback is a reward paid by ApniNivesh from affiliate commissions — it is not a product purchase.</p>
+
+    <h2>2. Cashback Refund Scenarios</h2>
+    <ul>
+      <li><strong>Overpayment:</strong> If ApniNivesh accidentally credits a higher cashback amount than approved, the excess amount may be adjusted against future cashback or recovered via UPI</li>
+      <li><strong>Incorrect UPI Transfer:</strong> If cashback was sent to the wrong UPI ID due to a user-provided error, ApniNivesh is not liable. Users must ensure their UPI ID is correct before submission</li>
+      <li><strong>Failed UPI Transfer:</strong> If a UPI payout fails due to technical reasons, the amount will be retried within 7 business days. If the issue persists, please contact support</li>
+    </ul>
+
+    <h2>3. Non-Refundable Scenarios</h2>
+    <ul>
+      <li>Cashback that was correctly paid out to the UPI ID provided by the user is non-refundable</li>
+      <li>Rejected cashback due to fraudulent activity, policy violations, or unconfirmed affiliate transactions cannot be appealed after 30 days</li>
+    </ul>
+
+    <h2>4. Product Purchase Refunds</h2>
+    <p>ApniNivesh does not sell any products or services directly. For refunds on products purchased through our affiliate links, please contact the respective merchant or bank directly. If a product purchased via our link is refunded, the associated cashback claim will be automatically rejected.</p>
+
+    <h2>5. How to Request Assistance</h2>
+    <p>For any cashback-related issues or disputes, email <strong>support@apninivesh.in</strong> with:</p>
+    <ul>
+      <li>Your tracking ID (provided at the time of claim)</li>
+      <li>Email address used during claim</li>
+      <li>Screenshot of the transaction (if applicable)</li>
+    </ul>
+    <p>Our team will respond within 3-5 business days.</p>
+
+    <h2>6. Contact</h2>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
+  </PolicyLayout>
+);
+
+export const KYCPolicy = () => (
+  <PolicyLayout title="KYC & Fraud Detection Policy">
+    <p>Last updated: March 8, 2026</p>
+    <p>This policy outlines the Know Your Customer (KYC) verification and fraud detection measures implemented by <strong>ApniNivesh</strong> (a product of <strong>Inspirex Technologies INC</strong>) to ensure the integrity of our cashback rewards program.</p>
+
+    <h2>1. Purpose</h2>
+    <p>Our KYC and anti-fraud measures exist to:</p>
+    <ul>
+      <li>Prevent fraudulent cashback claims and abuse of the rewards system</li>
+      <li>Protect genuine users from identity theft and misuse</li>
+      <li>Ensure compliance with applicable Indian regulations on digital payments</li>
+      <li>Maintain the financial sustainability of the cashback program</li>
+    </ul>
+
+    <h2>2. Information Collected for Verification</h2>
+    <p>When you submit a cashback claim, we collect and verify:</p>
+    <ul>
+      <li><strong>Identity:</strong> Full name, email address, and phone number</li>
+      <li><strong>Payment:</strong> UPI ID (verified against standard UPI format)</li>
+      <li><strong>Device:</strong> Device type (mobile/desktop) and user agent string</li>
+      <li><strong>Network:</strong> IP address hash (one-way cryptographic hash — we do not store raw IP addresses)</li>
+      <li><strong>Behavioral:</strong> Click timestamps, form submission patterns, and tracking link interactions</li>
+    </ul>
+
+    <h2>3. Fraud Detection Measures</h2>
+    <p>ApniNivesh employs the following anti-fraud mechanisms:</p>
+    <ul>
+      <li><strong>Duplicate Detection:</strong> Multiple claims from the same email, phone, or UPI ID for the same deal are automatically flagged</li>
+      <li><strong>Honeypot Fields:</strong> Hidden form fields to detect and block automated bot submissions</li>
+      <li><strong>Rate Limiting:</strong> A minimum 5-second cooldown between form submissions to prevent rapid-fire fraud</li>
+      <li><strong>IP Hashing:</strong> IP addresses are hashed to identify patterns of abuse without storing personally identifiable network data</li>
+      <li><strong>Device Fingerprinting:</strong> Device type and user agent are recorded to detect anomalous submission patterns</li>
+      <li><strong>Tracking ID Verification:</strong> Each claim generates a unique tracking ID that must match with the affiliate network's transaction records</li>
+      <li><strong>Manual Review:</strong> All cashback requests go through admin review before approval. Suspicious claims are manually investigated</li>
+    </ul>
+
+    <h2>4. Prohibited Activities</h2>
+    <p>The following activities will result in immediate rejection of cashback claims and potential account blacklisting:</p>
+    <ul>
+      <li>Submitting false or fictitious personal information</li>
+      <li>Using automated tools, bots, or scripts to submit claims</li>
+      <li>Creating multiple accounts or identities to claim duplicate cashback</li>
+      <li>Using VPNs, proxies, or ad blockers to manipulate tracking</li>
+      <li>Purchasing and immediately returning products solely to claim cashback</li>
+      <li>Colluding with merchants or third parties to generate fraudulent transactions</li>
+      <li>Exploiting technical glitches or system errors for unauthorized gains</li>
+    </ul>
+
+    <h2>5. Consequences of Fraud</h2>
+    <ul>
+      <li><strong>Immediate Rejection:</strong> All pending and future cashback claims from the flagged identity will be rejected</li>
+      <li><strong>Blacklisting:</strong> Email, phone, and UPI ID will be permanently blacklisted from future claims</li>
+      <li><strong>Recovery:</strong> ApniNivesh reserves the right to recover any cashback paid out on fraudulent claims</li>
+      <li><strong>Legal Action:</strong> In cases of significant fraud, Inspirex Technologies INC may pursue legal action under applicable Indian cyber and financial laws</li>
+    </ul>
+
+    <h2>6. Additional Verification</h2>
+    <p>For high-value cashback claims (above ₹500) or flagged claims, ApniNivesh may request additional verification:</p>
+    <ul>
+      <li>Screenshot of the order confirmation from the merchant</li>
+      <li>Transaction reference number from the payment</li>
+      <li>Email confirmation from the merchant</li>
+    </ul>
+    <p>Failure to provide requested verification within 7 days will result in rejection of the claim.</p>
+
+    <h2>7. Data Retention for Fraud Prevention</h2>
+    <ul>
+      <li>Cashback request data: Retained for 24 months</li>
+      <li>IP hashes: Retained for 12 months</li>
+      <li>Blacklisted identities: Retained indefinitely for fraud prevention</li>
+      <li>All data is stored securely with Row-Level Security and encrypted at rest</li>
+    </ul>
+
+    <h2>8. Reporting Fraud</h2>
+    <p>If you suspect fraudulent activity on your account or encounter suspicious behavior, please report immediately to <strong>support@apninivesh.in</strong> with subject line "Fraud Report".</p>
+
+    <h2>9. Contact</h2>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
   </PolicyLayout>
 );

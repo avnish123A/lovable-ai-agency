@@ -171,8 +171,10 @@ export type Database = {
         Row: {
           cashback_amount: string
           category: string | null
+          coupon_code: string | null
           created_at: string
           description: string | null
+          expiry_date: string | null
           external_deal_id: string | null
           id: string
           is_active: boolean
@@ -180,14 +182,17 @@ export type Database = {
           merchant_name: string
           offer_title: string
           source: string | null
+          terms: string | null
           tracking_link: string
           updated_at: string
         }
         Insert: {
           cashback_amount: string
           category?: string | null
+          coupon_code?: string | null
           created_at?: string
           description?: string | null
+          expiry_date?: string | null
           external_deal_id?: string | null
           id?: string
           is_active?: boolean
@@ -195,14 +200,17 @@ export type Database = {
           merchant_name: string
           offer_title: string
           source?: string | null
+          terms?: string | null
           tracking_link: string
           updated_at?: string
         }
         Update: {
           cashback_amount?: string
           category?: string | null
+          coupon_code?: string | null
           created_at?: string
           description?: string | null
+          expiry_date?: string | null
           external_deal_id?: string | null
           id?: string
           is_active?: boolean
@@ -210,6 +218,7 @@ export type Database = {
           merchant_name?: string
           offer_title?: string
           source?: string | null
+          terms?: string | null
           tracking_link?: string
           updated_at?: string
         }

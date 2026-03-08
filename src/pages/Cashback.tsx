@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
-import { Gift, Search, ArrowRight, Loader2, Zap } from "lucide-react";
+import { Gift, Search, ArrowRight, Loader2, Zap, Tag, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import CashbackClaimDialog from "@/components/CashbackClaimDialog";
+import { Link } from "react-router-dom";
 
 interface CashbackDeal {
   id: string;
@@ -20,6 +21,9 @@ interface CashbackDeal {
   tracking_link: string;
   category: string;
   is_active: boolean;
+  coupon_code: string | null;
+  expiry_date: string | null;
+  terms: string | null;
 }
 
 const Cashback = () => {
@@ -49,7 +53,7 @@ const Cashback = () => {
 
   return (
     <>
-      <SEOHead title="Cashback Rewards | ApniNivesh" description="Earn real cashback on financial products via UPI." />
+      <SEOHead title="Cashback Rewards | ApniNivesh" description="Earn real cashback on financial products via UPI. Browse deals, submit UPI ID, and get paid." />
       <Navbar />
       <div className="min-h-screen bg-background">
         <section className="relative overflow-hidden py-16 md:py-24">
@@ -78,7 +82,7 @@ const Cashback = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
                 { step: "1", title: "Browse Deals", desc: "Find cashback offers" },
-                { step: "2", title: "Get Cashback", desc: "Enter UPI & details" },
+                { step: "2", title: "Fill Details", desc: "Enter UPI & info" },
                 { step: "3", title: "Complete Purchase", desc: "Buy via tracking link" },
                 { step: "4", title: "Receive Money", desc: "Cashback to your UPI" },
               ].map(item => (
@@ -124,10 +128,22 @@ const Cashback = () => {
                           <p className="text-sm text-muted-foreground truncate">{deal.offer_title}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-3 flex-wrap">
                         <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 font-bold text-sm">{deal.cashback_amount} Cashback</Badge>
                         <Badge variant="outline" className="text-xs">{deal.category}</Badge>
                       </div>
+                      {deal.coupon_code && (
+                        <div className="flex items-center gap-2 mb-3 bg-muted/50 rounded-lg px-3 py-2 border border-dashed border-border">
+                          <Tag className="w-4 h-4 text-primary shrink-0" />
+                          <span className="font-mono text-sm font-semibold text-foreground">{deal.coupon_code}</span>
+                          <button onClick={() => { navigator.clipboard.writeText(deal.coupon_code!); }} className="ml-auto text-xs text-primary hover:underline">Copy</button>
+                        </div>
+                      )}
+                      {deal.expiry_date && (
+                        <p className="text-xs text-muted-foreground flex items-center gap-1 mb-3">
+                          <Calendar className="w-3 h-3" /> Expires: {new Date(deal.expiry_date).toLocaleDateString()}
+                        </p>
+                      )}
                       {deal.description && <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{deal.description}</p>}
                       <Button onClick={() => { setSelectedDeal(deal); setDialogOpen(true); }} className="w-full rounded-xl bg-primary text-primary-foreground font-semibold">
                         Get Cashback <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -137,6 +153,19 @@ const Cashback = () => {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        {/* Policy links */}
+        <section className="py-8 border-t border-border bg-muted/20">
+          <div className="container mx-auto px-4 text-center">
+            <p className="text-xs text-muted-foreground mb-2">By using our cashback service, you agree to our policies:</p>
+            <div className="flex flex-wrap justify-center gap-4 text-xs">
+              <Link to="/cashback-policy" className="text-primary hover:underline">Cashback Policy</Link>
+              <Link to="/refund-policy" className="text-primary hover:underline">Refund Policy</Link>
+              <Link to="/kyc-policy" className="text-primary hover:underline">KYC & Fraud Detection</Link>
+              <Link to="/terms" className="text-primary hover:underline">Terms & Conditions</Link>
+            </div>
           </div>
         </section>
       </div>

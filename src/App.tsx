@@ -75,6 +75,9 @@ const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ de
 const AffiliateDisclosure = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.AffiliateDisclosure })));
 const Disclaimer = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.Disclaimer })));
 const CookiePolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.CookiePolicy })));
+const CashbackPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.CashbackPolicy })));
+const RefundPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.RefundPolicy })));
+const KYCPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.KYCPolicy })));
 
 const queryClient = new QueryClient();
 
@@ -175,6 +178,9 @@ const AnimatedRoutes = () => {
             <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route path="/cashback-policy" element={<CashbackPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/kyc-policy" element={<KYCPolicy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
