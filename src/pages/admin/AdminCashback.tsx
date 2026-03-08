@@ -48,6 +48,8 @@ interface CashbackRequest {
   approved_at: string | null;
   paid_at: string | null;
   admin_notes: string | null;
+  public_note: string | null;
+  estimated_payout_date: string | null;
   device: string | null;
   ip_hash: string | null;
   created_at: string;
