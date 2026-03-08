@@ -49,12 +49,15 @@ const features = [
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 40 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  show: { 
+    opacity: 1, y: 0, scale: 1,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } 
+  },
 };
 
 const FeaturesSection = () => {
@@ -62,26 +65,40 @@ const FeaturesSection = () => {
     <section className="py-32 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-secondary/40" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-3xl" />
+      <motion.div 
+        animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-3xl" 
+      />
       
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-20"
         >
           <motion.span 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
             className="inline-block px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-bold mb-6"
           >
             Platform Features
           </motion.span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold mb-6 text-foreground tracking-tight">
             Everything to{" "}
-            <span className="text-gradient">Save Smarter</span>
+            <motion.span 
+              initial={{ backgroundSize: "0% 100%" }}
+              whileInView={{ backgroundSize: "100% 100%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="text-gradient"
+            >
+              Save Smarter
+            </motion.span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Complete suite of tools to find, compare, and apply for the best financial products.
@@ -92,23 +109,32 @@ const FeaturesSection = () => {
           variants={container}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {features.map((f) => (
-            <motion.div key={f.title} variants={item}>
+            <motion.div key={f.title} variants={item} whileHover={{ y: -10, transition: { duration: 0.25 } }}>
               <Link
                 to={f.href}
-                className="block p-8 rounded-3xl bg-card border border-border group hover:border-primary/40 hover:shadow-elegant transition-all duration-300 h-full"
+                className="block p-8 rounded-3xl bg-card border border-border group hover:border-primary/40 hover:shadow-elegant transition-all duration-300 h-full relative overflow-hidden"
               >
-                <div className={`w-14 h-14 rounded-2xl ${f.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <f.icon className="w-7 h-7 text-white" />
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-accent/5 transition-all duration-500 rounded-3xl" />
+                
+                <div className="relative z-10">
+                  <motion.div 
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    className={`w-14 h-14 rounded-2xl ${f.color} flex items-center justify-center mb-6 shadow-lg`}
+                  >
+                    <f.icon className="w-7 h-7 text-white" />
+                  </motion.div>
+                  <h3 className="text-xl font-heading font-bold text-foreground mb-3 flex items-center justify-between">
+                    {f.title}
+                    <ArrowUpRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
                 </div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-3 flex items-center justify-between">
-                  {f.title}
-                  <ArrowUpRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
               </Link>
             </motion.div>
           ))}
