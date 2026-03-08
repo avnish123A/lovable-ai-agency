@@ -12,6 +12,12 @@ const brands = [
   { name: "Bajaj Finserv", logo: "/logos/bajaj.png" },
   { name: "Paytm", logo: "/logos/paytm.png" },
   { name: "PhonePe", logo: "/logos/phonepe.png" },
+  { name: "Razorpay", logo: "/logos/razorpay.png" },
+  { name: "CRED", logo: "/logos/cred.png" },
+  { name: "Groww", logo: "/logos/groww.png" },
+  { name: "Zerodha", logo: "/logos/zerodha.png" },
+  { name: "PolicyBazaar", logo: "/logos/policybazaar.png" },
+  { name: "BankBazaar", logo: "/logos/bankbazaar.png" },
 ];
 
 const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
