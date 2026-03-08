@@ -156,9 +156,12 @@ const Cashback = () => {
           </div>
         </section>
 
-        {/* Policy links */}
+        {/* Track & Policy links */}
         <section className="py-8 border-t border-border bg-muted/20">
           <div className="container mx-auto px-4 text-center">
+            <Link to="/track-cashback" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 border border-primary/20 text-primary font-semibold hover:bg-primary/20 transition-colors mb-4">
+              <Search className="w-4 h-4" /> Track Your Cashback Status
+            </Link>
             <p className="text-xs text-muted-foreground mb-2">By using our cashback service, you agree to our policies:</p>
             <div className="flex flex-wrap justify-center gap-4 text-xs">
               <Link to="/cashback-policy" className="text-primary hover:underline">Cashback Policy</Link>

@@ -22,6 +22,7 @@ const BankAccounts = lazy(() => import("./pages/BankAccounts"));
 const DematAccounts = lazy(() => import("./pages/DematAccounts"));
 const FixedDeposits = lazy(() => import("./pages/FixedDeposits"));
 const Cashback = lazy(() => import("./pages/Cashback"));
+const CashbackTracker = lazy(() => import("./pages/CashbackTracker"));
 const EMICalculator = lazy(() => import("./pages/EMICalculator"));
 const EligibilityChecker = lazy(() => import("./pages/EligibilityChecker"));
 const CompareProducts = lazy(() => import("./pages/CompareProducts"));
@@ -178,6 +179,7 @@ const AnimatedRoutes = () => {
             <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route path="/track-cashback" element={<CashbackTracker />} />
             <Route path="/cashback-policy" element={<CashbackPolicy />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/kyc-policy" element={<KYCPolicy />} />
