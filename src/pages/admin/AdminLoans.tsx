@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Loader2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import ImageUpload from "@/components/admin/ImageUpload";
 
@@ -17,6 +17,7 @@ const AdminLoans = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
   const [form, setForm] = useState({
     loan_name: "", bank_name: "", interest_rate: 0, min_amount: 50000, max_amount: 5000000,
     min_tenure: 12, max_tenure: 60, processing_fee: "", apply_link: "",
@@ -65,6 +66,47 @@ const AdminLoans = () => {
     setDialogOpen(true);
   };
 
+  const handleAIEnhance = async () => {
+    if (!form.loan_name.trim() || !form.bank_name.trim()) {
+      toast.error("Enter loan name and bank name first");
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-product-enhance", {
+        body: {
+          product_type: "loan",
+          product_name: form.loan_name,
+          bank_name: form.bank_name,
+          existing_data: {
+            interest_rate: form.interest_rate,
+            min_amount: form.min_amount,
+            max_amount: form.max_amount,
+            processing_fee: form.processing_fee,
+            features: form.features.split(",").map(f => f.trim()).filter(Boolean),
+          },
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.data) {
+        const enhanced = data.data;
+        setForm(prev => ({
+          ...prev,
+          processing_fee: enhanced.processing_fee || prev.processing_fee,
+          features: enhanced.features?.join(", ") || prev.features,
+        }));
+        toast.success("AI enhanced product details!");
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "AI enhancement failed");
+    }
+    setAiLoading(false);
+  };
+
   const handleSave = async () => {
     if (!form.loan_name.trim() || !form.bank_name.trim()) {
       toast.error("Loan name and bank name are required");
@@ -106,10 +148,6 @@ const AdminLoans = () => {
     { key: "max_amount", label: "Max Amount (₹)", type: "number" },
     { key: "min_tenure", label: "Min Tenure (months)", type: "number" },
     { key: "max_tenure", label: "Max Tenure (months)", type: "number" },
-    { key: "processing_fee", label: "Processing Fee", type: "text" },
-    { key: "apply_link", label: "Apply Link", type: "text" },
-    { key: "min_salary", label: "Min Salary (₹)", type: "number" },
-    { key: "min_age", label: "Min Age", type: "number" },
   ];
 
   return (
@@ -141,8 +179,12 @@ const AdminLoans = () => {
                     value={form.image_url}
                     onChange={(url) => setForm({ ...form, image_url: url })}
                     folder="loans"
+                    maxWidth={800}
+                    maxHeight={500}
                   />
                 </div>
+
+                {/* Basic fields */}
                 {fields.map((f) => (
                   <div key={f.key} className="space-y-1">
                     <Label className="text-xs">{f.label}</Label>
@@ -153,10 +195,75 @@ const AdminLoans = () => {
                     />
                   </div>
                 ))}
+
+                {/* AI Enhancement Section */}
+                <div className="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold text-primary">AI Enhancement</span>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={handleAIEnhance}
+                      disabled={aiLoading}
+                      className="gap-2"
+                    >
+                      {aiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                      {aiLoading ? "Enhancing..." : "Enhance with AI"}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    AI will generate compelling features and processing fee descriptions.
+                  </p>
+                </div>
+
+                {/* AI-enhanced fields */}
+                <div className="space-y-1">
+                  <Label className="text-xs">Processing Fee</Label>
+                  <Input
+                    value={form.processing_fee}
+                    onChange={(e) => setForm({ ...form, processing_fee: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs">Apply Link</Label>
+                  <Input
+                    value={form.apply_link}
+                    onChange={(e) => setForm({ ...form, apply_link: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs">Min Salary (₹)</Label>
+                  <Input
+                    type="number"
+                    value={form.min_salary}
+                    onChange={(e) => setForm({ ...form, min_salary: Number(e.target.value) })}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="text-xs">Min Age</Label>
+                  <Input
+                    type="number"
+                    value={form.min_age}
+                    onChange={(e) => setForm({ ...form, min_age: Number(e.target.value) })}
+                  />
+                </div>
+
                 <div className="space-y-1">
                   <Label className="text-xs">Features (comma separated)</Label>
-                  <Textarea value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} />
+                  <Textarea 
+                    value={form.features} 
+                    onChange={(e) => setForm({ ...form, features: e.target.value })}
+                    rows={3}
+                  />
                 </div>
+
                 <Button onClick={handleSave} className="w-full">{editing ? "Update" : "Add"} Loan</Button>
               </div>
             </DialogContent>
