@@ -2,6 +2,13 @@ import { useState } from "react";
 import { PiggyBank } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import FinancialScore from "@/components/gamification/FinancialScore";
+import AchievementBadge from "@/components/gamification/AchievementBadge";
+import AnimatedCounter from "@/components/gamification/AnimatedCounter";
+import AIInsight from "@/components/gamification/AIInsight";
+import WhatIfSlider from "@/components/gamification/WhatIfSlider";
+import ResultActions from "@/components/gamification/ResultActions";
+import StepIndicator from "@/components/gamification/StepIndicator";
 
 const SavingsCalc = () => {
   const [monthly, setMonthly] = useState(10000);
@@ -13,6 +20,8 @@ const SavingsCalc = () => {
   const futureValue = monthly * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
   const totalDeposited = monthly * n;
   const interestEarned = futureValue - totalDeposited;
+  const growthMultiplier = futureValue / totalDeposited;
+  const score = Math.min(100, Math.round(growthMultiplier * 30));
 
   const chartData = Array.from({ length: years }, (_, i) => {
     const y = i + 1;
@@ -21,8 +30,11 @@ const SavingsCalc = () => {
     return { year: `Y${y}`, savings: Math.round(fv), deposited: monthly * m };
   });
 
+  const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
+
   return (
     <ToolLayout title="Savings Calculator" description="Plan your savings and watch your wealth grow" icon={<PiggyBank className="w-7 h-7 text-primary" />}>
+      <StepIndicator steps={["Set Savings", "View Growth", "Plan More"]} current={monthly > 500 ? (years > 1 ? 2 : 1) : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
@@ -31,29 +43,44 @@ const SavingsCalc = () => {
             { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
           ].map((f) => (
             <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Return") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : `₹${f.value.toLocaleString("en-IN")}`}</span></div>
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-muted-foreground">{f.label}</span>
+                <span className="font-semibold">{f.label.includes("Return") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
+              </div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
+          <WhatIfSlider label="What if you save more?" baseValue={monthly} min={500} max={500000} step={500}
+            onResult={(delta) => {
+              const newFV = (monthly + delta) * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+              const diff = newFV - futureValue;
+              return diff > 0 ? `You'd earn ${fmt(diff)} more!` : `You'd earn ${fmt(Math.abs(diff))} less`;
+            }}
+          />
         </div>
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <div className="text-center mb-4"><p className="text-sm text-muted-foreground">Total Savings</p><p className="text-3xl font-bold text-primary">₹{Math.round(futureValue).toLocaleString("en-IN")}</p></div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Deposited</span><span className="font-semibold">₹{totalDeposited.toLocaleString("en-IN")}</span></div>
-              <div className="flex justify-between text-sm"><span className="text-muted-foreground">Interest Earned</span><span className="font-semibold text-accent">₹{Math.round(interestEarned).toLocaleString("en-IN")}</span></div>
+          <div className="rounded-2xl border border-border bg-card p-6 text-center">
+            <p className="text-sm text-muted-foreground">Total Savings</p>
+            <AnimatedCounter value={Math.round(futureValue)} prefix="₹" className="text-3xl font-bold text-primary" />
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div><p className="text-xs text-muted-foreground">Deposited</p><p className="text-sm font-semibold">{fmt(totalDeposited)}</p></div>
+              <div><p className="text-xs text-muted-foreground">Interest</p><p className="text-sm font-semibold text-accent">{fmt(interestEarned)}</p></div>
             </div>
           </div>
           <div className="rounded-2xl border border-border bg-card p-4">
             <ResponsiveContainer width="100%" height={160}>
               <AreaChart data={chartData}>
                 <XAxis dataKey="year" tick={{ fontSize: 10 }} /><YAxis hide />
-                <Tooltip formatter={(v: number) => `₹${v.toLocaleString("en-IN")}`} />
+                <Tooltip formatter={(v: number) => fmt(v)} />
                 <Area type="monotone" dataKey="deposited" fill="hsl(221,83%,53%,0.1)" stroke="hsl(221,83%,53%)" strokeWidth={2} />
                 <Area type="monotone" dataKey="savings" fill="hsl(142,71%,45%,0.1)" stroke="hsl(142,71%,45%)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
+          <FinancialScore score={score} label="Growth Score" sublabel={`${growthMultiplier.toFixed(1)}x your deposits`} />
+          <AIInsight type="ai" title="AI Savings Tip" message={years >= 10 ? "Great long-term plan! Compound interest really kicks in after 10+ years." : "Consider extending to 10+ years — compound interest accelerates over time."} />
+          <AchievementBadge type="savvy_saver" show={score >= 70} message="Your savings plan will multiply your wealth!" />
+          <ResultActions title="Savings Calculation" data={{ "Monthly": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(futureValue), "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
         </div>
       </div>
     </ToolLayout>

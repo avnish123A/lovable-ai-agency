@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Gift } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import AchievementBadge from "@/components/gamification/AchievementBadge";
+import AnimatedCounter from "@/components/gamification/AnimatedCounter";
+import AIInsight from "@/components/gamification/AIInsight";
+import ResultActions from "@/components/gamification/ResultActions";
+import StepIndicator from "@/components/gamification/StepIndicator";
 
 const CashbackCalc = () => {
   const [spend, setSpend] = useState(50000);
@@ -9,9 +15,18 @@ const CashbackCalc = () => {
 
   const monthlyCashback = Math.min(spend * cashbackRate / 100, cap);
   const yearlyCashback = monthlyCashback * 12;
+  const hitsCap = monthlyCashback >= cap;
+
+  const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+    month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i],
+    cashback: Math.round(monthlyCashback),
+  }));
+
+  const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
   return (
     <ToolLayout title="Cashback Calculator" description="Calculate how much cashback you can earn from your spending" icon={<Gift className="w-7 h-7 text-primary" />}>
+      <StepIndicator steps={["Set Spend", "Choose Card", "View Cashback"]} current={spend > 1000 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
@@ -20,25 +35,38 @@ const CashbackCalc = () => {
             { label: "Monthly Cap (₹)", value: cap, set: setCap, min: 100, max: 10000, step: 100 },
           ].map((f) => (
             <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Rate") ? `${f.value}%` : `₹${f.value.toLocaleString("en-IN")}`}</span></div>
+              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Rate") ? `${f.value}%` : fmt(f.value)}</span></div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
         </div>
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
-            <p className="text-sm text-muted-foreground">Monthly Cashback</p>
-            <p className="text-3xl font-bold text-accent">₹{Math.round(monthlyCashback).toLocaleString("en-IN")}</p>
-            {monthlyCashback >= cap && <p className="text-xs text-amber-500 mt-1">⚡ Monthly cap reached</p>}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-border bg-card p-5 text-center">
+              <p className="text-xs text-muted-foreground">Monthly</p>
+              <AnimatedCounter value={Math.round(monthlyCashback)} prefix="₹" className="text-2xl font-bold text-accent" />
+              {hitsCap && <p className="text-[10px] text-amber-500 mt-1">⚡ Cap reached</p>}
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5 text-center">
+              <p className="text-xs text-muted-foreground">Yearly</p>
+              <AnimatedCounter value={Math.round(yearlyCashback)} prefix="₹" className="text-2xl font-bold text-primary" />
+            </div>
           </div>
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
-            <p className="text-sm text-muted-foreground">Yearly Cashback</p>
-            <p className="text-2xl font-bold text-primary">₹{Math.round(yearlyCashback).toLocaleString("en-IN")}</p>
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <p className="text-xs font-semibold text-muted-foreground mb-2">Monthly Cashback Timeline</p>
+            <ResponsiveContainer width="100%" height={150}>
+              <BarChart data={monthlyData}>
+                <XAxis dataKey="month" tick={{ fontSize: 9 }} /><YAxis hide />
+                <Tooltip formatter={(v: number) => fmt(v)} />
+                <Bar dataKey="cashback" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-          <div className="rounded-xl bg-accent/10 p-4 text-xs">
-            <p className="font-semibold text-foreground mb-1">💡 Maximize Cashback</p>
-            <p className="text-muted-foreground">Use category-specific cards (dining, fuel, shopping) to earn higher rates on different spend types.</p>
-          </div>
+          <AIInsight type={hitsCap ? "warning" : "ai"} title={hitsCap ? "Cap Alert" : "AI Cashback Tip"}
+            message={hitsCap ? `You're hitting the ${fmt(cap)} monthly cap. Consider a card with higher cap or use category-specific cards.` : `At ${cashbackRate}% rate, you're earning ${fmt(monthlyCashback)} monthly. Try cards with 5%+ on specific categories for even more.`}
+          />
+          <AchievementBadge type="cashback_pro" show={yearlyCashback >= 6000} message={`${fmt(yearlyCashback)} yearly cashback — that's a free vacation!`} />
+          <ResultActions title="Cashback Calculation" data={{ "Spend": fmt(spend), "Rate": `${cashbackRate}%`, "Monthly": fmt(monthlyCashback), "Yearly": fmt(yearlyCashback) }} productLink="/credit-cards" />
         </div>
       </div>
     </ToolLayout>
