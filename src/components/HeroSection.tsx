@@ -10,7 +10,7 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-hero" />
-      <div className="absolute inset-0 grid-pattern opacity-30" />
+      <div className="absolute inset-0 grid-pattern opacity-20" />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -19,9 +19,9 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/20 bg-accent/5 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-8"
             >
-              <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-sm text-foreground font-medium">India's Trusted Financial Platform</span>
             </motion.div>
 
@@ -43,7 +43,7 @@ const HeroSection = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg text-muted-foreground max-w-lg mb-10 leading-relaxed"
             >
-              Find the right financial product with smart tools and AI assistance.
+              Find the right financial products using smart tools and AI recommendations. 
               Compare, choose, and apply — all in minutes.
             </motion.p>
 
@@ -53,12 +53,12 @@ const HeroSection = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-base px-8 shadow-glow rounded-xl font-semibold">
+              <Button asChild size="lg" className="bg-gradient-cta text-primary-foreground hover:opacity-90 text-base px-8 shadow-glow rounded-xl font-semibold btn-glow">
                 <Link to="/credit-cards">
                   Explore Credit Cards <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="text-base px-8 border-border hover:bg-secondary rounded-xl font-semibold">
+              <Button asChild variant="outline" size="lg" className="text-base px-8 border-primary/20 hover:bg-primary/5 hover:border-primary/40 rounded-xl font-semibold text-foreground">
                 <Link to="/loans">Compare Loans</Link>
               </Button>
             </motion.div>
@@ -75,7 +75,7 @@ const HeroSection = () => {
                 { icon: TrendingUp, label: "Happy Users", value: "50K+" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <stat.icon className="w-5 h-5 text-accent mx-auto mb-2" />
+                  <stat.icon className="w-5 h-5 text-primary mx-auto mb-2" />
                   <p className="text-2xl font-heading font-bold text-foreground">{stat.value}</p>
                   <p className="text-xs text-muted-foreground">{stat.label}</p>
                 </div>
