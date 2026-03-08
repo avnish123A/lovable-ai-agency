@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard, Users, MessageSquare, TrendingUp, Gift } from "lucide-react";
+import { CreditCard, Users, MessageSquare, TrendingUp, Gift, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface Stats {
@@ -19,37 +20,58 @@ const AdminDashboard = () => {
   });
   const [recentLeads, setRecentLeads] = useState<any[]>([]);
 
+  const fetchStats = useCallback(async () => {
+    const [cards, loans, leads, messages, cashback] = await Promise.all([
+      supabase.from("credit_cards").select("id", { count: "exact", head: true }),
+      supabase.from("loan_products").select("id", { count: "exact", head: true }),
+      supabase.from("leads").select("id", { count: "exact", head: true }),
+      supabase.from("contact_messages").select("id", { count: "exact", head: true }),
+      supabase.from("cashback_offers").select("id", { count: "exact", head: true }),
+    ]);
+
+    setStats({
+      totalCards: cards.count ?? 0,
+      totalLoans: loans.count ?? 0,
+      totalLeads: leads.count ?? 0,
+      totalMessages: messages.count ?? 0,
+      totalCashback: cashback.count ?? 0,
+    });
+  }, []);
+
+  const fetchRecentLeads = useCallback(async () => {
+    const { data } = await supabase
+      .from("leads")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(5);
+    setRecentLeads(data ?? []);
+  }, []);
+
   useEffect(() => {
-    const fetchStats = async () => {
-      const [cards, loans, leads, messages, cashback] = await Promise.all([
-        supabase.from("credit_cards").select("id", { count: "exact", head: true }),
-        supabase.from("loan_products").select("id", { count: "exact", head: true }),
-        supabase.from("leads").select("id", { count: "exact", head: true }),
-        supabase.from("contact_messages").select("id", { count: "exact", head: true }),
-        supabase.from("cashback_offers").select("id", { count: "exact", head: true }),
-      ]);
-
-      setStats({
-        totalCards: cards.count ?? 0,
-        totalLoans: loans.count ?? 0,
-        totalLeads: leads.count ?? 0,
-        totalMessages: messages.count ?? 0,
-        totalCashback: cashback.count ?? 0,
-      });
-    };
-
-    const fetchRecentLeads = async () => {
-      const { data } = await supabase
-        .from("leads")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(5);
-      setRecentLeads(data ?? []);
-    };
-
     fetchStats();
     fetchRecentLeads();
-  }, []);
+
+    // Realtime: auto-refresh when leads/messages change
+    const leadsChannel = supabase
+      .channel("dashboard-leads")
+      .on("postgres_changes", { event: "*", schema: "public", table: "leads" }, () => {
+        fetchStats();
+        fetchRecentLeads();
+      })
+      .subscribe();
+
+    const messagesChannel = supabase
+      .channel("dashboard-messages")
+      .on("postgres_changes", { event: "*", schema: "public", table: "contact_messages" }, () => {
+        fetchStats();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(leadsChannel);
+      supabase.removeChannel(messagesChannel);
+    };
+  }, [fetchStats, fetchRecentLeads]);
 
   const statCards = [
     { label: "Credit Cards", value: stats.totalCards, icon: CreditCard, color: "text-blue-500" },
@@ -61,9 +83,14 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-heading font-bold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Welcome back, {user?.email}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-heading font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Welcome back, {user?.email}</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => { fetchStats(); fetchRecentLeads(); }} className="rounded-xl">
+          <RefreshCw className="w-4 h-4 mr-2" /> Refresh
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -95,6 +122,7 @@ const AdminDashboard = () => {
                     <th className="text-left py-2 font-medium text-muted-foreground">Name</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Email</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Phone</th>
+                    <th className="text-left py-2 font-medium text-muted-foreground">Product</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Status</th>
                     <th className="text-left py-2 font-medium text-muted-foreground">Date</th>
                   </tr>
@@ -105,6 +133,7 @@ const AdminDashboard = () => {
                       <td className="py-2.5 text-foreground">{lead.name}</td>
                       <td className="py-2.5 text-muted-foreground">{lead.email}</td>
                       <td className="py-2.5 text-muted-foreground">{lead.phone || "—"}</td>
+                      <td className="py-2.5 text-muted-foreground">{lead.product_name || lead.service || "—"}</td>
                       <td className="py-2.5">
                         <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent/15 text-accent">
                           {lead.status}
