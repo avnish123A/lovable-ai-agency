@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings REPLICA IDENTITY FULL;
