@@ -4,6 +4,7 @@ import { Rocket, Mail, Bell, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useComingSoonMode } from "@/contexts/ComingSoonContext";
 
 /* ─── Countdown Digit ─── */
 const CountdownDigit = ({ value, label }: { value: number; label: string }) => (
@@ -28,14 +29,14 @@ const CountdownDigit = ({ value, label }: { value: number; label: string }) => (
 
 /* ─── Main Component ─── */
 const ComingSoon = () => {
+  const { settings } = useComingSoonMode();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
-
-  const launchDate = new Date("2026-06-01T00:00:00");
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    const launchDate = new Date(settings.launch_date + "T00:00:00");
     const tick = () => {
       const diff = launchDate.getTime() - Date.now();
       if (diff > 0) {
@@ -45,12 +46,14 @@ const ComingSoon = () => {
           minutes: Math.floor((diff / (1000 * 60)) % 60),
           seconds: Math.floor((diff / 1000) % 60),
         });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [settings.launch_date]);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +68,6 @@ const ComingSoon = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Subtle gradient bg */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
 
       <motion.div
@@ -74,7 +76,6 @@ const ComingSoon = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 max-w-lg w-full mx-auto text-center"
       >
-        {/* Icon */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -84,16 +85,17 @@ const ComingSoon = () => {
           <Rocket className="w-8 h-8 text-primary" />
         </motion.div>
 
-        {/* Heading */}
+        {/* Dynamic headline from admin */}
         <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-foreground mb-3 tracking-tight">
-          Coming <span className="text-primary">Soon</span>
+          {settings.headline || "Coming Soon"}
         </h1>
 
+        {/* Dynamic description from admin */}
         <p className="text-muted-foreground text-base md:text-lg mb-10 max-w-sm mx-auto leading-relaxed">
-          We're building something great. Be the first to experience it.
+          {settings.description || "We're building something great. Be the first to experience it."}
         </p>
 
-        {/* Countdown */}
+        {/* Countdown using dynamic launch_date */}
         <div className="flex justify-center gap-6 sm:gap-10 mb-10">
           <CountdownDigit value={timeLeft.days} label="Days" />
           <CountdownDigit value={timeLeft.hours} label="Hours" />
@@ -101,10 +103,8 @@ const ComingSoon = () => {
           <CountdownDigit value={timeLeft.seconds} label="Sec" />
         </div>
 
-        {/* Divider */}
         <div className="w-12 h-px bg-border mx-auto mb-10" />
 
-        {/* Email subscription */}
         <AnimatePresence mode="wait">
           {subscribed ? (
             <motion.div
@@ -146,7 +146,6 @@ const ComingSoon = () => {
           )}
         </AnimatePresence>
 
-        {/* Brand */}
         <div className="mt-12 flex items-center justify-center gap-2 opacity-50">
           <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-5 w-5 object-contain" />
           <span className="text-xs font-heading font-semibold text-foreground">
