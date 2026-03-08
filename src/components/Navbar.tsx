@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 const navLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
   { label: "Loans", href: "/loans" },
-  { label: "Tools", href: "/tools" },
-  { label: "Compare", href: "/compare" },
+  { label: "Insurance", href: "/finance-deals" },
+  { label: "Finance Tools", href: "/tools" },
   { label: "Deals", href: "/finance-deals" },
   { label: "About", href: "/about" },
 ];
@@ -45,18 +45,18 @@ const Navbar = () => {
               <Wallet className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-heading font-bold text-foreground">
-              Kriya<span className="text-accent">pay</span>
+              Kriya<span className="text-primary">pay</span>
             </span>
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.label}
                 to={link.href}
                 className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   location.pathname === link.href
-                    ? "text-primary bg-primary/8"
+                    ? "text-primary bg-primary/10"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 }`}
               >
@@ -72,7 +72,7 @@ const Navbar = () => {
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
               <Bot className="w-4 h-4" />
             </Button>
-            <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl font-semibold shadow-glow-sm">
+            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl font-semibold shadow-glow-sm">
               <Link to="/credit-cards">Apply Now</Link>
             </Button>
           </div>
@@ -94,7 +94,7 @@ const Navbar = () => {
             <div className="container mx-auto px-4 py-4 space-y-1">
               {navLinks.map((link, i) => (
                 <motion.div
-                  key={link.href}
+                  key={link.label}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
@@ -103,7 +103,7 @@ const Navbar = () => {
                     to={link.href}
                     className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       location.pathname === link.href
-                        ? "text-primary bg-primary/8"
+                        ? "text-primary bg-primary/10"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                     }`}
                   >
@@ -115,7 +115,7 @@ const Navbar = () => {
                 <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
                   <Link to="/eligibility">Eligibility</Link>
                 </Button>
-                <Button asChild size="sm" className="flex-1 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90">
+                <Button asChild size="sm" className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link to="/credit-cards">Apply Now</Link>
                 </Button>
               </div>
