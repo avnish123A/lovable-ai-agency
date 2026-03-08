@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   Loader2, Plus, Search, Trash2, Pencil, Gift, Download,
-  CheckCircle, XCircle, Clock, DollarSign, Eye
+  CheckCircle, XCircle, Clock, DollarSign, Eye, Copy
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,6 +27,9 @@ interface CashbackDeal {
   category: string;
   is_active: boolean;
   source: string;
+  coupon_code: string | null;
+  expiry_date: string | null;
+  terms: string | null;
   created_at: string;
 }
 
@@ -51,6 +54,7 @@ interface CashbackRequest {
 const emptyDeal = {
   merchant_name: "", merchant_logo: "", offer_title: "", cashback_amount: "",
   description: "", tracking_link: "", category: "general", is_active: true, source: "manual",
+  coupon_code: "", expiry_date: "", terms: "",
 };
 
 const statusColors: Record<string, string> = {
@@ -73,6 +77,7 @@ const AdminCashback = () => {
   const [saving, setSaving] = useState(false);
   const [selectedReqIds, setSelectedReqIds] = useState<Set<string>>(new Set());
   const [viewReq, setViewReq] = useState<CashbackRequest | null>(null);
+  const [adminNote, setAdminNote] = useState("");
 
   const fetchData = async () => {
     const [dealsRes, reqRes] = await Promise.all([
@@ -88,11 +93,19 @@ const AdminCashback = () => {
 
   const handleSaveDeal = async () => {
     setSaving(true);
+    const payload: any = {
+      ...dealForm,
+      merchant_logo: dealForm.merchant_logo || null,
+      description: dealForm.description || null,
+      coupon_code: dealForm.coupon_code || null,
+      expiry_date: dealForm.expiry_date || null,
+      terms: dealForm.terms || null,
+    };
     if (editDeal) {
-      const { error } = await supabase.from("cashback_deals" as any).update(dealForm as any).eq("id", editDeal.id);
+      const { error } = await supabase.from("cashback_deals" as any).update(payload).eq("id", editDeal.id);
       if (error) toast.error("Failed to update"); else toast.success("Deal updated!");
     } else {
-      const { error } = await supabase.from("cashback_deals" as any).insert(dealForm as any);
+      const { error } = await supabase.from("cashback_deals" as any).insert(payload);
       if (error) toast.error("Failed to create"); else toast.success("Deal created!");
     }
     setSaving(false);
@@ -116,6 +129,8 @@ const AdminCashback = () => {
       offer_title: deal.offer_title, cashback_amount: deal.cashback_amount,
       description: deal.description || "", tracking_link: deal.tracking_link,
       category: deal.category, is_active: deal.is_active, source: deal.source,
+      coupon_code: deal.coupon_code || "", expiry_date: deal.expiry_date || "",
+      terms: deal.terms || "",
     });
     setShowDealDialog(true);
   };
@@ -126,6 +141,12 @@ const AdminCashback = () => {
     if (status === "paid") updates.paid_at = new Date().toISOString();
     const { error } = await supabase.from("cashback_requests" as any).update(updates).eq("id", id);
     if (error) toast.error("Failed"); else toast.success(`Status → ${status}`);
+    fetchData();
+  };
+
+  const saveAdminNote = async (id: string) => {
+    const { error } = await supabase.from("cashback_requests" as any).update({ admin_notes: adminNote } as any).eq("id", id);
+    if (error) toast.error("Failed"); else toast.success("Note saved!");
     fetchData();
   };
 
@@ -144,7 +165,7 @@ const AdminCashback = () => {
     URL.revokeObjectURL(url);
   };
 
-  const filteredDeals = deals.filter(d => d.merchant_name.toLowerCase().includes(search.toLowerCase()));
+  const filteredDeals = deals.filter(d => d.merchant_name.toLowerCase().includes(search.toLowerCase()) || d.offer_title.toLowerCase().includes(search.toLowerCase()));
   const filteredRequests = requests.filter(r => {
     const matchSearch = r.user_name.toLowerCase().includes(reqSearch.toLowerCase()) || r.email.toLowerCase().includes(reqSearch.toLowerCase()) || r.tracking_id.toLowerCase().includes(reqSearch.toLowerCase());
     return matchSearch && (statusFilter === "all" || r.status === statusFilter);
@@ -187,7 +208,7 @@ const AdminCashback = () => {
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input placeholder="Search..." value={reqSearch} onChange={e => setReqSearch(e.target.value)} className="pl-9" />
+              <Input placeholder="Search name, email, tracking ID..." value={reqSearch} onChange={e => setReqSearch(e.target.value)} className="pl-9" />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
@@ -232,7 +253,7 @@ const AdminCashback = () => {
                     <td className="p-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[req.status] || ""}`}>{req.status}</span></td>
                     <td className="p-3 text-muted-foreground text-xs">{new Date(req.created_at).toLocaleDateString()}</td>
                     <td className="p-3 text-right space-x-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setViewReq(req)}><Eye className="w-3.5 h-3.5" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setViewReq(req); setAdminNote(req.admin_notes || ""); }}><Eye className="w-3.5 h-3.5" /></Button>
                       {req.status === "pending" && (<>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600" onClick={() => updateRequestStatus(req.id, "approved")}><CheckCircle className="w-3.5 h-3.5" /></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => updateRequestStatus(req.id, "rejected")}><XCircle className="w-3.5 h-3.5" /></Button>
@@ -260,18 +281,29 @@ const AdminCashback = () => {
                 <th className="p-3 text-left font-medium text-muted-foreground">Merchant</th>
                 <th className="p-3 text-left font-medium text-muted-foreground">Offer</th>
                 <th className="p-3 text-left font-medium text-muted-foreground">Cashback</th>
+                <th className="p-3 text-left font-medium text-muted-foreground">Coupon</th>
+                <th className="p-3 text-left font-medium text-muted-foreground">Expiry</th>
                 <th className="p-3 text-left font-medium text-muted-foreground">Source</th>
                 <th className="p-3 text-left font-medium text-muted-foreground">Status</th>
                 <th className="p-3 text-right font-medium text-muted-foreground">Actions</th>
               </tr></thead>
               <tbody>
                 {filteredDeals.length === 0 ? (
-                  <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">No deals</td></tr>
+                  <tr><td colSpan={8} className="p-8 text-center text-muted-foreground">No deals</td></tr>
                 ) : filteredDeals.map(deal => (
                   <tr key={deal.id} className="border-b border-border hover:bg-muted/30">
                     <td className="p-3 font-medium">{deal.merchant_name}</td>
-                    <td className="p-3 text-muted-foreground">{deal.offer_title}</td>
+                    <td className="p-3 text-muted-foreground max-w-[200px] truncate">{deal.offer_title}</td>
                     <td className="p-3 font-semibold text-primary">{deal.cashback_amount}</td>
+                    <td className="p-3">
+                      {deal.coupon_code ? (
+                        <button onClick={() => { navigator.clipboard.writeText(deal.coupon_code!); toast.success("Coupon copied!"); }}
+                          className="inline-flex items-center gap-1 font-mono text-xs bg-muted px-2 py-0.5 rounded border border-border hover:bg-muted/80">
+                          {deal.coupon_code} <Copy className="w-3 h-3" />
+                        </button>
+                      ) : <span className="text-xs text-muted-foreground">—</span>}
+                    </td>
+                    <td className="p-3 text-xs text-muted-foreground">{deal.expiry_date ? new Date(deal.expiry_date).toLocaleDateString() : "—"}</td>
                     <td className="p-3"><Badge variant="outline" className="text-xs">{deal.source}</Badge></td>
                     <td className="p-3"><Badge variant={deal.is_active ? "default" : "secondary"} className="text-xs">{deal.is_active ? "Active" : "Inactive"}</Badge></td>
                     <td className="p-3 text-right space-x-1">
@@ -286,18 +318,24 @@ const AdminCashback = () => {
         </TabsContent>
       </Tabs>
 
+      {/* Deal Add/Edit Dialog */}
       <Dialog open={showDealDialog} onOpenChange={setShowDealDialog}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>{editDeal ? "Edit Deal" : "Add New Deal"}</DialogTitle></DialogHeader>
-          <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+          <div className="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Merchant Name *</Label><Input value={dealForm.merchant_name} onChange={e => setDealForm({ ...dealForm, merchant_name: e.target.value })} /></div>
               <div><Label>Cashback Amount *</Label><Input placeholder="₹200 or 10%" value={dealForm.cashback_amount} onChange={e => setDealForm({ ...dealForm, cashback_amount: e.target.value })} /></div>
             </div>
             <div><Label>Offer Title *</Label><Input value={dealForm.offer_title} onChange={e => setDealForm({ ...dealForm, offer_title: e.target.value })} /></div>
             <div><Label>Tracking Link *</Label><Input placeholder="https://..." value={dealForm.tracking_link} onChange={e => setDealForm({ ...dealForm, tracking_link: e.target.value })} /></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div><Label>Coupon Code</Label><Input placeholder="SAVE20" value={dealForm.coupon_code} onChange={e => setDealForm({ ...dealForm, coupon_code: e.target.value })} /></div>
+              <div><Label>Expiry Date</Label><Input type="date" value={dealForm.expiry_date} onChange={e => setDealForm({ ...dealForm, expiry_date: e.target.value })} /></div>
+            </div>
             <div><Label>Merchant Logo URL</Label><Input placeholder="https://..." value={dealForm.merchant_logo} onChange={e => setDealForm({ ...dealForm, merchant_logo: e.target.value })} /></div>
             <div><Label>Description</Label><Textarea value={dealForm.description} onChange={e => setDealForm({ ...dealForm, description: e.target.value })} rows={3} /></div>
+            <div><Label>Terms & Conditions</Label><Textarea placeholder="Enter deal specific T&C..." value={dealForm.terms} onChange={e => setDealForm({ ...dealForm, terms: e.target.value })} rows={3} /></div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Category</Label><Input value={dealForm.category} onChange={e => setDealForm({ ...dealForm, category: e.target.value })} /></div>
               <div><Label>Source</Label>
@@ -315,13 +353,21 @@ const AdminCashback = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Request Detail Dialog */}
       <Dialog open={!!viewReq} onOpenChange={o => !o && setViewReq(null)}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader><DialogTitle>Request Details</DialogTitle></DialogHeader>
-          {viewReq && <div className="space-y-3 text-sm">
-            {([["Name", viewReq.user_name], ["Email", viewReq.email], ["Phone", viewReq.phone], ["UPI ID", viewReq.upi_id], ["Tracking ID", viewReq.tracking_id], ["Amount", viewReq.cashback_amount || "—"], ["Status", viewReq.status], ["Device", viewReq.device || "—"], ["Submitted", new Date(viewReq.created_at).toLocaleString()], ["Approved", viewReq.approved_at ? new Date(viewReq.approved_at).toLocaleString() : "—"], ["Paid", viewReq.paid_at ? new Date(viewReq.paid_at).toLocaleString() : "—"]] as [string, string][]).map(([l, v]) => (
-              <div key={l} className="flex justify-between"><span className="text-muted-foreground">{l}</span><span className="font-medium text-foreground">{v}</span></div>
-            ))}
+          {viewReq && <div className="space-y-4">
+            <div className="space-y-2 text-sm">
+              {([["Name", viewReq.user_name], ["Email", viewReq.email], ["Phone", viewReq.phone], ["UPI ID", viewReq.upi_id], ["Tracking ID", viewReq.tracking_id], ["Amount", viewReq.cashback_amount || "—"], ["Status", viewReq.status], ["Device", viewReq.device || "—"], ["Submitted", new Date(viewReq.created_at).toLocaleString()], ["Approved", viewReq.approved_at ? new Date(viewReq.approved_at).toLocaleString() : "—"], ["Paid", viewReq.paid_at ? new Date(viewReq.paid_at).toLocaleString() : "—"]] as [string, string][]).map(([l, v]) => (
+                <div key={l} className="flex justify-between"><span className="text-muted-foreground">{l}</span><span className="font-medium text-foreground">{v}</span></div>
+              ))}
+            </div>
+            <div>
+              <Label>Admin Notes</Label>
+              <Textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} placeholder="Add internal notes..." rows={3} />
+              <Button size="sm" className="mt-2" onClick={() => saveAdminNote(viewReq.id)}>Save Note</Button>
+            </div>
           </div>}
         </DialogContent>
       </Dialog>
