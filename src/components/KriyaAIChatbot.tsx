@@ -266,7 +266,7 @@ const KriyaAIChatbot = () => {
                     {[
                       { label: "💳 Credit Cards", path: "/credit-cards" },
                       { label: "📊 EMI Calculator", path: "/emi-calculator" },
-                      { label: "🎯 Deals", path: "/finance-deals" },
+                      { label: "🎯 Compare", path: "/compare" },
                       { label: "⚖️ Compare", path: "/compare" },
                     ].map((nav) => (
                       <button

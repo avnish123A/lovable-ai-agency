@@ -42,7 +42,7 @@ const FeaturedDeals = () => {
             </p>
           </div>
           <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
-            <Link to="/finance-deals">View All Deals</Link>
+            <Link to="/credit-cards">View All Products</Link>
           </Button>
         </motion.div>
 
