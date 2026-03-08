@@ -27,6 +27,7 @@ const footerLinks = {
 
 const Footer = () => {
   useEffect(() => {
+    // Cuelinks smart script
     if (!document.getElementById("cuelinks-script")) {
       const cIdScript = document.createElement("script");
       cIdScript.id = "cuelinks-cid";
@@ -43,6 +44,17 @@ const Footer = () => {
           ? "https://cdn0.cuelinks.com/js/cuelinksv2.js"
           : "http://cdn0.cuelinks.com/js/cuelinksv2.js";
       document.body.appendChild(s);
+    }
+
+    // EarnKaro/CashKaro smart link script
+    if (!document.getElementById("earnkaro-script")) {
+      const ekScript = document.createElement("script");
+      ekScript.id = "earnkaro-script";
+      ekScript.type = "text/javascript";
+      ekScript.async = true;
+      ekScript.src = "https://ekaro.in/smart-link.js";
+      ekScript.setAttribute("data-ek-id", "EARNKARO_USER_ID");
+      document.body.appendChild(ekScript);
     }
   }, []);
 
