@@ -7,9 +7,12 @@ import { supabase } from "@/integrations/supabase/client";
 import BankLogo from "@/components/BankLogo";
 import CreditCardVisual from "@/components/CreditCardVisual";
 import TrustBadge from "@/components/TrustBadge";
+import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
 const TopCardsSection = () => {
   const [cards, setCards] = useState<any[]>([]);
+  const [selectedCard, setSelectedCard] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchCards = async () => {
@@ -26,7 +29,20 @@ const TopCardsSection = () => {
 
   const fmt = (n: number) => (n === 0 ? "Free" : `₹${n.toLocaleString("en-IN")}`);
 
+  const handleApply = (card: any) => {
+    const dealLike = {
+      id: card.id,
+      title: card.card_name,
+      merchant: card.bank_name,
+      subcategory: "credit_cards",
+      tracking_link: card.apply_link || null,
+    };
+    setSelectedCard(dealLike);
+    setDialogOpen(true);
+  };
+
   return (
+    <>
     <section className="py-24 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
@@ -94,7 +110,11 @@ const TopCardsSection = () => {
                     <Star className="w-4 h-4 text-primary fill-primary" />
                     <span className="text-sm font-bold text-foreground">{card.rating}</span>
                   </div>
-                  <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
+                  <Button
+                    size="sm"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                    onClick={() => handleApply(card)}
+                  >
                     Apply Now
                   </Button>
                 </div>
@@ -104,6 +124,14 @@ const TopCardsSection = () => {
         </div>
       </div>
     </section>
+
+    <LeadCaptureDialog
+      open={dialogOpen}
+      onOpenChange={setDialogOpen}
+      deal={selectedCard}
+      onSuccess={() => { setDialogOpen(false); setSelectedCard(null); }}
+    />
+    </>
   );
 };
 
