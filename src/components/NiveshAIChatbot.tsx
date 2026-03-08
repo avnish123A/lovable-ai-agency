@@ -86,7 +86,7 @@ const TypingDots = () => (
   </div>
 );
 
-const KriyaAIChatbot = () => {
+const NiveshAIChatbot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -266,8 +266,8 @@ const KriyaAIChatbot = () => {
                     {[
                       { label: "💳 Credit Cards", path: "/credit-cards" },
                       { label: "📊 EMI Calculator", path: "/emi-calculator" },
-                      { label: "🎯 Compare", path: "/compare" },
-                      { label: "⚖️ Compare", path: "/compare" },
+                      { label: "🎯 Compare Products", path: "/compare" },
+                      { label: "🏦 Bank Accounts", path: "/bank-accounts" },
                     ].map((nav) => (
                       <button
                         key={nav.path}
@@ -397,4 +397,4 @@ const KriyaAIChatbot = () => {
   );
 };
 
-export default KriyaAIChatbot;
+export default NiveshAIChatbot;
