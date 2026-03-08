@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 const navLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
   { label: "Loans", href: "/loans" },
-  { label: "Insurance", href: "/finance-deals?filter=insurance" },
-  { label: "Finance Deals", href: "/finance-deals" },
-  { label: "Cashback", href: "/cashback" },
-  { label: "Tools", href: "/emi-calculator" },
+  { label: "Compare", href: "/compare" },
+  { label: "Deals", href: "/finance-deals" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
