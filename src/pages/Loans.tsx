@@ -9,6 +9,7 @@ import BankLogo from "@/components/BankLogo";
 import TrustBadge from "@/components/TrustBadge";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
+import SEOHead from "@/components/SEOHead";
 
 const Loans = () => {
   const [loans, setLoans] = useState<any[]>([]);

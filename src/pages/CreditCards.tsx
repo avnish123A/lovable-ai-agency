@@ -10,6 +10,7 @@ import CreditCardVisual from "@/components/CreditCardVisual";
 import TrustBadge from "@/components/TrustBadge";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
+import SEOHead from "@/components/SEOHead";
 
 const CreditCards = () => {
   const [cards, setCards] = useState<any[]>([]);
