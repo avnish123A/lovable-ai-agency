@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Award, Star, Shield, Target, Zap, Trophy } from "lucide-react";
+import { Award, Star, Shield, Target, Zap, Trophy, TrendingUp, Wallet } from "lucide-react";
 
-export type BadgeType = "smart_planner" | "savvy_saver" | "debt_crusher" | "goal_setter" | "budget_master" | "cashback_pro";
+export type BadgeType = "smart_planner" | "savvy_saver" | "debt_crusher" | "goal_setter" | "budget_master" | "cashback_pro" | "smart_saver" | "investment_planner" | "credit_pro";
 
 const BADGE_CONFIG: Record<BadgeType, { icon: any; label: string; color: string; bg: string }> = {
   smart_planner: { icon: Star, label: "Smart Planner", color: "text-amber-500", bg: "from-amber-500/10 to-amber-400/5 border-amber-500/20" },
@@ -10,6 +10,9 @@ const BADGE_CONFIG: Record<BadgeType, { icon: any; label: string; color: string;
   goal_setter: { icon: Target, label: "Goal Setter", color: "text-purple-500", bg: "from-purple-500/10 to-purple-400/5 border-purple-500/20" },
   budget_master: { icon: Award, label: "Budget Master", color: "text-blue-500", bg: "from-blue-500/10 to-blue-400/5 border-blue-500/20" },
   cashback_pro: { icon: Trophy, label: "Cashback Pro", color: "text-pink-500", bg: "from-pink-500/10 to-pink-400/5 border-pink-500/20" },
+  smart_saver: { icon: Wallet, label: "Smart Saver", color: "text-emerald-500", bg: "from-emerald-500/10 to-emerald-400/5 border-emerald-500/20" },
+  investment_planner: { icon: TrendingUp, label: "Investment Planner", color: "text-indigo-500", bg: "from-indigo-500/10 to-indigo-400/5 border-indigo-500/20" },
+  credit_pro: { icon: Shield, label: "Credit Pro", color: "text-cyan-500", bg: "from-cyan-500/10 to-cyan-400/5 border-cyan-500/20" },
 };
 
 interface AchievementBadgeProps {
