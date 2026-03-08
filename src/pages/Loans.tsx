@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Landmark } from "lucide-react";
+import { Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -8,10 +8,13 @@ import Footer from "@/components/Footer";
 import BankLogo from "@/components/BankLogo";
 import TrustBadge from "@/components/TrustBadge";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
+import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
 const Loans = () => {
   const [loans, setLoans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedLoan, setSelectedLoan] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -27,6 +30,23 @@ const Loans = () => {
   }, []);
 
   const fmt = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+  const handleApply = (loan: any) => {
+    const dealLike = {
+      id: loan.id,
+      title: loan.loan_name,
+      merchant: loan.bank_name,
+      subcategory: "loans",
+      tracking_link: loan.apply_link || null,
+    };
+    setSelectedLoan(dealLike);
+    setDialogOpen(true);
+  };
+
+  const handleDialogSuccess = () => {
+    setDialogOpen(false);
+    setSelectedLoan(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,12 +95,18 @@ const Loans = () => {
                     </div>
                   </div>
 
-                  {/* Interest rate highlight */}
-                  <div className="mx-6 mb-4 p-4 rounded-xl bg-primary/5 border border-primary/10 text-center">
-                    <p className="text-xs text-muted-foreground mb-1">Starting Interest Rate</p>
-                    <p className="text-3xl font-heading font-bold text-primary">{loan.interest_rate}%</p>
-                    <p className="text-xs text-muted-foreground">per annum</p>
-                  </div>
+                  {/* Product image or Interest rate highlight */}
+                  {loan.image_url ? (
+                    <div className="mx-6 mb-4">
+                      <img src={loan.image_url} alt={loan.loan_name} className="w-full h-24 object-contain rounded-lg" />
+                    </div>
+                  ) : (
+                    <div className="mx-6 mb-4 p-4 rounded-xl bg-primary/5 border border-primary/10 text-center">
+                      <p className="text-xs text-muted-foreground mb-1">Starting Interest Rate</p>
+                      <p className="text-3xl font-heading font-bold text-primary">{loan.interest_rate}%</p>
+                      <p className="text-xs text-muted-foreground">per annum</p>
+                    </div>
+                  )}
 
                   <div className="px-6 pb-6 flex flex-col flex-1">
                     <h3 className="font-heading font-bold text-foreground text-base mb-4">{loan.loan_name}</h3>
@@ -91,8 +117,12 @@ const Loans = () => {
                         <span className="text-foreground font-medium">{fmt(loan.min_amount)} - {fmt(loan.max_amount)}</span>
                       </div>
                       <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Interest Rate</span>
+                        <span className="text-primary font-semibold">{loan.interest_rate}% p.a.</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Processing Fee</span>
-                        <span className="text-foreground font-medium">{loan.processing_fee}</span>
+                        <span className="text-foreground font-medium">{loan.processing_fee || "—"}</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Tenure</span>
@@ -110,8 +140,11 @@ const Loans = () => {
                     </div>
 
                     <div className="mt-auto pt-4 border-t border-border">
-                      <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
-                        Apply Now
+                      <Button 
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                        onClick={() => handleApply(loan)}
+                      >
+                        Apply Now <ExternalLink className="w-4 h-4 ml-2" />
                       </Button>
                     </div>
                   </div>
@@ -124,6 +157,14 @@ const Loans = () => {
         </div>
       </section>
       <Footer />
+
+      {/* Lead Capture Dialog */}
+      <LeadCaptureDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        deal={selectedLoan}
+        onSuccess={handleDialogSuccess}
+      />
     </div>
   );
 };
