@@ -110,7 +110,8 @@ export const TermsConditions = () => (
       <li>Comparison of credit cards, loans, and insurance products from partner banks</li>
       <li>AI-powered product recommendations via NiveshAI (powered by Google Gemini and OpenAI)</li>
       <li>EMI calculators, eligibility checkers, and financial planning tools</li>
-      <li>Cashback offer aggregation and deal tracking</li>
+      <li>Cashback rewards program — users earn cashback via UPI by completing purchases through tracked affiliate links</li>
+      <li>Deal aggregation from affiliate networks including Hiqmobi</li>
       <li>Lead submission to partner banks on your behalf</li>
     </ul>
 
