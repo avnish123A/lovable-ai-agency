@@ -288,10 +288,12 @@ const AdminLoans = () => {
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
       ) : (
         <div className="grid gap-3">
+          {filtered.length > 0 && <div className="flex items-center gap-2 text-sm text-muted-foreground"><Checkbox checked={selected.size === filtered.length && filtered.length > 0} onCheckedChange={toggleAll} /><span>Select All ({filtered.length})</span></div>}
           {filtered.map((loan) => (
-            <Card key={loan.id}>
+            <Card key={loan.id} className={selected.has(loan.id) ? "border-primary" : ""}>
               <CardContent className="flex items-center justify-between py-4">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <Checkbox checked={selected.has(loan.id)} onCheckedChange={() => toggleSelect(loan.id)} />
                   {loan.image_url ? (
                     <img src={loan.image_url} alt={loan.loan_name} className="w-16 h-10 object-contain rounded" />
                   ) : (
