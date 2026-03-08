@@ -21,7 +21,9 @@ interface ComingSoonSettings {
   enabled: boolean;
   headline: string;
   description: string;
-  launch_date: string;
+  countdown_days: number;
+  countdown_hours: number;
+  countdown_minutes: number;
 }
 
 const AdminSettings = () => {
@@ -38,7 +40,9 @@ const AdminSettings = () => {
     enabled: false,
     headline: "Something Powerful is Coming",
     description: "We're building the future of financial comparison. Be the first to know.",
-    launch_date: "2025-04-15",
+    countdown_days: 30,
+    countdown_hours: 0,
+    countdown_minutes: 0,
   });
   const [categoryCS, setCategoryCS] = useState<Record<CategoryKey, boolean>>({
     credit_cards: false, loans: false, insurance: false, bank_accounts: false,
@@ -97,7 +101,16 @@ const AdminSettings = () => {
       enabled: comingSoon.enabled,
       headline: comingSoon.headline,
       description: comingSoon.description,
-      launch_date: comingSoon.launch_date,
+      countdown_days: comingSoon.countdown_days,
+      countdown_hours: comingSoon.countdown_hours,
+      countdown_minutes: comingSoon.countdown_minutes,
+      // Store the target timestamp so frontend can count down to it
+      countdown_target: new Date(
+        Date.now() +
+        comingSoon.countdown_days * 86400000 +
+        comingSoon.countdown_hours * 3600000 +
+        comingSoon.countdown_minutes * 60000
+      ).toISOString(),
     };
 
     // Upsert: insert if not exists, update if exists
@@ -227,16 +240,42 @@ const AdminSettings = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cs-date">Launch Date</Label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                id="cs-date"
-                type="date"
-                value={comingSoon.launch_date}
-                onChange={(e) => setComingSoon({ ...comingSoon, launch_date: e.target.value })}
-                className="pl-10"
-              />
+            <Label>Custom Countdown Timer</Label>
+            <p className="text-xs text-muted-foreground">Set how much time to show on the countdown. Timer starts when you save.</p>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <Label htmlFor="cs-days" className="text-xs text-muted-foreground">Days</Label>
+                <Input
+                  id="cs-days"
+                  type="number"
+                  min={0}
+                  max={999}
+                  value={comingSoon.countdown_days}
+                  onChange={(e) => setComingSoon({ ...comingSoon, countdown_days: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="cs-hours" className="text-xs text-muted-foreground">Hours</Label>
+                <Input
+                  id="cs-hours"
+                  type="number"
+                  min={0}
+                  max={23}
+                  value={comingSoon.countdown_hours}
+                  onChange={(e) => setComingSoon({ ...comingSoon, countdown_hours: parseInt(e.target.value) || 0 })}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="cs-minutes" className="text-xs text-muted-foreground">Minutes</Label>
+                <Input
+                  id="cs-minutes"
+                  type="number"
+                  min={0}
+                  max={59}
+                  value={comingSoon.countdown_minutes}
+                  onChange={(e) => setComingSoon({ ...comingSoon, countdown_minutes: parseInt(e.target.value) || 0 })}
+                />
+              </div>
             </div>
           </div>
 
