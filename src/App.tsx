@@ -50,6 +50,7 @@ const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const AdminAITools = lazy(() => import("./pages/admin/AdminAITools"));
+const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
 
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
