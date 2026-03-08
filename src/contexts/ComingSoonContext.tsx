@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useRef, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ComingSoonSettings {
@@ -8,7 +8,7 @@ interface ComingSoonSettings {
   countdown_days: number;
   countdown_hours: number;
   countdown_minutes: number;
-  countdown_target: string; // ISO timestamp to count down to
+  countdown_target: string;
 }
 
 interface ComingSoonContextType {
@@ -40,8 +40,9 @@ export const useComingSoonMode = () => useContext(ComingSoonContext);
 export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<ComingSoonSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
+  const lastValueRef = useRef<string>("");
 
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       const { data } = await supabase
         .from("site_settings")
@@ -50,8 +51,12 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (data?.value) {
+        const raw = JSON.stringify(data.value);
+        // Only update state if value actually changed
+        if (raw === lastValueRef.current) return;
+        lastValueRef.current = raw;
+
         const val = data.value as Record<string, unknown>;
-        // Support both old launch_date and new countdown_target formats
         let target = val.countdown_target as string | undefined;
         if (!target && val.launch_date) {
           target = new Date((val.launch_date as string) + "T00:00:00").toISOString();
@@ -71,20 +76,17 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchSettings();
 
+    // Primary: Realtime subscription
     const channel = supabase
       .channel("coming-soon-mode-rt")
       .on(
         "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "site_settings",
-        },
+        { event: "*", schema: "public", table: "site_settings" },
         (payload: any) => {
           const row = payload.new || payload.old;
           if (row?.key === "coming_soon_mode") fetchSettings();
@@ -92,10 +94,14 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
       )
       .subscribe();
 
+    // Fallback: Poll every 3 seconds in case realtime misses events
+    const pollId = setInterval(fetchSettings, 3000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(pollId);
     };
-  }, []);
+  }, [fetchSettings]);
 
   return (
     <ComingSoonContext.Provider
