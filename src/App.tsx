@@ -13,6 +13,9 @@ import EMICalculator from "./pages/EMICalculator";
 import EligibilityChecker from "./pages/EligibilityChecker";
 import FinanceDeals from "./pages/FinanceDeals";
 import { PrivacyPolicy, TermsConditions, AffiliateDisclosure, Disclaimer, CookiePolicy } from "./pages/PolicyPages";
+import CompareProducts from "./pages/CompareProducts";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +40,9 @@ const AnimatedRoutes = () => {
           <Route path="/emi-calculator" element={<EMICalculator />} />
           <Route path="/eligibility" element={<EligibilityChecker />} />
           <Route path="/finance-deals" element={<FinanceDeals />} />
+          <Route path="/compare" element={<CompareProducts />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />

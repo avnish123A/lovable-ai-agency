@@ -6,10 +6,13 @@ const footerLinks = {
   Products: [
     { label: "Credit Cards", href: "/credit-cards" },
     { label: "Personal Loans", href: "/loans" },
+    { label: "Compare Products", href: "/compare" },
     { label: "Finance Deals", href: "/finance-deals" },
     { label: "Cashback Offers", href: "/cashback" },
   ],
-  Tools: [
+  Company: [
+    { label: "About Us", href: "/about" },
+    { label: "Contact", href: "/contact" },
     { label: "EMI Calculator", href: "/emi-calculator" },
     { label: "Eligibility Checker", href: "/eligibility" },
   ],
