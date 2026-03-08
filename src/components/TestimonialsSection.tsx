@@ -5,7 +5,7 @@ const testimonials = [
   {
     name: "Priya Sharma",
     role: "Software Engineer",
-    text: "MoneyMint helped me find a credit card with 5X rewards on online shopping. Saved ₹15,000 in the first year!",
+    text: "Kriyapay helped me find a credit card with 5X rewards on online shopping. Saved ₹15,000 in the first year!",
     rating: 5,
   },
   {
@@ -17,7 +17,7 @@ const testimonials = [
   {
     name: "Ananya Patel",
     role: "Marketing Manager",
-    text: "I love the cashback offers section. I check MoneyMint before every major purchase now.",
+    text: "I love the cashback offers section. I check Kriyapay before every major purchase now.",
     rating: 4,
   },
 ];
@@ -32,11 +32,11 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-foreground">
             Loved by <span className="text-gradient">50,000+</span> Users
           </h2>
           <p className="text-muted-foreground max-w-md mx-auto">
-            See how MoneyMint is helping people save money and make smarter financial choices.
+            See how Kriyapay is helping people save money and make smarter financial choices.
           </p>
         </motion.div>
 
@@ -50,13 +50,13 @@ const TestimonialsSection = () => {
               transition={{ delay: i * 0.1 }}
               className="rounded-xl border border-border bg-card p-6"
             >
-              <Quote className="w-8 h-8 text-primary/30 mb-4" />
+              <Quote className="w-8 h-8 text-primary/20 mb-4" />
               <p className="text-sm text-muted-foreground leading-relaxed mb-5">"{t.text}"</p>
               <div className="flex items-center gap-1 mb-3">
                 {Array.from({ length: 5 }).map((_, idx) => (
                   <Star
                     key={idx}
-                    className={`w-3.5 h-3.5 ${idx < t.rating ? "text-primary fill-primary" : "text-muted"}`}
+                    className={`w-3.5 h-3.5 ${idx < t.rating ? "text-accent fill-accent" : "text-muted"}`}
                   />
                 ))}
               </div>

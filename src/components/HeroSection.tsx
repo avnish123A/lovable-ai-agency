@@ -1,24 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Zap, TrendingUp } from "lucide-react";
+import { ArrowRight, Shield, CreditCard, TrendingUp, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-hero" />
-      <div className="absolute inset-0 grid-pattern opacity-30" />
-
-      <motion.div
-        className="absolute top-1/4 left-[10%] w-72 h-72 rounded-full bg-primary/5 blur-[100px]"
-        animate={{ y: [0, -30, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-[10%] w-96 h-96 rounded-full bg-accent/5 blur-[120px]"
-        animate={{ y: [0, 20, 0], scale: [1, 0.95, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -26,22 +14,22 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/15 bg-primary/5 mb-8"
           >
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm text-primary font-medium">India's Smartest Financial Platform</span>
+            <IndianRupee className="w-3.5 h-3.5 text-primary" />
+            <span className="text-sm text-primary font-medium">India's Trusted Financial Comparison Platform</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight mb-6"
+            className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold leading-tight mb-6 text-foreground"
           >
-            Find the{" "}
-            <span className="text-gradient">Best Deals</span>
+            Compare the Best{" "}
+            <span className="text-gradient">Credit Cards, Loans</span>
             <br />
-            on Cards, Loans & Cashback
+            & Financial Offers in India
           </motion.h1>
 
           <motion.p
@@ -50,8 +38,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Compare credit cards, personal loans, and cashback offers from top banks.
-            Check your eligibility instantly and save thousands every year.
+            AI-powered recommendations from HDFC, ICICI, Axis, SBI & more.
+            Find the perfect card, loan, or insurance in minutes.
           </motion.p>
 
           <motion.div
@@ -62,11 +50,11 @@ const HeroSection = () => {
           >
             <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 shadow-glow-sm">
               <Link to="/credit-cards">
-                Explore Cards <ArrowRight className="ml-2 w-4 h-4" />
+                Compare Credit Cards <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-base px-8 border-border hover:bg-secondary">
-              <Link to="/eligibility">Check Eligibility</Link>
+              <Link to="/finance-deals">Browse All Deals</Link>
             </Button>
           </motion.div>
 
@@ -77,9 +65,9 @@ const HeroSection = () => {
             className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           >
             {[
-              { icon: Shield, label: "Secure", value: "100%" },
-              { icon: Zap, label: "Products", value: "200+" },
-              { icon: TrendingUp, label: "Users", value: "50K+" },
+              { icon: Shield, label: "Secure & Verified", value: "100%" },
+              { icon: CreditCard, label: "Products", value: "200+" },
+              { icon: TrendingUp, label: "Happy Users", value: "50K+" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <stat.icon className="w-5 h-5 text-primary mx-auto mb-2" />
