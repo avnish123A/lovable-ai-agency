@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useComingSoonMode } from "@/contexts/ComingSoonContext";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ─── Countdown Digit ─── */
 const CountdownDigit = ({ value, label }: { value: number; label: string }) => (
@@ -61,11 +62,26 @@ const ComingSoon = () => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    toast.success("You're on the list! We'll notify you when we launch.");
-    setEmail("");
-    setLoading(false);
-    setSubscribed(true);
+    try {
+      const { error } = await supabase
+        .from("coming_soon_subscribers" as any)
+        .insert({ email: email.trim().toLowerCase() } as any);
+      if (error) {
+        if (error.code === "23505") {
+          toast.info("You're already on the list!");
+        } else {
+          throw error;
+        }
+      } else {
+        toast.success("You're on the list! We'll notify you when we launch.");
+      }
+      setEmail("");
+      setSubscribed(true);
+    } catch (err: any) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

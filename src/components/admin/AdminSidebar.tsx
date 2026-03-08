@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard, CreditCard, Users, Building, Settings, LogOut, Wallet, MessageSquare, 
-  Gift, Sparkles, BarChart3, Key, Shield, Landmark, TrendingUp, Percent, Phone
+  Gift, Sparkles, BarChart3, Key, Shield, Landmark, TrendingUp, Percent, Phone, Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ const links = [
   { label: "Fixed Deposits", href: "/admin/fixed-deposits", icon: Percent },
   { label: "Cashback Offers", href: "/admin/cashback", icon: Gift },
   { label: "Leads", href: "/admin/leads", icon: Users },
+  { label: "Subscribers", href: "/admin/subscribers", icon: Bell },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { label: "Contact Settings", href: "/admin/contact-settings", icon: Phone },
