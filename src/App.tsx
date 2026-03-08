@@ -54,8 +54,6 @@ const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const AdminAITools = lazy(() => import("./pages/admin/AdminAITools"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
-const AdminBanks = lazy(() => import("./pages/admin/AdminBanks"));
-const AdminMedia = lazy(() => import("./pages/admin/AdminMedia"));
 
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
@@ -134,8 +132,6 @@ const AnimatedRoutes = () => {
               <Route path="deals" element={<AdminDeals />} />
               <Route path="cashback" element={<AdminCashback />} />
               <Route path="leads" element={<AdminLeads />} />
-              <Route path="banks" element={<AdminBanks />} />
-              <Route path="media" element={<AdminMedia />} />
               <Route path="messages" element={<AdminMessages />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="ai-tools" element={<AdminAITools />} />
