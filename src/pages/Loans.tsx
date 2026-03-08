@@ -51,6 +51,11 @@ const Loans = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead 
+        title="Best Personal Loans in India 2026 – Compare Interest Rates | Kriyapay"
+        description="Compare personal loans from HDFC, SBI, ICICI, Axis Bank & Bajaj Finserv. Check interest rates, EMI & eligibility. Apply online via Kriyapay."
+        canonical="https://kriyapay.co.in/loans"
+      />
       <Navbar />
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">

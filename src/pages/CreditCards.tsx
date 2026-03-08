@@ -54,6 +54,11 @@ const CreditCards = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead 
+        title="Best Credit Cards in India 2026 – Compare & Apply | Kriyapay"
+        description="Compare best credit cards from HDFC, SBI, ICICI, Axis Bank & more. Check rewards, cashback, fees & apply online. Free comparison by Kriyapay."
+        canonical="https://kriyapay.co.in/credit-cards"
+      />
       <Navbar />
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">
