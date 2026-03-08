@@ -8,10 +8,13 @@ import { Star, ExternalLink, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import CategoryComingSoon from "@/components/CategoryComingSoon";
+import { useCategoryComingSoon } from "@/hooks/useCategoryComingSoon";
 
 const DematAccounts = () => {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isComingSoon } = useCategoryComingSoon("demat_accounts");
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,6 +31,9 @@ const DematAccounts = () => {
     <div className="min-h-screen bg-background">
       <SEOHead title="Best Demat Accounts in India 2026 | KriyaPay" description="Compare top demat & trading accounts - Zerodha, Groww, Upstox & more. Zero brokerage, free account opening." canonical="https://kriyapay.lovable.app/demat-accounts" />
       <Navbar />
+      {isComingSoon ? (
+        <CategoryComingSoon title="Demat Accounts" description="Top trading & demat account comparisons coming soon!" />
+      ) : (
       <section className="pt-28 pb-20">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
@@ -76,6 +82,7 @@ const DematAccounts = () => {
           {!loading && items.length === 0 && <p className="text-center text-muted-foreground py-10">No demat accounts available yet.</p>}
         </div>
       </section>
+      )}
       <Footer />
     </div>
   );

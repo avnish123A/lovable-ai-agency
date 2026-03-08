@@ -8,10 +8,13 @@ import { Star, ExternalLink, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import BankLogo from "@/components/BankLogo";
+import CategoryComingSoon from "@/components/CategoryComingSoon";
+import { useCategoryComingSoon } from "@/hooks/useCategoryComingSoon";
 
 const FixedDeposits = () => {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isComingSoon } = useCategoryComingSoon("fixed_deposits");
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,6 +31,9 @@ const FixedDeposits = () => {
     <div className="min-h-screen bg-background">
       <SEOHead title="Best Fixed Deposit Rates in India 2026 | KriyaPay" description="Compare FD interest rates from SBI, HDFC, ICICI & more. Find highest FD rates for regular & senior citizens." canonical="https://kriyapay.lovable.app/fixed-deposits" />
       <Navbar />
+      {isComingSoon ? (
+        <CategoryComingSoon title="Fixed Deposits" description="Best FD rate comparisons are coming soon!" />
+      ) : (
       <section className="pt-28 pb-20">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
@@ -80,6 +86,7 @@ const FixedDeposits = () => {
           {!loading && items.length === 0 && <p className="text-center text-muted-foreground py-10">No fixed deposits available yet.</p>}
         </div>
       </section>
+      )}
       <Footer />
     </div>
   );
