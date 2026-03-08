@@ -1,8 +1,7 @@
-const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbw3rtHLUUdiIooCnYL92GfU3bCb9lUOsCZTCZvNrznBaOLXJeDLB4e580NYHr1tUtc/exec";
+import { supabase } from "@/integrations/supabase/client";
 
 let lastSubmitTime = 0;
-const MIN_INTERVAL_MS = 5000; // 5 seconds between submissions
+const MIN_INTERVAL_MS = 5000;
 
 export interface GoogleSheetLead {
   name: string;
@@ -20,20 +19,14 @@ export async function submitLeadToGoogleSheet(lead: GoogleSheetLead) {
   }
   lastSubmitTime = now;
 
-  const payload = {
-    ...lead,
-    source: "kriyapay.co.in",
-    user_agent: navigator.userAgent,
-    ip: "", // optional — Apps Script can capture from request
-  };
-
-  const res = await fetch(GOOGLE_SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors", // Apps Script doesn't support CORS preflight
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+  const { data, error } = await supabase.functions.invoke("send-to-sheet", {
+    body: lead,
   });
 
-  // no-cors means we can't read the response, but the request is sent
-  return { success: true };
+  if (error) {
+    console.error("Sheet submission error:", error);
+    throw error;
+  }
+
+  return data;
 }
