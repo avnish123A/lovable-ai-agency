@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { LineChart as LineChartIcon } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -13,6 +13,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getInvestmentInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const InvestmentReturnCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [initial, setInitial] = useState(100000);
   const [monthly, setMonthly] = useState(5000);
   const [rate, setRate] = useState(12);
@@ -81,7 +82,7 @@ const InvestmentReturnCalc = () => {
             }}
           />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             {[
               { label: "Total Value", value: totalValue, highlight: true },
@@ -138,7 +139,7 @@ const InvestmentReturnCalc = () => {
           />
           
           <AchievementBadge type="savvy_saver" show={growthScore >= 60} message="Smart investment strategy!" />
-          <ResultActions title="Investment Plan" data={{ "Lump Sum": fmt(initial), "SIP": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total Value": fmt(totalValue), "Real Value": fmt(realValue), "Returns": fmt(returns), "Multiplier": `${multiplier.toFixed(2)}x` }} productLink="/demat-accounts" />
+          <ResultActions title="Investment Plan" data={{ "Lump Sum": fmt(initial), "SIP": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total Value": fmt(totalValue), "Real Value": fmt(realValue), "Returns": fmt(returns), "Multiplier": `${multiplier.toFixed(2)}x` }} productLink="/demat-accounts" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>
