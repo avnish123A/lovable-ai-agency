@@ -99,72 +99,101 @@ const AdminSettings = () => {
 
   const handleSaveComingSoon = async () => {
     setSavingComingSoon(true);
-    const valueToSave = {
-      enabled: comingSoon.enabled,
-      headline: comingSoon.headline,
-      description: comingSoon.description,
-      countdown_days: comingSoon.countdown_days,
-      countdown_hours: comingSoon.countdown_hours,
-      countdown_minutes: comingSoon.countdown_minutes,
-      // Store the target timestamp so frontend can count down to it
-      countdown_target: new Date(
-        Date.now() +
-        comingSoon.countdown_days * 86400000 +
-        comingSoon.countdown_hours * 3600000 +
-        comingSoon.countdown_minutes * 60000
-      ).toISOString(),
-    };
+    try {
+      const valueToSave = {
+        enabled: comingSoon.enabled,
+        headline: comingSoon.headline,
+        description: comingSoon.description,
+        countdown_days: comingSoon.countdown_days,
+        countdown_hours: comingSoon.countdown_hours,
+        countdown_minutes: comingSoon.countdown_minutes,
+        countdown_target: new Date(
+          Date.now() +
+          comingSoon.countdown_days * 86400000 +
+          comingSoon.countdown_hours * 3600000 +
+          comingSoon.countdown_minutes * 60000
+        ).toISOString(),
+      };
 
-    // Upsert: insert if not exists, update if exists
-    const { error } = await supabase
-      .from("site_settings")
-      .upsert(
-        { key: "coming_soon_mode", value: valueToSave, updated_at: new Date().toISOString() },
-        { onConflict: "key" }
-      );
+      const { error } = await supabase
+        .from("site_settings")
+        .upsert(
+          { key: "coming_soon_mode", value: valueToSave as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { onConflict: "key" }
+        );
 
-    if (error) {
+      if (error) {
+        console.error("Save coming soon error:", error);
+        toast.error("Failed to save coming soon settings");
+      } else {
+        toast.success(comingSoon.enabled ? "Coming Soon mode enabled!" : "Coming Soon settings saved!");
+      }
+    } catch (err) {
+      console.error("Save coming soon exception:", err);
       toast.error("Failed to save coming soon settings");
-    } else {
-      toast.success(comingSoon.enabled ? "Coming Soon mode enabled!" : "Coming Soon settings saved!");
+    } finally {
+      setSavingComingSoon(false);
     }
-    setSavingComingSoon(false);
   };
 
   const toggleMaintenance = async () => {
     const updated = { ...maintenance, enabled: !maintenance.enabled };
     setMaintenance(updated);
     setSaving(true);
-    const { error } = await supabase
-      .from("site_settings")
-      .upsert(
-        { key: "maintenance_mode", value: updated, updated_at: new Date().toISOString() },
-        { onConflict: "key" }
-      );
-    if (error) toast.error("Failed to toggle maintenance mode");
-    else toast.success(updated.enabled ? "Maintenance mode ON — site is now restricted" : "Maintenance mode OFF — site is live");
-    setSaving(false);
+    try {
+      const { error } = await supabase
+        .from("site_settings")
+        .upsert(
+          { key: "maintenance_mode", value: updated as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { onConflict: "key" }
+        );
+      if (error) {
+        console.error("Toggle maintenance error:", error);
+        toast.error("Failed to toggle maintenance mode");
+        setMaintenance({ ...updated, enabled: !updated.enabled });
+      } else {
+        toast.success(updated.enabled ? "Maintenance mode ON — site is now restricted" : "Maintenance mode OFF — site is live");
+      }
+    } catch (err) {
+      console.error("Toggle maintenance exception:", err);
+      toast.error("Failed to toggle maintenance mode");
+      setMaintenance({ ...updated, enabled: !updated.enabled });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleComingSoon = async () => {
     const updated = { ...comingSoon, enabled: !comingSoon.enabled };
     setComingSoon(updated);
     setSavingComingSoon(true);
-    const target = new Date(
-      Date.now() +
-      updated.countdown_days * 86400000 +
-      updated.countdown_hours * 3600000 +
-      updated.countdown_minutes * 60000
-    ).toISOString();
-    const { error } = await supabase
-      .from("site_settings")
-      .upsert(
-        { key: "coming_soon_mode", value: { ...updated, countdown_target: target }, updated_at: new Date().toISOString() },
-        { onConflict: "key" }
-      );
-    if (error) toast.error("Failed to toggle coming soon mode");
-    else toast.success(updated.enabled ? "Coming Soon mode ON — site redirects to launch page" : "Coming Soon mode OFF — site is live");
-    setSavingComingSoon(false);
+    try {
+      const target = new Date(
+        Date.now() +
+        updated.countdown_days * 86400000 +
+        updated.countdown_hours * 3600000 +
+        updated.countdown_minutes * 60000
+      ).toISOString();
+      const { error } = await supabase
+        .from("site_settings")
+        .upsert(
+          { key: "coming_soon_mode", value: { ...updated, countdown_target: target } as unknown as Record<string, unknown>, updated_at: new Date().toISOString() },
+          { onConflict: "key" }
+        );
+      if (error) {
+        console.error("Toggle coming soon error:", error);
+        toast.error("Failed to toggle coming soon mode");
+        setComingSoon({ ...updated, enabled: !updated.enabled }); // revert
+      } else {
+        toast.success(updated.enabled ? "Coming Soon mode ON — site redirects to launch page" : "Coming Soon mode OFF — site is live");
+      }
+    } catch (err) {
+      console.error("Toggle coming soon exception:", err);
+      toast.error("Failed to toggle coming soon mode");
+      setComingSoon({ ...updated, enabled: !updated.enabled }); // revert
+    } finally {
+      setSavingComingSoon(false);
+    }
   };
 
   const toggleCategoryCS = async (key: CategoryKey) => {
