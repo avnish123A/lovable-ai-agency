@@ -63,9 +63,11 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
           event: "*",
           schema: "public",
           table: "site_settings",
-          filter: "key=eq.maintenance_mode",
         },
-        () => fetchSettings()
+        (payload: any) => {
+          const row = payload.new || payload.old;
+          if (row?.key === "maintenance_mode") fetchSettings();
+        }
       )
       .subscribe();
 
