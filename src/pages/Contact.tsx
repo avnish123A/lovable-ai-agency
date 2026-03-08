@@ -111,7 +111,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground mb-0.5">Office</p>
-                      <p className="text-sm font-medium text-foreground">Inspirex Technologies<br />India</p>
+                      <p className="text-sm font-medium text-foreground">Inspirex Technologies<br />Rajasthan, India</p>
                     </div>
                   </div>
                 </div>

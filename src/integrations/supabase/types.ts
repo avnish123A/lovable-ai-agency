@@ -56,6 +56,36 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          key_name: string
+          key_value: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_name: string
+          key_value: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_name?: string
+          key_value?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       banks: {
         Row: {
           created_at: string
@@ -166,6 +196,7 @@ export type Database = {
           created_at: string
           features: string[] | null
           id: string
+          image_url: string | null
           is_active: boolean | null
           joining_fee: number
           min_age: number | null
@@ -185,6 +216,7 @@ export type Database = {
           created_at?: string
           features?: string[] | null
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           joining_fee?: number
           min_age?: number | null
@@ -204,6 +236,7 @@ export type Database = {
           created_at?: string
           features?: string[] | null
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           joining_fee?: number
           min_age?: number | null
@@ -404,6 +437,7 @@ export type Database = {
           employment_type: string[] | null
           features: string[] | null
           id: string
+          image_url: string | null
           interest_rate: number
           is_active: boolean | null
           loan_name: string
@@ -423,6 +457,7 @@ export type Database = {
           employment_type?: string[] | null
           features?: string[] | null
           id?: string
+          image_url?: string | null
           interest_rate: number
           is_active?: boolean | null
           loan_name: string
@@ -442,6 +477,7 @@ export type Database = {
           employment_type?: string[] | null
           features?: string[] | null
           id?: string
+          image_url?: string | null
           interest_rate?: number
           is_active?: boolean | null
           loan_name?: string
