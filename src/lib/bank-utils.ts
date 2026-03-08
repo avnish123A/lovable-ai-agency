@@ -1,37 +1,44 @@
 // Bank logo and branding utilities
-// Uses img.logo.dev for logos and maps bank names to brand colors
+// Uses local logos from /public/logos/ for reliable, fast loading
 
 const BANK_LOGOS: Record<string, string> = {
-  "HDFC Bank": "https://img.logo.dev/hdfcbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "HDFC": "https://img.logo.dev/hdfcbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "ICICI Bank": "https://img.logo.dev/icicibank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "ICICI": "https://img.logo.dev/icicibank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Axis Bank": "https://img.logo.dev/axisbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Axis": "https://img.logo.dev/axisbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "SBI": "https://img.logo.dev/sbicard.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "SBI Cards": "https://img.logo.dev/sbicard.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "State Bank of India": "https://img.logo.dev/sbi.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Kotak Mahindra Bank": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Kotak Bank": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Kotak": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "IndusInd Bank": "https://img.logo.dev/indusind.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "IndusInd": "https://img.logo.dev/indusind.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Yes Bank": "https://img.logo.dev/yesbank.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "RBL Bank": "https://img.logo.dev/rblbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "RBL": "https://img.logo.dev/rblbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "IDFC First Bank": "https://img.logo.dev/idfcfirstbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "IDFC First": "https://img.logo.dev/idfcfirstbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Federal Bank": "https://img.logo.dev/federalbank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "AU Small Finance Bank": "https://img.logo.dev/aubank.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Bajaj Finserv": "https://img.logo.dev/bajajfinserv.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Bajaj Finance": "https://img.logo.dev/bajajfinserv.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Tata Capital": "https://img.logo.dev/tatacapital.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Standard Chartered": "https://img.logo.dev/sc.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Citi Bank": "https://img.logo.dev/citibank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Citibank": "https://img.logo.dev/citibank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "HSBC": "https://img.logo.dev/hsbc.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "American Express": "https://img.logo.dev/americanexpress.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
-  "Amex": "https://img.logo.dev/americanexpress.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  // Major Banks
+  "HDFC Bank": "/logos/hdfc.png",
+  "HDFC": "/logos/hdfc.png",
+  "ICICI Bank": "/logos/icici.png",
+  "ICICI": "/logos/icici.png",
+  "Axis Bank": "/logos/axis.png",
+  "Axis": "/logos/axis.png",
+  "SBI": "/logos/sbi.png",
+  "SBI Cards": "/logos/sbi.png",
+  "State Bank of India": "/logos/sbi.png",
+  "Kotak Mahindra Bank": "/logos/kotak.png",
+  "Kotak Bank": "/logos/kotak.png",
+  "Kotak": "/logos/kotak.png",
+  "IndusInd Bank": "/logos/indusind.png",
+  "IndusInd": "/logos/indusind.png",
+  "Yes Bank": "/logos/yesbank.png",
+  "Bajaj Finserv": "/logos/bajaj.png",
+  "Bajaj Finance": "/logos/bajaj.png",
+  "Paytm": "/logos/paytm.png",
+  "PhonePe": "/logos/phonepe.png",
+  "Razorpay": "/logos/razorpay.png",
+
+  // Fintech & Investment
+  "Upstox": "/logos/upstox.png",
+  "Groww": "/logos/groww.png",
+  "Zerodha": "/logos/zerodha.png",
+
+  // Insurance
+  "ICICI Prudential": "/logos/icici-prudential.png",
+  "HDFC ERGO": "/logos/hdfc-ergo.png",
+
+  // Other Banks
+  "AU Small Finance Bank": "/logos/au-bank.png",
+  "RBL Bank": "/logos/rbl.png",
+  "RBL": "/logos/rbl.png",
+  "Bank of Baroda": "/logos/bob.png",
+  "Bank of Baroda Credit Card": "/logos/bob.png",
 };
 
 const BANK_COLORS: Record<string, { primary: string; gradient: string }> = {
@@ -52,14 +59,20 @@ const BANK_COLORS: Record<string, { primary: string; gradient: string }> = {
   "Yes Bank": { primary: "#0066B3", gradient: "from-[#0066B3] to-[#003D6B]" },
   "RBL Bank": { primary: "#E31837", gradient: "from-[#E31837] to-[#8B0000]" },
   "RBL": { primary: "#E31837", gradient: "from-[#E31837] to-[#8B0000]" },
-  "IDFC First Bank": { primary: "#9C1D26", gradient: "from-[#9C1D26] to-[#5C0F15]" },
-  "IDFC First": { primary: "#9C1D26", gradient: "from-[#9C1D26] to-[#5C0F15]" },
+  "Bajaj Finserv": { primary: "#00529B", gradient: "from-[#00529B] to-[#002D54]" },
+  "Bajaj Finance": { primary: "#00529B", gradient: "from-[#00529B] to-[#002D54]" },
+  "Upstox": { primary: "#6B3FA0", gradient: "from-[#6B3FA0] to-[#3D2366]" },
+  "Groww": { primary: "#00D09C", gradient: "from-[#00D09C] to-[#008B68]" },
+  "Zerodha": { primary: "#387ED1", gradient: "from-[#387ED1] to-[#1E4D8C]" },
+  "ICICI Prudential": { primary: "#003B70", gradient: "from-[#003B70] to-[#F58220]" },
+  "HDFC ERGO": { primary: "#004B87", gradient: "from-[#004B87] to-[#D22630]" },
+  "AU Small Finance Bank": { primary: "#4B0082", gradient: "from-[#4B0082] to-[#FFD700]" },
+  "Bank of Baroda": { primary: "#F15A22", gradient: "from-[#F15A22] to-[#A03010]" },
+  "Bank of Baroda Credit Card": { primary: "#F15A22", gradient: "from-[#F15A22] to-[#A03010]" },
   "American Express": { primary: "#006FCF", gradient: "from-[#006FCF] to-[#00478A]" },
   "Amex": { primary: "#006FCF", gradient: "from-[#006FCF] to-[#00478A]" },
   "Standard Chartered": { primary: "#0072AA", gradient: "from-[#0072AA] to-[#003D5C]" },
   "HSBC": { primary: "#DB0011", gradient: "from-[#DB0011] to-[#8B0000]" },
-  "Bajaj Finserv": { primary: "#00529B", gradient: "from-[#00529B] to-[#002D54]" },
-  "Bajaj Finance": { primary: "#00529B", gradient: "from-[#00529B] to-[#002D54]" },
 };
 
 const DEFAULT_COLOR = { primary: "#2563eb", gradient: "from-primary to-primary/80" };
@@ -68,11 +81,29 @@ export function getBankLogo(bankName: string): string {
   if (BANK_LOGOS[bankName]) {
     return BANK_LOGOS[bankName];
   }
-  // Fallback: construct from bank name
-  const slug = bankName.toLowerCase().replace(/\s+/g, "").replace(/bank$/i, "");
-  return `https://img.logo.dev/${slug}.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png`;
+  
+  // Try partial match
+  const lower = bankName.toLowerCase();
+  for (const [key, url] of Object.entries(BANK_LOGOS)) {
+    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+      return url;
+    }
+  }
+  
+  // No match - return empty to trigger fallback initials
+  return "";
 }
 
 export function getBankColor(bankName: string) {
-  return BANK_COLORS[bankName] || DEFAULT_COLOR;
+  if (BANK_COLORS[bankName]) return BANK_COLORS[bankName];
+  
+  // Try partial match
+  const lower = bankName.toLowerCase();
+  for (const [key, color] of Object.entries(BANK_COLORS)) {
+    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+      return color;
+    }
+  }
+  
+  return DEFAULT_COLOR;
 }
