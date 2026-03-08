@@ -18,93 +18,271 @@ const PolicyLayout = ({ title, children }: { title: string; children: React.Reac
 
 export const PrivacyPolicy = () => (
   <PolicyLayout title="Privacy Policy">
-    <p>Last updated: March 2026</p>
-    <p>Kriyapay (operated by Inspirex Technologies) is committed to protecting your privacy. This policy explains how we collect, use, and safeguard your personal information.</p>
-    <h2>Information We Collect</h2>
-    <p>We collect information you provide directly, including your name, email address, phone number, city, and salary range when you submit a lead form. We also collect usage data such as pages visited, clicks, and device information through analytics tools.</p>
-    <h2>How We Use Your Information</h2>
+    <p>Last updated: March 8, 2026</p>
+    <p>Kriyapay (owned and operated by <strong>Inspirex Technologies Inc</strong>) is committed to protecting the privacy of its users. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal data when you visit <strong>kriyapay.co.in</strong> and use our financial product comparison services.</p>
+    
+    <h2>1. Information We Collect</h2>
+    <p><strong>Personal Information (provided by you):</strong></p>
     <ul>
-      <li>To connect you with relevant financial products from our partner banks</li>
-      <li>To personalize your experience and show relevant offers</li>
-      <li>To improve our platform and services</li>
-      <li>To communicate updates about offers you've expressed interest in</li>
+      <li>Full name, email address, phone number, city of residence, and monthly salary range — collected via lead capture forms when you express interest in a financial product</li>
+      <li>Company name and employment type — collected for loan eligibility assessments</li>
+      <li>Contact form submissions including name, email, phone, and message content</li>
     </ul>
-    <h2>Data Sharing</h2>
-    <p>We share your information only with the specific banking partner whose product you apply for. We do not sell your data to third parties. Our affiliate partners (such as Cuelinks) may collect anonymized click data for tracking purposes.</p>
-    <h2>Data Security</h2>
-    <p>We use industry-standard security measures including HTTPS encryption and secure database storage to protect your information.</p>
-    <h2>Your Rights</h2>
-    <p>You may request access to, correction of, or deletion of your personal data by contacting us at support@kriyapay.co.in.</p>
-    <h2>Contact</h2>
-    <p>Inspirex Technologies<br />Email: support@kriyapay.co.in</p>
+    <p><strong>Automatically Collected Information:</strong></p>
+    <ul>
+      <li>Device type, browser type, operating system, and user agent string</li>
+      <li>IP address (stored as a one-way hash for fraud prevention — we do not store raw IP addresses)</li>
+      <li>Pages visited, click events on product links, referral source, and session duration</li>
+      <li>Cookies and tracking pixels from our affiliate partners (Cuelinks, EarnKaro)</li>
+    </ul>
+
+    <h2>2. How We Use Your Information</h2>
+    <ul>
+      <li>To connect you with relevant credit card, loan, and insurance products from our 15+ partner banks including HDFC Bank, ICICI Bank, SBI, Axis Bank, Kotak Mahindra Bank, IndusInd Bank, Yes Bank, AU Small Finance Bank, RBL Bank, and Bank of Baroda</li>
+      <li>To process and forward your lead information to the specific bank or financial institution whose product you applied for</li>
+      <li>To provide AI-powered product recommendations and eligibility assessments using our KriyaAI engine</li>
+      <li>To send transactional communications about products you've expressed interest in</li>
+      <li>To analyze platform usage patterns and improve our comparison algorithms</li>
+      <li>To detect and prevent fraudulent activity, including duplicate lead submissions</li>
+    </ul>
+
+    <h2>3. Data Sharing & Third Parties</h2>
+    <p>We share your personal information <strong>only</strong> in the following circumstances:</p>
+    <ul>
+      <li><strong>Partner Banks:</strong> When you click "Apply Now" or submit a lead form, your information is shared with the specific financial institution for processing your application</li>
+      <li><strong>Affiliate Networks:</strong> Cuelinks (Publisher ID: 211481) and EarnKaro track click-through data using cookies for commission attribution. They do not receive your personal details</li>
+      <li><strong>AI Service Providers:</strong> Product descriptions and recommendations are generated using Google Gemini and OpenAI models via secure API connections. No personally identifiable information is sent to AI providers</li>
+      <li><strong>Analytics:</strong> Aggregated, anonymized usage data may be used for internal reporting</li>
+    </ul>
+    <p>We <strong>do not sell, rent, or trade</strong> your personal data to third-party marketers or data brokers.</p>
+
+    <h2>4. Data Storage & Security</h2>
+    <p>Your data is stored on secure cloud infrastructure with the following protections:</p>
+    <ul>
+      <li>TLS/HTTPS encryption for all data in transit</li>
+      <li>Row-Level Security policies on all database tables</li>
+      <li>IP addresses are hashed using one-way cryptographic functions before storage</li>
+      <li>API keys and sensitive credentials are stored in encrypted vault storage, never in source code</li>
+      <li>Admin access requires authenticated sessions with email verification</li>
+    </ul>
+
+    <h2>5. Data Retention</h2>
+    <p>Lead data is retained for up to 24 months from the date of submission to facilitate follow-ups and for business analytics. Contact form messages are retained for 12 months. You may request deletion at any time.</p>
+
+    <h2>6. Your Rights</h2>
+    <p>Under applicable Indian data protection laws, you have the right to:</p>
+    <ul>
+      <li>Access your personal data held by us</li>
+      <li>Request correction of inaccurate information</li>
+      <li>Request deletion of your personal data</li>
+      <li>Withdraw consent for marketing communications</li>
+      <li>Lodge a complaint with the relevant data protection authority</li>
+    </ul>
+    <p>To exercise any of these rights, email us at <strong>support@kriyapay.co.in</strong> with the subject line "Data Request".</p>
+
+    <h2>7. Children's Privacy</h2>
+    <p>Kriyapay is not intended for individuals under 18 years of age. We do not knowingly collect data from minors. Financial products listed require applicants to be at least 18-21 years old as per bank policies.</p>
+
+    <h2>8. Contact</h2>
+    <p><strong>Inspirex Technologies Inc</strong><br />
+    Email: support@kriyapay.co.in<br />
+    Website: kriyapay.co.in</p>
   </PolicyLayout>
 );
 
 export const TermsConditions = () => (
   <PolicyLayout title="Terms & Conditions">
-    <p>Last updated: March 2026</p>
-    <p>By using Kriyapay (kriyapay.co.in), you agree to these terms. Please read them carefully.</p>
-    <h2>Service Description</h2>
-    <p>Kriyapay is a financial product comparison platform. We display credit card, loan, and insurance offers from partner banks and financial institutions. We do not directly provide any financial products or services.</p>
-    <h2>User Responsibilities</h2>
+    <p>Last updated: March 8, 2026</p>
+    <p>These Terms & Conditions ("Terms") govern your use of the Kriyapay platform at <strong>kriyapay.co.in</strong>, owned and operated by <strong>Inspirex Technologies Inc</strong>. By accessing or using our services, you agree to be bound by these Terms.</p>
+
+    <h2>1. About Kriyapay</h2>
+    <p>Kriyapay is a financial product comparison and lead generation platform. We aggregate credit card, personal loan, and insurance product information from 15+ Indian banks and financial institutions. We operate as an <strong>affiliate and lead generation partner</strong> — we do not directly issue, underwrite, or guarantee any financial product.</p>
+
+    <h2>2. Eligibility</h2>
     <ul>
-      <li>You must provide accurate information when using our services</li>
-      <li>You must be at least 18 years old to use our platform</li>
-      <li>You are responsible for any applications you submit through our platform</li>
+      <li>You must be at least 18 years of age to use our platform</li>
+      <li>You must be an Indian resident or NRI eligible for Indian financial products</li>
+      <li>You must provide truthful, accurate, and complete information when submitting any form</li>
     </ul>
-    <h2>Accuracy of Information</h2>
-    <p>While we strive to display accurate and up-to-date information, product terms, interest rates, and fees may change. Always verify details directly with the financial institution before applying.</p>
-    <h2>Intellectual Property</h2>
-    <p>All content, design, and functionality on Kriyapay is owned by Inspirex Technologies and protected by intellectual property laws.</p>
-    <h2>Limitation of Liability</h2>
-    <p>Kriyapay is not liable for any decisions you make based on information displayed on our platform. We are a comparison service, not a financial advisor.</p>
+
+    <h2>3. Services Provided</h2>
+    <ul>
+      <li>Comparison of credit cards, loans, and insurance products from partner banks</li>
+      <li>AI-powered product recommendations via KriyaAI (powered by Google Gemini and OpenAI)</li>
+      <li>EMI calculators, eligibility checkers, and financial planning tools</li>
+      <li>Cashback offer aggregation and deal tracking</li>
+      <li>Lead submission to partner banks on your behalf</li>
+    </ul>
+
+    <h2>4. User Responsibilities</h2>
+    <ul>
+      <li>You are solely responsible for the accuracy of information you provide in lead forms and applications</li>
+      <li>You must not submit false, misleading, or fraudulent information</li>
+      <li>You must not use automated tools (bots, scrapers) to access our platform</li>
+      <li>You acknowledge that submitting a lead does not guarantee product approval — all decisions are made by the respective financial institution</li>
+    </ul>
+
+    <h2>5. Product Information Accuracy</h2>
+    <p>While we make every effort to display accurate and current product information (interest rates, fees, rewards, eligibility criteria), these details are sourced from official bank websites, partner APIs, and affiliate networks. Product terms may change without prior notice. <strong>Always verify the latest terms directly with the bank before applying.</strong></p>
+
+    <h2>6. AI-Generated Content</h2>
+    <p>Kriyapay uses artificial intelligence (Google Gemini, OpenAI GPT models) to generate product descriptions, benefits summaries, eligibility assessments, and terms & conditions summaries. AI-generated content is derived from official bank data but may contain simplifications or minor inaccuracies. It does not constitute financial advice.</p>
+
+    <h2>7. Intellectual Property</h2>
+    <p>All content, design, branding, source code, algorithms, and functionality on Kriyapay is the exclusive property of Inspirex Technologies Inc and is protected under applicable intellectual property laws. Bank logos, product names, and trademarks belong to their respective owners and are used for identification purposes only.</p>
+
+    <h2>8. Limitation of Liability</h2>
+    <p>Inspirex Technologies Inc and Kriyapay shall not be held liable for:</p>
+    <ul>
+      <li>Any financial decisions made based on information displayed on our platform</li>
+      <li>Rejection or approval of any financial product application</li>
+      <li>Any losses arising from reliance on AI-generated content</li>
+      <li>Technical issues, downtime, or data loss beyond our reasonable control</li>
+      <li>Actions of third-party banks, affiliate networks, or financial institutions</li>
+    </ul>
+
+    <h2>9. Governing Law</h2>
+    <p>These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from the use of Kriyapay shall be subject to the exclusive jurisdiction of courts in India.</p>
+
+    <h2>10. Contact</h2>
+    <p><strong>Inspirex Technologies Inc</strong><br />
+    Email: support@kriyapay.co.in<br />
+    Website: kriyapay.co.in</p>
   </PolicyLayout>
 );
 
 export const AffiliateDisclosure = () => (
   <PolicyLayout title="Affiliate Disclosure">
-    <p>Last updated: March 2026</p>
-    <p>Kriyapay participates in affiliate marketing programs. This means we may earn a commission when you click on certain links and apply for or purchase financial products through our platform.</p>
-    <h2>How It Works</h2>
-    <p>When you click "Apply Now" on any product listing, you may be redirected to the bank or financial institution's website through an affiliate tracking link. If you complete an application or purchase, we may receive a referral fee.</p>
-    <h2>Our Commitment</h2>
+    <p>Last updated: March 8, 2026</p>
+    <p>Kriyapay, operated by <strong>Inspirex Technologies Inc</strong>, participates in affiliate marketing programs to monetize our financial product comparison platform. This disclosure explains how our affiliate relationships work and how they may affect your experience.</p>
+
+    <h2>1. How We Earn Revenue</h2>
+    <p>Kriyapay earns revenue through the following channels:</p>
     <ul>
-      <li>Affiliate relationships do not influence our product rankings or recommendations</li>
-      <li>We display products based on relevance and user benefit</li>
-      <li>Commission amounts do not affect the price you pay — you get the same terms directly from the bank</li>
+      <li><strong>Cost Per Lead (CPL):</strong> When you submit your details through a lead form for a credit card, loan, or insurance product, and the partner bank receives your application, we may earn a referral fee</li>
+      <li><strong>Cost Per Action (CPA):</strong> When you click "Apply Now" and complete an application or purchase on the bank's website, we may earn a commission through our affiliate tracking partners</li>
+      <li><strong>Click Tracking:</strong> Some affiliate links generate revenue based on qualified click-throughs to partner websites</li>
     </ul>
-    <h2>Partners</h2>
-    <p>We work with affiliate networks including Cuelinks to manage our partnerships with banks and financial institutions across India.</p>
+
+    <h2>2. Our Affiliate Partners</h2>
+    <ul>
+      <li><strong>Cuelinks</strong> (Publisher ID: 211481) — India's leading content monetization platform. Cuelinks automatically converts qualifying outbound links to affiliate links and tracks conversions</li>
+      <li><strong>EarnKaro</strong> — Affiliate network providing tracking links for select financial products and e-commerce deals</li>
+      <li><strong>Direct Bank Partnerships</strong> — We maintain direct affiliate relationships with select banks for lead generation</li>
+    </ul>
+
+    <h2>3. Impact on Rankings & Recommendations</h2>
+    <p><strong>Our commitment to transparency:</strong></p>
+    <ul>
+      <li>Affiliate commission rates <strong>do not</strong> influence product rankings on our comparison pages</li>
+      <li>AI-powered recommendations (KriyaAI) are based on user-provided criteria (salary, spending habits, preferences) — not commission potential</li>
+      <li>Products are ranked by relevance, user ratings, and feature match — not affiliate revenue</li>
+      <li>We display both affiliate and non-affiliate products to provide comprehensive comparisons</li>
+    </ul>
+
+    <h2>4. No Extra Cost to You</h2>
+    <p>Using our affiliate links does not add any extra cost, fee, or charge to your transaction. You receive the <strong>same terms, rates, and offers</strong> as you would by going directly to the bank's website. Our commission is paid by the bank or affiliate network, not by you.</p>
+
+    <h2>5. Identifying Affiliate Links</h2>
+    <p>Links that redirect through Cuelinks or EarnKaro tracking domains are affiliate links. "Apply Now" buttons on product pages typically contain affiliate tracking parameters. We aim to clearly label sponsored or promoted content where applicable.</p>
+
+    <h2>6. Contact</h2>
+    <p>For questions about our affiliate relationships, email <strong>support@kriyapay.co.in</strong>.</p>
   </PolicyLayout>
 );
 
 export const Disclaimer = () => (
   <PolicyLayout title="Disclaimer">
-    <p>Last updated: March 2026</p>
-    <h2>Not Financial Advice</h2>
-    <p>The information provided on Kriyapay is for general informational purposes only and should not be considered as financial advice. We are a comparison platform, not a licensed financial advisor.</p>
-    <h2>Product Information</h2>
-    <p>Product details including interest rates, fees, rewards, and eligibility criteria are sourced from our partner banks and affiliate networks. These may change without notice. Always confirm details with the respective financial institution.</p>
-    <h2>AI-Generated Content</h2>
-    <p>Some product descriptions on our platform are generated using artificial intelligence. While we strive for accuracy, AI-generated content may occasionally contain inaccuracies. We recommend verifying all information before making financial decisions.</p>
-    <h2>No Guarantees</h2>
-    <p>Kriyapay does not guarantee approval of any financial product. Eligibility and approval decisions are made solely by the respective banks and financial institutions.</p>
+    <p>Last updated: March 8, 2026</p>
+    <p>This disclaimer applies to all content and services provided on <strong>kriyapay.co.in</strong>, owned and operated by <strong>Inspirex Technologies Inc</strong>.</p>
+
+    <h2>1. Not Financial Advice</h2>
+    <p>Kriyapay is a <strong>financial product comparison platform</strong>, not a licensed financial advisor, broker, or intermediary registered with SEBI, IRDAI, or RBI. The information, tools, calculators, and AI-generated content on this platform are for <strong>general informational purposes only</strong> and should not be construed as personalized financial advice. Always consult a certified financial planner or directly contact the bank before making financial decisions.</p>
+
+    <h2>2. Product Information</h2>
+    <p>Product details displayed on Kriyapay — including but not limited to interest rates, annual fees, joining fees, reward points, cashback rates, eligibility criteria, and processing fees — are sourced from:</p>
+    <ul>
+      <li>Official bank websites (HDFC Bank, ICICI Bank, SBI, Axis Bank, Kotak Mahindra Bank, etc.)</li>
+      <li>Affiliate network feeds (Cuelinks, EarnKaro)</li>
+      <li>Publicly available product documentation</li>
+    </ul>
+    <p>These details are subject to change by the respective financial institutions <strong>without prior notice to Kriyapay</strong>. We update information regularly but cannot guarantee real-time accuracy at all times.</p>
+
+    <h2>3. AI-Generated Content Disclaimer</h2>
+    <p>Kriyapay uses artificial intelligence models (Google Gemini, OpenAI GPT) to generate:</p>
+    <ul>
+      <li>Product descriptions and benefit summaries</li>
+      <li>Terms & conditions summaries (marked with *asterisks for regulatory references)</li>
+      <li>Eligibility assessments and personalized recommendations</li>
+      <li>Chatbot responses via KriyaAI</li>
+    </ul>
+    <p>While AI content is based on official bank data, it may contain <strong>simplifications, generalizations, or occasional inaccuracies</strong>. AI-generated content is not a substitute for reading official product terms from the bank. Kriyapay is not liable for decisions made based on AI-generated content.</p>
+
+    <h2>4. No Guarantee of Approval</h2>
+    <p>Submitting a lead or application through Kriyapay does not guarantee approval of any financial product. Credit card approvals, loan disbursements, and insurance policy issuances are <strong>solely at the discretion of the respective bank or financial institution</strong> based on their internal credit assessment, KYC verification, and underwriting criteria.</p>
+
+    <h2>5. Third-Party Links</h2>
+    <p>Kriyapay contains links to third-party websites (bank portals, affiliate networks, payment platforms like Razorpay, PhonePe, Paytm). We are not responsible for the content, privacy practices, or terms of service of these external websites. Clicking on "Apply Now" or affiliate links will redirect you to the bank's or partner's website.</p>
+
+    <h2>6. Calculator & Tool Accuracy</h2>
+    <p>Financial tools on Kriyapay (EMI Calculator, Eligibility Checker, Budget Planner, Compound Interest Calculator, etc.) provide <strong>estimated results</strong> based on the inputs you provide. Actual loan EMIs, interest amounts, and eligibility may differ based on the bank's assessment. These tools are for indicative purposes only.</p>
+
+    <h2>7. Limitation of Liability</h2>
+    <p>Inspirex Technologies Inc, its directors, employees, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use of Kriyapay, including but not limited to financial losses, data breaches by third parties, or reliance on information provided on this platform.</p>
+
+    <h2>8. Contact</h2>
+    <p><strong>Inspirex Technologies Inc</strong><br />
+    Email: support@kriyapay.co.in<br />
+    Website: kriyapay.co.in</p>
   </PolicyLayout>
 );
 
 export const CookiePolicy = () => (
   <PolicyLayout title="Cookie Policy">
-    <p>Last updated: March 2026</p>
-    <p>Kriyapay uses cookies and similar tracking technologies to improve your browsing experience and for analytics and affiliate tracking.</p>
-    <h2>Types of Cookies We Use</h2>
+    <p>Last updated: March 8, 2026</p>
+    <p>This Cookie Policy explains how <strong>Kriyapay</strong> (operated by Inspirex Technologies Inc) uses cookies and similar tracking technologies on <strong>kriyapay.co.in</strong>.</p>
+
+    <h2>1. What Are Cookies</h2>
+    <p>Cookies are small text files stored on your device when you visit a website. They help the website remember your preferences, track your interactions, and enable certain functionality.</p>
+
+    <h2>2. Types of Cookies We Use</h2>
     <ul>
-      <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
-      <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our website</li>
-      <li><strong>Affiliate Tracking Cookies:</strong> Used by our affiliate partners (e.g., Cuelinks) to track referrals and attribute commissions</li>
+      <li><strong>Essential Cookies:</strong> Required for core platform functionality including authentication, form submissions, and session management. These cannot be disabled</li>
+      <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with Kriyapay — which pages are most visited, which products get the most clicks, and where users drop off. This data is aggregated and anonymized</li>
+      <li><strong>Affiliate Tracking Cookies:</strong> Set by our affiliate partners to attribute commissions:
+        <ul>
+          <li><strong>Cuelinks</strong> (Publisher ID: 211481) — Sets cookies to track click-throughs from Kriyapay to bank websites. Cookie duration: typically 30-90 days depending on the merchant program</li>
+          <li><strong>EarnKaro</strong> — Sets cookies for tracking conversions on linked products. Cookie duration varies by campaign</li>
+        </ul>
+      </li>
+      <li><strong>Preference Cookies:</strong> Store your theme preference (light/dark mode), recently viewed products, and comparison selections</li>
     </ul>
-    <h2>Third-Party Cookies</h2>
-    <p>Our affiliate partners may set cookies to track clicks and conversions. These cookies are governed by the respective third party's privacy policy.</p>
-    <h2>Managing Cookies</h2>
-    <p>You can control cookies through your browser settings. Disabling cookies may affect the functionality of certain features on our website.</p>
+
+    <h2>3. Third-Party Cookies</h2>
+    <p>The following third parties may set cookies when you use Kriyapay:</p>
+    <ul>
+      <li><strong>Cuelinks (cdn0.cuelinks.com)</strong> — Affiliate link conversion and tracking</li>
+      <li><strong>EarnKaro (ekaro.in)</strong> — Smart link tracking and attribution</li>
+    </ul>
+    <p>Each third party's use of cookies is governed by their own privacy and cookie policies.</p>
+
+    <h2>4. Cookie Duration</h2>
+    <ul>
+      <li><strong>Session Cookies:</strong> Deleted when you close your browser — used for active session management</li>
+      <li><strong>Persistent Cookies:</strong> Remain on your device for a set period (typically 30-90 days) — used for affiliate tracking and returning user recognition</li>
+    </ul>
+
+    <h2>5. Managing Cookies</h2>
+    <p>You can control and manage cookies through your browser settings:</p>
+    <ul>
+      <li><strong>Chrome:</strong> Settings → Privacy and Security → Cookies</li>
+      <li><strong>Firefox:</strong> Settings → Privacy & Security → Cookies</li>
+      <li><strong>Safari:</strong> Preferences → Privacy → Manage Website Data</li>
+      <li><strong>Edge:</strong> Settings → Cookies and Site Permissions</li>
+    </ul>
+    <p><strong>Note:</strong> Disabling cookies may prevent affiliate links from working correctly and may affect certain features like theme preferences and comparison tools.</p>
+
+    <h2>6. Contact</h2>
+    <p>For questions about our use of cookies, contact us at <strong>support@kriyapay.co.in</strong>.</p>
   </PolicyLayout>
 );
