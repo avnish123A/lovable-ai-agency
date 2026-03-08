@@ -103,7 +103,7 @@ const HeroSection = () => {
                     <img src={bank.logo} alt={bank.name} className="h-5 w-auto object-contain" />
                     <span className="text-sm font-semibold text-foreground">{bank.name}</span>
                   </motion.div>
-                })}
+                ))}
               </div>
             </motion.div>
           </div>
