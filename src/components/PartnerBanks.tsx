@@ -27,24 +27,28 @@ const PartnerBanks = () => {
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-wrap justify-center items-center gap-8 md:gap-12"
+          className="flex flex-wrap justify-center items-center gap-8 md:gap-14"
         >
-          {banks.map((bank) => (
-            <div
+          {banks.map((bank, i) => (
+            <motion.div
               key={bank.name}
-              className="flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-105"
             >
               <img
                 src={bank.logo}
                 alt={`${bank.name} logo`}
-                className="h-10 w-10 rounded-lg object-contain bg-card p-1"
+                className="h-10 w-10 rounded-xl object-contain bg-secondary p-1.5"
                 loading="lazy"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
               <span className="text-xs text-muted-foreground font-medium">{bank.name}</span>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       </div>

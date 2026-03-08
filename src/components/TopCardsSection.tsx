@@ -24,7 +24,7 @@ const TopCardsSection = () => {
   const fmt = (n: number) => (n === 0 ? "Free" : `₹${n.toLocaleString("en-IN")}`);
 
   return (
-    <section className="py-24 bg-card/50">
+    <section className="py-24 bg-secondary/30">
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -40,7 +40,7 @@ const TopCardsSection = () => {
               Handpicked cards with the best rewards, cashback, and welcome bonuses.
             </p>
           </div>
-          <Button asChild variant="outline" className="mt-4 md:mt-0 border-border">
+          <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
             <Link to="/credit-cards">View All Cards</Link>
           </Button>
         </motion.div>
@@ -53,10 +53,10 @@ const TopCardsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="rounded-xl border border-border bg-card p-6 card-hover"
+              className="rounded-2xl border border-border bg-card shadow-card p-6 card-hover"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                   <CreditCard className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -87,7 +87,7 @@ const TopCardsSection = () => {
                   <Star className="w-4 h-4 text-primary fill-primary" />
                   <span className="text-sm font-medium text-foreground">{card.rating}</span>
                 </div>
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">Apply Now</Button>
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">Apply Now</Button>
               </div>
             </motion.div>
           ))}
