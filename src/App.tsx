@@ -12,6 +12,7 @@ import Cashback from "./pages/Cashback";
 import EMICalculator from "./pages/EMICalculator";
 import EligibilityChecker from "./pages/EligibilityChecker";
 import FinanceDeals from "./pages/FinanceDeals";
+import { PrivacyPolicy, TermsConditions, AffiliateDisclosure, Disclaimer, CookiePolicy } from "./pages/PolicyPages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,11 @@ const AnimatedRoutes = () => {
           <Route path="/emi-calculator" element={<EMICalculator />} />
           <Route path="/eligibility" element={<EligibilityChecker />} />
           <Route path="/finance-deals" element={<FinanceDeals />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
