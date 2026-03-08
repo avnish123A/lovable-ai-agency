@@ -1,9 +1,27 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Bot, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+const rotatingQuestions = [
+  "Best cashback credit card?",
+  "Low interest personal loan?",
+  "Compare term insurance plans",
+  "Highest FD rates today?",
+  "Best demat account for beginners?",
+];
+
 const CTASection = () => {
+  const [qIndex, setQIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQIndex(prev => (prev + 1) % rotatingQuestions.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="py-32">
       <div className="container mx-auto px-4 md:px-8">
@@ -13,10 +31,8 @@ const CTASection = () => {
           viewport={{ once: true }}
           className="relative rounded-[2.5rem] overflow-hidden"
         >
-          {/* Gradient background */}
           <div className="absolute inset-0 bg-gradient-cta" />
           
-          {/* Animated orbs */}
           <motion.div 
             animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
             transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
@@ -28,7 +44,6 @@ const CTASection = () => {
             className="absolute bottom-10 left-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl"
           />
           
-          {/* Grid pattern */}
           <div className="absolute inset-0 grid-pattern opacity-5" />
           
           <div className="relative z-10 p-12 md:p-20 lg:p-28">
@@ -45,7 +60,20 @@ const CTASection = () => {
               
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white mb-8 leading-tight tracking-tight">
                 Ask NiveshAI <br className="hidden sm:block" />
-                <span className="text-accent">Anything</span>
+                <span className="relative inline-block min-h-[1.2em]">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={qIndex}
+                      initial={{ y: 30, opacity: 0, filter: "blur(8px)" }}
+                      animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                      exit={{ y: -30, opacity: 0, filter: "blur(8px)" }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="text-accent inline-block"
+                    >
+                      "{rotatingQuestions[qIndex]}"
+                    </motion.span>
+                  </AnimatePresence>
+                </span>
               </h2>
               <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
                 Get instant answers about credit cards, loans, and cashback offers. Our AI assistant helps you make informed financial decisions.

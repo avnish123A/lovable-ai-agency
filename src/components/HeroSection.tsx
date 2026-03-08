@@ -1,10 +1,19 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Play, TrendingUp, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
 const CreditCard3D = lazy(() => import("@/components/CreditCard3D"));
+
+const rotatingWords = [
+  { text: "Credit Cards", color: "from-primary to-accent" },
+  { text: "Personal Loans", color: "from-accent to-primary" },
+  { text: "Insurance", color: "from-primary to-emerald-400" },
+  { text: "Fixed Deposits", color: "from-accent to-teal-400" },
+  { text: "Investments", color: "from-emerald-400 to-primary" },
+];
 
 const stats = [
   { icon: TrendingUp, value: "50+", label: "Products" },
@@ -13,13 +22,22 @@ const stats = [
 ];
 
 const HeroSection = () => {
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex(prev => (prev + 1) % rotatingWords.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-hero" />
       <div className="absolute inset-0 grid-pattern opacity-30" />
 
-      {/* Floating orbs with enhanced glow */}
+      {/* Floating orbs */}
       <motion.div
         animate={{ y: [0, -25, 0], scale: [1, 1.08, 1], opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -30,7 +48,6 @@ const HeroSection = () => {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
         className="absolute bottom-32 right-[10%] w-96 h-96 bg-accent/12 rounded-full blur-3xl"
       />
-      {/* Extra subtle orb */}
       <motion.div
         animate={{ x: [0, 30, 0], y: [0, -15, 0] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
@@ -56,7 +73,7 @@ const HeroSection = () => {
               <span className="text-sm text-foreground font-semibold relative z-10">AI-Powered Financial Platform</span>
             </motion.div>
 
-            {/* Heading with staggered words */}
+            {/* Heading with rotating text */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -64,23 +81,28 @@ const HeroSection = () => {
               className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold leading-[1.05] mb-8 text-foreground tracking-tight"
             >
               Find the Best{" "}
-              <motion.span
-                className="text-gradient inline-block"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4, duration: 0.5, type: "spring" }}
-              >
-                Credit Cards
-              </motion.span>{" "}
-              &{" "}
-              <motion.span
-                className="text-gradient inline-block"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6, duration: 0.5, type: "spring" }}
-              >
-                Loans
-              </motion.span>
+              <span className="relative inline-block min-w-[280px] md:min-w-[380px] text-left align-bottom">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={wordIndex}
+                    initial={{ y: 40, opacity: 0, rotateX: -45 }}
+                    animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                    exit={{ y: -40, opacity: 0, rotateX: 45 }}
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className={`bg-gradient-to-r ${rotatingWords[wordIndex].color} bg-clip-text text-transparent inline-block`}
+                  >
+                    {rotatingWords[wordIndex].text}
+                  </motion.span>
+                </AnimatePresence>
+                {/* Animated underline */}
+                <motion.div
+                  key={`underline-${wordIndex}`}
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                  className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full origin-left"
+                />
+              </span>
             </motion.h1>
 
             <motion.p
@@ -105,7 +127,8 @@ const HeroSection = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="flex items-center gap-2.5"
+                  whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                  className="flex items-center gap-2.5 cursor-default"
                 >
                   <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
                     <stat.icon className="w-4 h-4 text-primary" />
@@ -118,7 +141,7 @@ const HeroSection = () => {
               ))}
             </motion.div>
 
-            {/* CTA Buttons with enhanced hover */}
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
