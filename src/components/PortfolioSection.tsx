@@ -1,62 +1,55 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, TrendingUp } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const projects = [
   {
     client: "FinTech Startup",
     title: "AI-Powered Fraud Detection",
-    description: "Deployed real-time transaction monitoring that reduced fraud by 94% while maintaining sub-100ms response times.",
+    description: "Real-time transaction monitoring reducing fraud by 94%.",
     metric: "94%",
     metricLabel: "Fraud Reduction",
-    tags: ["Machine Learning", "Real-time", "FinTech"],
+    tags: ["AI", "FinTech"],
   },
   {
     client: "E-Commerce Platform",
     title: "Intelligent Customer Support",
-    description: "Built multi-language conversational AI handling 15,000+ daily queries with 97% customer satisfaction.",
+    description: "Multi-language AI handling 15,000+ daily queries.",
     metric: "97%",
     metricLabel: "CSAT Score",
-    tags: ["NLP", "Chatbot", "Multilingual"],
+    tags: ["Chatbot", "NLP"],
   },
   {
     client: "Healthcare SaaS",
     title: "Predictive Patient Analytics",
-    description: "Created ML pipelines processing 2M+ patient records for early diagnosis and treatment optimization.",
+    description: "ML pipelines processing 2M+ patient records.",
     metric: "3.2×",
-    metricLabel: "Diagnostic Accuracy",
-    tags: ["Healthcare", "Analytics", "HIPAA"],
-  },
-  {
-    client: "Logistics Company",
-    title: "Route Optimization Engine",
-    description: "Engineered AI agents that optimized delivery routes across 50+ cities, cutting costs by 40%.",
-    metric: "40%",
-    metricLabel: "Cost Reduction",
-    tags: ["Optimization", "Automation", "IoT"],
+    metricLabel: "Accuracy Boost",
+    tags: ["Healthcare", "ML"],
   },
 ];
 
 const PortfolioSection = () => {
   return (
-    <section id="portfolio" className="py-32 relative">
+    <section className="py-28 relative">
+      <div className="absolute inset-0 bg-gradient-hero opacity-30" />
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center max-w-2xl mx-auto mb-20"
+          className="text-center max-w-2xl mx-auto mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.2em] text-primary font-medium mb-4">Case Studies</p>
-          <h2 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight mb-5">
-            Results That <span className="text-gradient italic">Speak</span>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Our Work</p>
+          <h2 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Results That <span className="text-gradient">Speak</span>
           </h2>
-          <div className="gold-line w-16 mx-auto mb-6" />
           <p className="text-muted-foreground text-lg leading-relaxed font-light">
             A selection of transformative projects delivered for visionary companies.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {projects.map((project, i) => (
             <motion.div
               key={project.title}
@@ -65,26 +58,21 @@ const PortfolioSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               whileHover={{ y: -4, transition: { duration: 0.3 } }}
-              className="group p-8 rounded-sm bg-gradient-card border-gradient hover:shadow-glow-sm transition-all duration-500"
+              className="group p-7 rounded-2xl bg-gradient-card border border-border/50 hover:border-primary/30 hover:shadow-glow-sm transition-all duration-500"
             >
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-xs uppercase tracking-[0.15em] text-primary font-medium">{project.client}</span>
-                <ArrowUpRight size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-medium text-primary">{project.client}</span>
+                <ArrowUpRight size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
-              <h3 className="font-heading text-2xl font-semibold mb-3 text-foreground">{project.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-light">{project.description}</p>
-              
-              <div className="flex items-center gap-4 mb-6 p-4 rounded-sm bg-secondary/50">
-                <TrendingUp size={18} className="text-primary" />
-                <div>
-                  <span className="font-heading text-2xl font-bold text-gradient">{project.metric}</span>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground ml-2">{project.metricLabel}</span>
-                </div>
+              <h3 className="font-heading text-lg font-semibold mb-2 text-foreground">{project.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 font-light">{project.description}</p>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 mb-4">
+                <span className="font-heading text-2xl font-bold text-gradient">{project.metric}</span>
+                <span className="text-[11px] text-muted-foreground">{project.metricLabel}</span>
               </div>
-
-              <div className="flex flex-wrap gap-2">
+              <div className="flex gap-2">
                 {project.tags.map((tag) => (
-                  <span key={tag} className="text-[10px] uppercase tracking-wider px-3 py-1 rounded-sm bg-secondary text-secondary-foreground border border-border/50">
+                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground border border-border/50">
                     {tag}
                   </span>
                 ))}
@@ -92,6 +80,21 @@ const PortfolioSection = () => {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <Link
+            to="/portfolio"
+            className="group inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-foreground transition-colors"
+          >
+            View all projects
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
