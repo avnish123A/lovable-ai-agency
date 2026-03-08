@@ -1,31 +1,35 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const banks = [
-  { name: "HDFC Bank", logo: "https://logo.clearbit.com/hdfcbank.com" },
-  { name: "ICICI Bank", logo: "https://logo.clearbit.com/icicibank.com" },
-  { name: "Axis Bank", logo: "https://logo.clearbit.com/axisbank.com" },
-  { name: "SBI", logo: "https://logo.clearbit.com/sbi.co.in" },
-  { name: "Kotak Bank", logo: "https://logo.clearbit.com/kotak.com" },
-  { name: "IndusInd Bank", logo: "https://logo.clearbit.com/indusind.com" },
-  { name: "Yes Bank", logo: "https://logo.clearbit.com/yesbank.in" },
-  { name: "RBL Bank", logo: "https://logo.clearbit.com/rblbank.com" },
-  { name: "IDFC First", logo: "https://logo.clearbit.com/idfcfirstbank.com" },
-  { name: "Bajaj Finserv", logo: "https://logo.clearbit.com/bajajfinserv.in" },
-  { name: "Paytm", logo: "https://logo.clearbit.com/paytm.com" },
-  { name: "PhonePe", logo: "https://logo.clearbit.com/phonepe.com" },
-  { name: "CRED", logo: "https://logo.clearbit.com/cred.club" },
-  { name: "Flipkart", logo: "https://logo.clearbit.com/flipkart.com" },
-  { name: "Amazon India", logo: "https://logo.clearbit.com/amazon.in" },
-  { name: "Swiggy", logo: "https://logo.clearbit.com/swiggy.com" },
+const TOKEN = "pk_a8TNe9MYRhSE6Rgc26MNYQ";
+const logoUrl = (domain: string) =>
+  `https://img.logo.dev/${domain}?token=${TOKEN}&size=80&format=png`;
+
+const brands = [
+  { name: "HDFC Bank", logo: logoUrl("hdfcbank.com") },
+  { name: "ICICI Bank", logo: logoUrl("icicibank.com") },
+  { name: "Axis Bank", logo: logoUrl("axisbank.com") },
+  { name: "SBI", logo: logoUrl("sbi.co.in") },
+  { name: "Kotak Bank", logo: logoUrl("kotak.com") },
+  { name: "IndusInd Bank", logo: logoUrl("indusind.com") },
+  { name: "Yes Bank", logo: logoUrl("yesbank.in") },
+  { name: "RBL Bank", logo: logoUrl("rblbank.com") },
+  { name: "IDFC First", logo: logoUrl("idfcfirstbank.com") },
+  { name: "Bajaj Finserv", logo: logoUrl("bajajfinserv.in") },
+  { name: "Paytm", logo: logoUrl("paytm.com") },
+  { name: "PhonePe", logo: logoUrl("phonepe.com") },
+  { name: "CRED", logo: logoUrl("cred.club") },
+  { name: "Flipkart", logo: logoUrl("flipkart.com") },
+  { name: "Amazon India", logo: logoUrl("amazon.in") },
+  { name: "Swiggy", logo: logoUrl("swiggy.com") },
 ];
 
-const BankItem = ({ name, logo }: { name: string; logo: string }) => {
+const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
   const [error, setError] = useState(false);
   const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex flex-col items-center gap-2 min-w-[100px] mx-6">
+    <div className="flex flex-col items-center gap-2 flex-shrink-0 px-6">
       <div className="h-14 w-14 rounded-2xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         {error ? (
           <span className="text-xs font-heading font-bold text-primary">{initials}</span>
@@ -45,9 +49,6 @@ const BankItem = ({ name, logo }: { name: string; logo: string }) => {
 };
 
 const PartnerBanks = () => {
-  // Double the array for seamless infinite scroll
-  const doubled = [...banks, ...banks];
-
   return (
     <section className="py-14 border-b border-border overflow-hidden">
       <div className="container mx-auto px-4 md:px-8">
@@ -67,10 +68,17 @@ const PartnerBanks = () => {
         <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
 
-        <div className="flex animate-marquee hover:[animation-play-state:paused]">
-          {doubled.map((bank, i) => (
-            <BankItem key={`${bank.name}-${i}`} name={bank.name} logo={bank.logo} />
-          ))}
+        <div className="marquee-track">
+          <div className="marquee-content">
+            {brands.map((brand) => (
+              <BrandItem key={brand.name} name={brand.name} logo={brand.logo} />
+            ))}
+          </div>
+          <div className="marquee-content" aria-hidden="true">
+            {brands.map((brand) => (
+              <BrandItem key={`dup-${brand.name}`} name={brand.name} logo={brand.logo} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
