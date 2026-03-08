@@ -19,7 +19,7 @@ const Loans = lazy(() => import("./pages/Loans"));
 const Cashback = lazy(() => import("./pages/Cashback"));
 const EMICalculator = lazy(() => import("./pages/EMICalculator"));
 const EligibilityChecker = lazy(() => import("./pages/EligibilityChecker"));
-const FinanceDeals = lazy(() => import("./pages/FinanceDeals"));
+
 const DealDetail = lazy(() => import("./pages/DealDetail"));
 const CompareProducts = lazy(() => import("./pages/CompareProducts"));
 const About = lazy(() => import("./pages/About"));
@@ -103,7 +103,7 @@ const AnimatedRoutes = () => {
             <Route path="/cashback" element={<Cashback />} />
             <Route path="/emi-calculator" element={<EMICalculator />} />
             <Route path="/eligibility" element={<EligibilityChecker />} />
-            <Route path="/finance-deals" element={<FinanceDeals />} />
+            
             <Route path="/deal/:id" element={<DealDetail />} />
             <Route path="/compare" element={<CompareProducts />} />
             <Route path="/about" element={<About />} />
