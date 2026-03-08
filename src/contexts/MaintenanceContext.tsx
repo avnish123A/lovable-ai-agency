@@ -39,7 +39,7 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
         .from("site_settings")
         .select("value")
         .eq("key", "maintenance_mode")
-        .single();
+        .maybeSingle();
 
       if (data?.value) {
         setSettings(data.value as unknown as MaintenanceSettings);
@@ -53,6 +53,25 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchSettings();
+
+    // Realtime subscription for instant updates
+    const channel = supabase
+      .channel("maintenance-mode-rt")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "site_settings",
+          filter: "key=eq.maintenance_mode",
+        },
+        () => fetchSettings()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
