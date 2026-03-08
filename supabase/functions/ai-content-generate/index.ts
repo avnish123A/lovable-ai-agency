@@ -33,19 +33,19 @@ Features: ${features || "N/A"}
 
     switch (generate_type) {
       case "description":
-        systemPrompt = "You are a fintech copywriter for Kriyapay. Generate a concise, compelling product description (2-3 sentences) that highlights key benefits. Use professional yet approachable tone. No markdown formatting.";
+        systemPrompt = "You are a fintech copywriter for ApniNivesh. Generate a concise, compelling product description (2-3 sentences) that highlights key benefits. Use professional yet approachable tone. No markdown formatting.";
         break;
       case "benefits":
-        systemPrompt = "You are a fintech advisor for Kriyapay. List 5-6 key benefits of this financial product as bullet points. Each bullet should be one clear sentence. Start each with a relevant emoji. No markdown headers.";
+        systemPrompt = "You are a fintech advisor for ApniNivesh. List 5-6 key benefits of this financial product as bullet points. Each bullet should be one clear sentence. Start each with a relevant emoji. No markdown headers.";
         break;
       case "eligibility":
-        systemPrompt = "You are a fintech advisor for Kriyapay. Based on the product details, generate realistic eligibility requirements as bullet points. Include age, income, credit score, employment type, and documentation. Start each with ✓. No markdown headers.";
+        systemPrompt = "You are a fintech advisor for ApniNivesh. Based on the product details, generate realistic eligibility requirements as bullet points. Include age, income, credit score, employment type, and documentation. Start each with ✓. No markdown headers.";
         break;
       case "terms":
-        systemPrompt = "You are a fintech compliance writer for Kriyapay. Generate a brief terms & conditions summary (4-5 key points) for this financial product. Be factual and clear. Start each with a number. No markdown headers.";
+        systemPrompt = "You are a fintech compliance writer for ApniNivesh. Generate a brief terms & conditions summary (4-5 key points) for this financial product. Be factual and clear. Start each with a number. No markdown headers.";
         break;
       case "all":
-        systemPrompt = `You are a fintech content writer for Kriyapay. Generate ALL of the following for this financial product. Use this exact format:
+        systemPrompt = `You are a fintech content writer for ApniNivesh. Generate ALL of the following for this financial product. Use this exact format:
 
 DESCRIPTION:
 (2-3 sentence compelling description)

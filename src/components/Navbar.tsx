@@ -55,7 +55,7 @@ const Navbar = () => {
               <Wallet className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-heading font-bold text-foreground">
-              Kriya<span className="text-primary">pay</span>
+              Apni<span className="text-primary">Nivesh</span>
             </span>
           </Link>
 

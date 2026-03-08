@@ -16,9 +16,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead 
-        title="Kriyapay – Compare Best Credit Cards, Loans & Insurance in India" 
-        description="Compare credit cards, personal loans & insurance from 15+ Indian banks. AI-powered recommendations, EMI calculators & eligibility checkers by Inspirex Technologies Inc."
-        canonical="https://kriyapay.co.in"
+        title="ApniNivesh – Compare Best Credit Cards, Loans & Insurance in India" 
+        description="Compare credit cards, personal loans & insurance from 15+ Indian banks. AI-powered recommendations, EMI calculators & eligibility checkers by Inspirex Technologies INC."
+        canonical="https://apninivesh.in"
       />
       <Navbar />
       <HeroSection />

@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
     // EarnKaro smart link format
     // Format: https://ekaro.in/enkr{timestamp}{affiliate_id}?url={encoded_url}
     const timestamp = Date.now().toString(36);
-    const affiliateId = EARNKARO_ID || "kriyapay";
+    const affiliateId = EARNKARO_ID || "apninivesh";
     
     // Encode the original URL
     const encodedUrl = encodeURIComponent(url);

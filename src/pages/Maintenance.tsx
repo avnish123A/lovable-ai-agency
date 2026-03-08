@@ -80,8 +80,8 @@ const MaintenancePage = ({
             <Mail className="w-6 h-6 text-primary" />
             <div className="text-left">
               <p className="text-sm text-muted-foreground">Contact Us</p>
-              <a href="mailto:support@kriyapay.co.in" className="font-heading font-bold text-foreground hover:text-primary transition-colors">
-                support@kriyapay.co.in
+              <a href="mailto:support@apninivesh.in" className="font-heading font-bold text-foreground hover:text-primary transition-colors">
+                support@apninivesh.in
               </a>
             </div>
           </div>

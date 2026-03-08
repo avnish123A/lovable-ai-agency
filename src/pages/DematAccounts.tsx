@@ -29,7 +29,7 @@ const DematAccounts = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Best Demat Accounts in India 2026 | KriyaPay" description="Compare top demat & trading accounts - Zerodha, Groww, Upstox & more." canonical="https://kriyapay.lovable.app/demat-accounts" />
+      <SEOHead title="Best Demat Accounts in India 2026 | ApniNivesh" description="Compare top demat & trading accounts - Zerodha, Groww, Upstox & more." canonical="https://apninivesh.in/demat-accounts" />
       <Navbar />
       {isComingSoon ? (
         <CategoryComingSoon title="Demat Accounts" description="Top trading & demat account comparisons coming soon!" />

@@ -32,8 +32,8 @@ const Contact = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
-    email: "contact@kriyapay.co.in", phone: "+91 98765 43210",
-    address: "Inspirex Technologies, Rajasthan, India", working_hours: "Mon-Fri: 10:00 AM - 6:00 PM",
+    email: "contact@apninivesh.in", phone: "+91 98765 43210",
+    address: "Inspirex Technologies INC, Rajasthan, India", working_hours: "Mon-Fri: 10:00 AM - 6:00 PM",
     whatsapp: "", instagram: "", facebook: "", twitter: "", map_embed: "",
   });
 
@@ -45,7 +45,6 @@ const Contact = () => {
       }
     };
     fetchContact();
-    // Realtime: reflect admin changes instantly
     const ch = supabase.channel("contact-rt").on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => fetchContact()).subscribe();
     return () => { supabase.removeChannel(ch); };
   }, []);
@@ -89,7 +88,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Contact Us - KriyaPay | Financial Services Support" description="Get in touch with KriyaPay for credit cards, loans, insurance queries. We respond within 24 hours." canonical="https://kriyapay.lovable.app/contact" />
+      <SEOHead title="Contact Us - ApniNivesh | Financial Services Support" description="Get in touch with ApniNivesh for credit cards, loans, insurance queries. We respond within 24 hours." canonical="https://apninivesh.in/contact" />
       <Navbar />
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">

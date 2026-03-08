@@ -10,6 +10,14 @@ const brands = [
   { name: "IndusInd Bank", logo: "/logos/indusind.png" },
   { name: "Yes Bank", logo: "/logos/yesbank.png" },
   { name: "Bajaj Finserv", logo: "/logos/bajaj.png" },
+  { name: "AU Bank", logo: "/logos/au-bank.png" },
+  { name: "RBL Bank", logo: "/logos/rbl.png" },
+  { name: "Bank of Baroda", logo: "/logos/bob.png" },
+  { name: "Zerodha", logo: "/logos/zerodha.png" },
+  { name: "Groww", logo: "/logos/groww.png" },
+  { name: "Upstox", logo: "/logos/upstox.png" },
+  { name: "ICICI Prudential", logo: "/logos/icici-prudential.png" },
+  { name: "HDFC ERGO", logo: "/logos/hdfc-ergo.png" },
   { name: "Paytm", logo: "/logos/paytm.png" },
   { name: "PhonePe", logo: "/logos/phonepe.png" },
   { name: "Razorpay", logo: "/logos/razorpay.png" },
@@ -49,7 +57,7 @@ const PartnerBanks = () => {
           viewport={{ once: true }}
           className="text-center text-sm text-muted-foreground font-medium uppercase tracking-wider mb-10"
         >
-          Trusted by India's Leading Brands & Banks
+          Trusted by India's Leading Banks & Financial Brands
         </motion.p>
       </div>
 

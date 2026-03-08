@@ -53,7 +53,7 @@ const Card = () => {
           anchorY="middle"
           font="https://fonts.gstatic.com/s/dmsans/v15/rP2Hp2ywxg089UriCZOIHQ.woff2"
         >
-          KRIYAPAY
+          APNINIVESH
         </Text>
         {/* Card holder */}
         <Text

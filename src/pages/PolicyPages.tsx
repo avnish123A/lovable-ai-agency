@@ -19,7 +19,7 @@ const PolicyLayout = ({ title, children }: { title: string; children: React.Reac
 export const PrivacyPolicy = () => (
   <PolicyLayout title="Privacy Policy">
     <p>Last updated: March 8, 2026</p>
-    <p>Kriyapay (owned and operated by <strong>Inspirex Technologies Inc</strong>) is committed to protecting the privacy of its users. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal data when you visit <strong>kriyapay.co.in</strong> and use our financial product comparison services.</p>
+    <p>ApniNivesh (owned and operated by <strong>Inspirex Technologies INC</strong>) is committed to protecting the privacy of its users. This Privacy Policy explains how we collect, use, disclose, and safeguard your personal data when you visit <strong>apninivesh.in</strong> and use our financial product comparison services.</p>
     
     <h2>1. Information We Collect</h2>
     <p><strong>Personal Information (provided by you):</strong></p>
@@ -40,7 +40,7 @@ export const PrivacyPolicy = () => (
     <ul>
       <li>To connect you with relevant credit card, loan, and insurance products from our 15+ partner banks including HDFC Bank, ICICI Bank, SBI, Axis Bank, Kotak Mahindra Bank, IndusInd Bank, Yes Bank, AU Small Finance Bank, RBL Bank, and Bank of Baroda</li>
       <li>To process and forward your lead information to the specific bank or financial institution whose product you applied for</li>
-      <li>To provide AI-powered product recommendations and eligibility assessments using our KriyaAI engine</li>
+      <li>To provide AI-powered product recommendations and eligibility assessments using our NiveshAI engine</li>
       <li>To send transactional communications about products you've expressed interest in</li>
       <li>To analyze platform usage patterns and improve our comparison algorithms</li>
       <li>To detect and prevent fraudulent activity, including duplicate lead submissions</li>
@@ -78,25 +78,25 @@ export const PrivacyPolicy = () => (
       <li>Withdraw consent for marketing communications</li>
       <li>Lodge a complaint with the relevant data protection authority</li>
     </ul>
-    <p>To exercise any of these rights, email us at <strong>support@kriyapay.co.in</strong> with the subject line "Data Request".</p>
+    <p>To exercise any of these rights, email us at <strong>support@apninivesh.in</strong> with the subject line "Data Request".</p>
 
     <h2>7. Children's Privacy</h2>
-    <p>Kriyapay is not intended for individuals under 18 years of age. We do not knowingly collect data from minors. Financial products listed require applicants to be at least 18-21 years old as per bank policies.</p>
+    <p>ApniNivesh is not intended for individuals under 18 years of age. We do not knowingly collect data from minors. Financial products listed require applicants to be at least 18-21 years old as per bank policies.</p>
 
     <h2>8. Contact</h2>
-    <p><strong>Inspirex Technologies Inc</strong><br />
-    Email: support@kriyapay.co.in<br />
-    Website: kriyapay.co.in</p>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
   </PolicyLayout>
 );
 
 export const TermsConditions = () => (
   <PolicyLayout title="Terms & Conditions">
     <p>Last updated: March 8, 2026</p>
-    <p>These Terms & Conditions ("Terms") govern your use of the Kriyapay platform at <strong>kriyapay.co.in</strong>, owned and operated by <strong>Inspirex Technologies Inc</strong>. By accessing or using our services, you agree to be bound by these Terms.</p>
+    <p>These Terms & Conditions ("Terms") govern your use of the ApniNivesh platform at <strong>apninivesh.in</strong>, owned and operated by <strong>Inspirex Technologies INC</strong>. By accessing or using our services, you agree to be bound by these Terms.</p>
 
-    <h2>1. About Kriyapay</h2>
-    <p>Kriyapay is a financial product comparison and lead generation platform. We aggregate credit card, personal loan, and insurance product information from 15+ Indian banks and financial institutions. We operate as an <strong>affiliate and lead generation partner</strong> — we do not directly issue, underwrite, or guarantee any financial product.</p>
+    <h2>1. About ApniNivesh</h2>
+    <p>ApniNivesh is a financial product comparison and lead generation platform. We aggregate credit card, personal loan, and insurance product information from 15+ Indian banks and financial institutions. We operate as an <strong>affiliate and lead generation partner</strong> — we do not directly issue, underwrite, or guarantee any financial product.</p>
 
     <h2>2. Eligibility</h2>
     <ul>
@@ -108,7 +108,7 @@ export const TermsConditions = () => (
     <h2>3. Services Provided</h2>
     <ul>
       <li>Comparison of credit cards, loans, and insurance products from partner banks</li>
-      <li>AI-powered product recommendations via KriyaAI (powered by Google Gemini and OpenAI)</li>
+      <li>AI-powered product recommendations via NiveshAI (powered by Google Gemini and OpenAI)</li>
       <li>EMI calculators, eligibility checkers, and financial planning tools</li>
       <li>Cashback offer aggregation and deal tracking</li>
       <li>Lead submission to partner banks on your behalf</li>
@@ -126,13 +126,13 @@ export const TermsConditions = () => (
     <p>While we make every effort to display accurate and current product information (interest rates, fees, rewards, eligibility criteria), these details are sourced from official bank websites, partner APIs, and affiliate networks. Product terms may change without prior notice. <strong>Always verify the latest terms directly with the bank before applying.</strong></p>
 
     <h2>6. AI-Generated Content</h2>
-    <p>Kriyapay uses artificial intelligence (Google Gemini, OpenAI GPT models) to generate product descriptions, benefits summaries, eligibility assessments, and terms & conditions summaries. AI-generated content is derived from official bank data but may contain simplifications or minor inaccuracies. It does not constitute financial advice.</p>
+    <p>ApniNivesh uses artificial intelligence (Google Gemini, OpenAI GPT models) to generate product descriptions, benefits summaries, eligibility assessments, and terms & conditions summaries. AI-generated content is derived from official bank data but may contain simplifications or minor inaccuracies. It does not constitute financial advice.</p>
 
     <h2>7. Intellectual Property</h2>
-    <p>All content, design, branding, source code, algorithms, and functionality on Kriyapay is the exclusive property of Inspirex Technologies Inc and is protected under applicable intellectual property laws. Bank logos, product names, and trademarks belong to their respective owners and are used for identification purposes only.</p>
+    <p>All content, design, branding, source code, algorithms, and functionality on ApniNivesh is the exclusive property of Inspirex Technologies INC and is protected under applicable intellectual property laws. Bank logos, product names, and trademarks belong to their respective owners and are used for identification purposes only.</p>
 
     <h2>8. Limitation of Liability</h2>
-    <p>Inspirex Technologies Inc and Kriyapay shall not be held liable for:</p>
+    <p>Inspirex Technologies INC and ApniNivesh shall not be held liable for:</p>
     <ul>
       <li>Any financial decisions made based on information displayed on our platform</li>
       <li>Rejection or approval of any financial product application</li>
@@ -142,22 +142,22 @@ export const TermsConditions = () => (
     </ul>
 
     <h2>9. Governing Law</h2>
-    <p>These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from the use of Kriyapay shall be subject to the exclusive jurisdiction of courts in India.</p>
+    <p>These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from the use of ApniNivesh shall be subject to the exclusive jurisdiction of courts in India.</p>
 
     <h2>10. Contact</h2>
-    <p><strong>Inspirex Technologies Inc</strong><br />
-    Email: support@kriyapay.co.in<br />
-    Website: kriyapay.co.in</p>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
   </PolicyLayout>
 );
 
 export const AffiliateDisclosure = () => (
   <PolicyLayout title="Affiliate Disclosure">
     <p>Last updated: March 8, 2026</p>
-    <p>Kriyapay, operated by <strong>Inspirex Technologies Inc</strong>, participates in affiliate marketing programs to monetize our financial product comparison platform. This disclosure explains how our affiliate relationships work and how they may affect your experience.</p>
+    <p>ApniNivesh, operated by <strong>Inspirex Technologies INC</strong>, participates in affiliate marketing programs to monetize our financial product comparison platform. This disclosure explains how our affiliate relationships work and how they may affect your experience.</p>
 
     <h2>1. How We Earn Revenue</h2>
-    <p>Kriyapay earns revenue through the following channels:</p>
+    <p>ApniNivesh earns revenue through the following channels:</p>
     <ul>
       <li><strong>Cost Per Lead (CPL):</strong> When you submit your details through a lead form for a credit card, loan, or insurance product, and the partner bank receives your application, we may earn a referral fee</li>
       <li><strong>Cost Per Action (CPA):</strong> When you click "Apply Now" and complete an application or purchase on the bank's website, we may earn a commission through our affiliate tracking partners</li>
@@ -175,7 +175,7 @@ export const AffiliateDisclosure = () => (
     <p><strong>Our commitment to transparency:</strong></p>
     <ul>
       <li>Affiliate commission rates <strong>do not</strong> influence product rankings on our comparison pages</li>
-      <li>AI-powered recommendations (KriyaAI) are based on user-provided criteria (salary, spending habits, preferences) — not commission potential</li>
+      <li>AI-powered recommendations (NiveshAI) are based on user-provided criteria (salary, spending habits, preferences) — not commission potential</li>
       <li>Products are ranked by relevance, user ratings, and feature match — not affiliate revenue</li>
       <li>We display both affiliate and non-affiliate products to provide comprehensive comparisons</li>
     </ul>
@@ -187,60 +187,60 @@ export const AffiliateDisclosure = () => (
     <p>Links that redirect through Cuelinks or EarnKaro tracking domains are affiliate links. "Apply Now" buttons on product pages typically contain affiliate tracking parameters. We aim to clearly label sponsored or promoted content where applicable.</p>
 
     <h2>6. Contact</h2>
-    <p>For questions about our affiliate relationships, email <strong>support@kriyapay.co.in</strong>.</p>
+    <p>For questions about our affiliate relationships, email <strong>support@apninivesh.in</strong>.</p>
   </PolicyLayout>
 );
 
 export const Disclaimer = () => (
   <PolicyLayout title="Disclaimer">
     <p>Last updated: March 8, 2026</p>
-    <p>This disclaimer applies to all content and services provided on <strong>kriyapay.co.in</strong>, owned and operated by <strong>Inspirex Technologies Inc</strong>.</p>
+    <p>This disclaimer applies to all content and services provided on <strong>apninivesh.in</strong>, owned and operated by <strong>Inspirex Technologies INC</strong>.</p>
 
     <h2>1. Not Financial Advice</h2>
-    <p>Kriyapay is a <strong>financial product comparison platform</strong>, not a licensed financial advisor, broker, or intermediary registered with SEBI, IRDAI, or RBI. The information, tools, calculators, and AI-generated content on this platform are for <strong>general informational purposes only</strong> and should not be construed as personalized financial advice. Always consult a certified financial planner or directly contact the bank before making financial decisions.</p>
+    <p>ApniNivesh is a <strong>financial product comparison platform</strong>, not a licensed financial advisor, broker, or intermediary registered with SEBI, IRDAI, or RBI. The information, tools, calculators, and AI-generated content on this platform are for <strong>general informational purposes only</strong> and should not be construed as personalized financial advice. Always consult a certified financial planner or directly contact the bank before making financial decisions.</p>
 
     <h2>2. Product Information</h2>
-    <p>Product details displayed on Kriyapay — including but not limited to interest rates, annual fees, joining fees, reward points, cashback rates, eligibility criteria, and processing fees — are sourced from:</p>
+    <p>Product details displayed on ApniNivesh — including but not limited to interest rates, annual fees, joining fees, reward points, cashback rates, eligibility criteria, and processing fees — are sourced from:</p>
     <ul>
       <li>Official bank websites (HDFC Bank, ICICI Bank, SBI, Axis Bank, Kotak Mahindra Bank, etc.)</li>
       <li>Affiliate network feeds (Cuelinks, EarnKaro)</li>
       <li>Publicly available product documentation</li>
     </ul>
-    <p>These details are subject to change by the respective financial institutions <strong>without prior notice to Kriyapay</strong>. We update information regularly but cannot guarantee real-time accuracy at all times.</p>
+    <p>These details are subject to change by the respective financial institutions <strong>without prior notice to ApniNivesh</strong>. We update information regularly but cannot guarantee real-time accuracy at all times.</p>
 
     <h2>3. AI-Generated Content Disclaimer</h2>
-    <p>Kriyapay uses artificial intelligence models (Google Gemini, OpenAI GPT) to generate:</p>
+    <p>ApniNivesh uses artificial intelligence models (Google Gemini, OpenAI GPT) to generate:</p>
     <ul>
       <li>Product descriptions and benefit summaries</li>
       <li>Terms & conditions summaries (marked with *asterisks for regulatory references)</li>
       <li>Eligibility assessments and personalized recommendations</li>
-      <li>Chatbot responses via KriyaAI</li>
+      <li>Chatbot responses via NiveshAI</li>
     </ul>
-    <p>While AI content is based on official bank data, it may contain <strong>simplifications, generalizations, or occasional inaccuracies</strong>. AI-generated content is not a substitute for reading official product terms from the bank. Kriyapay is not liable for decisions made based on AI-generated content.</p>
+    <p>While AI content is based on official bank data, it may contain <strong>simplifications, generalizations, or occasional inaccuracies</strong>. AI-generated content is not a substitute for reading official product terms from the bank. ApniNivesh is not liable for decisions made based on AI-generated content.</p>
 
     <h2>4. No Guarantee of Approval</h2>
-    <p>Submitting a lead or application through Kriyapay does not guarantee approval of any financial product. Credit card approvals, loan disbursements, and insurance policy issuances are <strong>solely at the discretion of the respective bank or financial institution</strong> based on their internal credit assessment, KYC verification, and underwriting criteria.</p>
+    <p>Submitting a lead or application through ApniNivesh does not guarantee approval of any financial product. Credit card approvals, loan disbursements, and insurance policy issuances are <strong>solely at the discretion of the respective bank or financial institution</strong> based on their internal credit assessment, KYC verification, and underwriting criteria.</p>
 
     <h2>5. Third-Party Links</h2>
-    <p>Kriyapay contains links to third-party websites (bank portals, affiliate networks, payment platforms like Razorpay, PhonePe, Paytm). We are not responsible for the content, privacy practices, or terms of service of these external websites. Clicking on "Apply Now" or affiliate links will redirect you to the bank's or partner's website.</p>
+    <p>ApniNivesh contains links to third-party websites (bank portals, affiliate networks, payment platforms like Razorpay, PhonePe, Paytm). We are not responsible for the content, privacy practices, or terms of service of these external websites. Clicking on "Apply Now" or affiliate links will redirect you to the bank's or partner's website.</p>
 
     <h2>6. Calculator & Tool Accuracy</h2>
-    <p>Financial tools on Kriyapay (EMI Calculator, Eligibility Checker, Budget Planner, Compound Interest Calculator, etc.) provide <strong>estimated results</strong> based on the inputs you provide. Actual loan EMIs, interest amounts, and eligibility may differ based on the bank's assessment. These tools are for indicative purposes only.</p>
+    <p>Financial tools on ApniNivesh (EMI Calculator, Eligibility Checker, Budget Planner, Compound Interest Calculator, etc.) provide <strong>estimated results</strong> based on the inputs you provide. Actual loan EMIs, interest amounts, and eligibility may differ based on the bank's assessment. These tools are for indicative purposes only.</p>
 
     <h2>7. Limitation of Liability</h2>
-    <p>Inspirex Technologies Inc, its directors, employees, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use of Kriyapay, including but not limited to financial losses, data breaches by third parties, or reliance on information provided on this platform.</p>
+    <p>Inspirex Technologies INC, its directors, employees, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use of ApniNivesh, including but not limited to financial losses, data breaches by third parties, or reliance on information provided on this platform.</p>
 
     <h2>8. Contact</h2>
-    <p><strong>Inspirex Technologies Inc</strong><br />
-    Email: support@kriyapay.co.in<br />
-    Website: kriyapay.co.in</p>
+    <p><strong>Inspirex Technologies INC</strong><br />
+    Email: support@apninivesh.in<br />
+    Website: apninivesh.in</p>
   </PolicyLayout>
 );
 
 export const CookiePolicy = () => (
   <PolicyLayout title="Cookie Policy">
     <p>Last updated: March 8, 2026</p>
-    <p>This Cookie Policy explains how <strong>Kriyapay</strong> (operated by Inspirex Technologies Inc) uses cookies and similar tracking technologies on <strong>kriyapay.co.in</strong>.</p>
+    <p>This Cookie Policy explains how <strong>ApniNivesh</strong> (operated by Inspirex Technologies INC) uses cookies and similar tracking technologies on <strong>apninivesh.in</strong>.</p>
 
     <h2>1. What Are Cookies</h2>
     <p>Cookies are small text files stored on your device when you visit a website. They help the website remember your preferences, track your interactions, and enable certain functionality.</p>
@@ -248,10 +248,10 @@ export const CookiePolicy = () => (
     <h2>2. Types of Cookies We Use</h2>
     <ul>
       <li><strong>Essential Cookies:</strong> Required for core platform functionality including authentication, form submissions, and session management. These cannot be disabled</li>
-      <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with Kriyapay — which pages are most visited, which products get the most clicks, and where users drop off. This data is aggregated and anonymized</li>
+      <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with ApniNivesh — which pages are most visited, which products get the most clicks, and where users drop off. This data is aggregated and anonymized</li>
       <li><strong>Affiliate Tracking Cookies:</strong> Set by our affiliate partners to attribute commissions:
         <ul>
-          <li><strong>Cuelinks</strong> (Publisher ID: 211481) — Sets cookies to track click-throughs from Kriyapay to bank websites. Cookie duration: typically 30-90 days depending on the merchant program</li>
+          <li><strong>Cuelinks</strong> (Publisher ID: 211481) — Sets cookies to track click-throughs from ApniNivesh to bank websites. Cookie duration: typically 30-90 days depending on the merchant program</li>
           <li><strong>EarnKaro</strong> — Sets cookies for tracking conversions on linked products. Cookie duration varies by campaign</li>
         </ul>
       </li>
@@ -259,7 +259,7 @@ export const CookiePolicy = () => (
     </ul>
 
     <h2>3. Third-Party Cookies</h2>
-    <p>The following third parties may set cookies when you use Kriyapay:</p>
+    <p>The following third parties may set cookies when you use ApniNivesh:</p>
     <ul>
       <li><strong>Cuelinks (cdn0.cuelinks.com)</strong> — Affiliate link conversion and tracking</li>
       <li><strong>EarnKaro (ekaro.in)</strong> — Smart link tracking and attribution</li>
@@ -283,6 +283,6 @@ export const CookiePolicy = () => (
     <p><strong>Note:</strong> Disabling cookies may prevent affiliate links from working correctly and may affect certain features like theme preferences and comparison tools.</p>
 
     <h2>6. Contact</h2>
-    <p>For questions about our use of cookies, contact us at <strong>support@kriyapay.co.in</strong>.</p>
+    <p>For questions about our use of cookies, contact us at <strong>support@apninivesh.in</strong>.</p>
   </PolicyLayout>
 );

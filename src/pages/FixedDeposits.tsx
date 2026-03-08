@@ -30,7 +30,7 @@ const FixedDeposits = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEOHead title="Best Fixed Deposit Rates in India 2026 | KriyaPay" description="Compare FD interest rates from SBI, HDFC, ICICI & more." canonical="https://kriyapay.lovable.app/fixed-deposits" />
+      <SEOHead title="Best Fixed Deposit Rates in India 2026 | ApniNivesh" description="Compare FD interest rates from SBI, HDFC, ICICI & more." canonical="https://apninivesh.in/fixed-deposits" />
       <Navbar />
       {isComingSoon ? (
         <CategoryComingSoon title="Fixed Deposits" description="Best FD rate comparisons are coming soon!" />
