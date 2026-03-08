@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { CreditCard, Sparkles } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import ReactMarkdown from "react-markdown";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const SPENDING_CATEGORIES = ["Shopping", "Travel", "Dining", "Fuel", "Bills & Utilities", "Groceries"];
 
@@ -72,10 +72,7 @@ const CreditCardFinder = () => {
     <ToolLayout title="AI Credit Card Finder" description="Tell us about yourself and AI finds the perfect card" icon={<CreditCard className="w-7 h-7 text-primary" />}>
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          <div>
-            <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Monthly Income</span><span className="font-semibold">₹{income.toLocaleString("en-IN")}</span></div>
-            <input type="range" min={10000} max={500000} step={5000} value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full accent-primary" />
-          </div>
+          <EditableSliderInput label="Monthly Income" value={income} onChange={setIncome} min={10000} max={500000} step={5000} prefix="₹" />
 
           <div>
             <p className="text-sm text-muted-foreground mb-2">Top Spending Categories</p>

@@ -6,6 +6,7 @@ import AnimatedCounter from "@/components/gamification/AnimatedCounter";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const InterestRateCalc = () => {
   const [principal, setPrincipal] = useState(100000);
@@ -29,16 +30,9 @@ const InterestRateCalc = () => {
       <StepIndicator steps={["Enter Amounts", "Set Period", "View Rates"]} current={finalAmount > principal ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Principal (₹)", value: principal, set: setPrincipal, min: 1000, max: 10000000, step: 1000 },
-            { label: "Final Amount (₹)", value: finalAmount, set: setFinalAmount, min: principal, max: 50000000, step: 1000 },
-            { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span></div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Principal" value={principal} onChange={setPrincipal} min={1000} max={10000000} step={1000} prefix="₹" />
+          <EditableSliderInput label="Final Amount" value={finalAmount} onChange={setFinalAmount} min={principal} max={50000000} step={1000} prefix="₹" />
+          <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
         </div>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">

@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getHomeLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const HomeLoanCalc = () => {
@@ -57,20 +58,11 @@ const HomeLoanCalc = () => {
       <StepIndicator steps={["Property Details", "View EMI", "Get Insights"]} current={loanAmount > 0 ? 2 : 1} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Property Value (₹)", value: amount, set: setAmount, min: 500000, max: 50000000, step: 100000 },
-            { label: "Down Payment (₹)", value: downPayment, set: setDownPayment, min: 0, max: amount * 0.8, step: 50000 },
-            { label: `Interest Rate (Best: SBI ${INDIAN_BENCHMARKS.homeLoanRates.sbi}%)`, value: rate, set: setRate, min: 5, max: 15, step: 0.1 },
-            { label: "Loan Tenure (Years)", value: years, set: setYears, min: 5, max: 30, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold text-foreground">{f.label.includes("Rate") || f.label.includes("Interest") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
-              </div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Property Value" value={amount} onChange={setAmount} min={500000} max={50000000} step={100000} prefix="₹" />
+          <EditableSliderInput label="Down Payment" value={downPayment} onChange={setDownPayment} min={0} max={amount * 0.8} step={50000} prefix="₹" />
+          <EditableSliderInput label={`Interest Rate (Best: SBI ${INDIAN_BENCHMARKS.homeLoanRates.sbi}%)`} value={rate} onChange={setRate} min={5} max={15} step={0.1} suffix="%" />
+          <EditableSliderInput label="Loan Tenure" value={years} onChange={setYears} min={5} max={30} step={1} suffix=" yrs" />
+
           <WhatIfSlider
             label="What if you increase down payment?"
             baseValue={downPayment}
@@ -84,7 +76,6 @@ const HomeLoanCalc = () => {
             }}
           />
 
-          {/* Bank rate comparison */}
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
             <p className="font-semibold text-foreground mb-2">🏦 Current Home Loan Rates (2025)</p>
             {Object.entries(INDIAN_BENCHMARKS.homeLoanRates).map(([bank, bankRate]) => (

@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getInvestmentInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const InvestmentReturnCalc = () => {
@@ -27,7 +28,6 @@ const InvestmentReturnCalc = () => {
   const multiplier = totalInvested > 0 ? totalValue / totalInvested : 0;
   const xirr = totalInvested > 0 ? ((Math.pow(totalValue / totalInvested, 1 / years) - 1) * 100) : 0;
 
-  // Real return after inflation
   const realReturn = rate - INDIAN_BENCHMARKS.avgInflation;
   const realValue = totalValue / Math.pow(1 + INDIAN_BENCHMARKS.avgInflation / 100, years);
 
@@ -50,19 +50,11 @@ const InvestmentReturnCalc = () => {
       <StepIndicator steps={["Investment Setup", "View Returns", "Plan Strategy"]} current={totalInvested > 0 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Initial Investment (₹)", value: initial, set: setInitial, min: 0, max: 10000000, step: 10000 },
-            { label: "Monthly SIP (₹)", value: monthly, set: setMonthly, min: 0, max: 200000, step: 500 },
-            { label: `Expected Return (Nifty 10yr: ${INDIAN_BENCHMARKS.sipReturns.nifty50_10yr}%)`, value: rate, set: setRate, min: 1, max: 30, step: 0.5 },
-            { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">{f.label}</span><span className="font-semibold">{f.label.includes("Return") || f.label.includes("Nifty") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span></div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Initial Investment" value={initial} onChange={setInitial} min={0} max={10000000} step={10000} prefix="₹" />
+          <EditableSliderInput label="Monthly SIP" value={monthly} onChange={setMonthly} min={0} max={200000} step={500} prefix="₹" />
+          <EditableSliderInput label={`Expected Return (Nifty 10yr: ${INDIAN_BENCHMARKS.sipReturns.nifty50_10yr}%)`} value={rate} onChange={setRate} min={1} max={30} step={0.5} suffix="%" />
+          <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
 
-          {/* Benchmark comparison */}
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
             <p className="font-semibold text-foreground mb-2">📊 Benchmark Returns (10-Year CAGR)</p>
             {[
@@ -103,7 +95,6 @@ const InvestmentReturnCalc = () => {
             ))}
           </div>
 
-          {/* Inflation-adjusted value */}
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-center">
             <p className="text-xs text-muted-foreground">Inflation-Adjusted Value (Real Worth)</p>
             <p className="text-xl font-bold text-amber-600">{fmt(realValue)}</p>

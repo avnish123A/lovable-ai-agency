@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getSavingsInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const SavingsCalc = () => {
@@ -42,21 +43,10 @@ const SavingsCalc = () => {
       <StepIndicator steps={["Set Savings", "View Growth", "Plan More"]} current={monthly > 500 ? (years > 1 ? 2 : 1) : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Monthly Savings (₹)", value: monthly, set: setMonthly, min: 500, max: 500000, step: 500 },
-            { label: `Expected Return (PPF: ${INDIAN_BENCHMARKS.ppfRate}%)`, value: rate, set: setRate, min: 1, max: 20, step: 0.5 },
-            { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold">{f.label.includes("Return") || f.label.includes("PPF") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
-              </div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Monthly Savings" value={monthly} onChange={setMonthly} min={500} max={500000} step={500} prefix="₹" />
+          <EditableSliderInput label={`Expected Return (PPF: ${INDIAN_BENCHMARKS.ppfRate}%)`} value={rate} onChange={setRate} min={1} max={20} step={0.5} suffix="%" />
+          <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
 
-          {/* Product rate comparison */}
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
             <p className="font-semibold text-foreground mb-2">📊 Where to Save (Current Rates)</p>
             {[
@@ -91,7 +81,6 @@ const SavingsCalc = () => {
             </div>
           </div>
 
-          {/* Inflation warning */}
           <div className={`rounded-xl border p-3 text-center ${realReturn > 2 ? "border-accent/20 bg-accent/5" : "border-amber-500/20 bg-amber-500/5"}`}>
             <p className="text-[10px] text-muted-foreground">Real Value (After {INDIAN_BENCHMARKS.avgInflation}% Inflation)</p>
             <p className={`text-lg font-bold ${realReturn > 2 ? "text-accent" : "text-amber-600"}`}>{fmt(realValue)}</p>

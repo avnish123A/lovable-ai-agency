@@ -7,6 +7,7 @@ import AchievementBadge from "@/components/gamification/AchievementBadge";
 import AIInsight from "@/components/gamification/AIInsight";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getBudgetInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const categories = [
@@ -28,17 +29,12 @@ const BudgetPlanner = () => {
   const remaining = 100 - total;
   const savingsPercent = allocations[7];
 
-  // Enhanced budget scoring with real benchmarks
   const budgetScore = useMemo(() => {
     let score = 0;
-    // Savings (40 pts): Benchmark is 20.3% (Indian avg)
     score += savingsPercent >= 30 ? 40 : savingsPercent >= 20 ? 35 : savingsPercent >= 15 ? 25 : savingsPercent * 1.5;
-    // Housing within limit (25 pts): Benchmark is 28%
     const housing = allocations[0];
     score += housing <= 28 ? 25 : housing <= 35 ? 18 : housing <= 40 ? 10 : 5;
-    // Budget balanced (20 pts)
     score += remaining >= 0 ? 20 : 0;
-    // Healthcare allocated (15 pts)
     score += allocations[4] >= 5 ? 15 : allocations[4] >= 3 ? 10 : 5;
     return Math.min(100, Math.round(score));
   }, [allocations, savingsPercent, remaining]);
@@ -49,9 +45,8 @@ const BudgetPlanner = () => {
 
   const aiInsights = useMemo(() => getBudgetInsights(income, allocations, categories.map(c => c.label)), [income, allocations]);
 
-  // 50-30-20 analysis
-  const needs = allocations[0] + allocations[3] + allocations[4]; // Housing + Utilities + Healthcare
-  const wants = allocations[1] + allocations[2] + allocations[5] + allocations[6]; // Food + Transport + Entertainment + Shopping
+  const needs = allocations[0] + allocations[3] + allocations[4];
+  const wants = allocations[1] + allocations[2] + allocations[5] + allocations[6];
   const saves = allocations[7] + remaining;
 
   return (
@@ -60,8 +55,7 @@ const BudgetPlanner = () => {
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <div className="mb-5">
-            <div className="flex justify-between text-sm mb-2"><span className="text-muted-foreground">Monthly Income (₹)</span><span className="font-semibold">{fmt(income)}</span></div>
-            <input type="range" min={10000} max={500000} step={5000} value={income} onChange={(e) => setIncome(Number(e.target.value))} className="w-full accent-primary" />
+            <EditableSliderInput label="Monthly Income" value={income} onChange={setIncome} min={10000} max={500000} step={5000} prefix="₹" />
           </div>
           <div className="space-y-3">
             {categories.map((cat, i) => (
@@ -69,7 +63,15 @@ const BudgetPlanner = () => {
                 <span className="text-lg w-6">{cat.emoji}</span>
                 <span className="text-sm text-muted-foreground w-24">{cat.label}</span>
                 <input type="range" min={0} max={50} step={1} value={allocations[i]} onChange={(e) => { const n = [...allocations]; n[i] = Number(e.target.value); setAllocations(n); }} className="flex-1 accent-primary" />
-                <span className="text-sm font-semibold w-10 text-right">{allocations[i]}%</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={50}
+                  value={allocations[i]}
+                  onChange={(e) => { const n = [...allocations]; n[i] = Math.min(50, Math.max(0, Number(e.target.value) || 0)); setAllocations(n); }}
+                  className="w-14 text-right text-sm font-semibold rounded-md border border-border bg-background px-1.5 py-0.5 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
+                />
+                <span className="text-xs text-muted-foreground">%</span>
               </div>
             ))}
           </div>
@@ -84,7 +86,6 @@ const BudgetPlanner = () => {
             {remaining > 0 && <p className="text-xs text-accent mt-1">✅ {remaining}% unallocated</p>}
           </div>
 
-          {/* 50-30-20 Analysis */}
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs font-semibold text-muted-foreground mb-3">50-30-20 Rule Analysis</p>
             <div className="space-y-2">

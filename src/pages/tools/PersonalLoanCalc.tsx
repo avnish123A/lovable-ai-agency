@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getPersonalLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const PersonalLoanCalc = () => {
@@ -58,21 +59,10 @@ const PersonalLoanCalc = () => {
       <StepIndicator steps={["Enter Details", "View EMI", "Compare Options"]} current={amount > 10000 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
-          {[
-            { label: "Loan Amount (₹)", value: amount, set: setAmount, min: 10000, max: 5000000, step: 10000 },
-            { label: `Interest Rate (Avg: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`, value: rate, set: setRate, min: 8, max: 30, step: 0.5 },
-            { label: "Tenure (Years)", value: years, set: setYears, min: 1, max: 7, step: 1 },
-          ].map((f) => (
-            <div key={f.label}>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold">{f.label.includes("Rate") || f.label.includes("Avg") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
-              </div>
-              <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
-            </div>
-          ))}
+          <EditableSliderInput label="Loan Amount" value={amount} onChange={setAmount} min={10000} max={5000000} step={10000} prefix="₹" />
+          <EditableSliderInput label={`Interest Rate (Avg: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`} value={rate} onChange={setRate} min={8} max={30} step={0.5} suffix="%" />
+          <EditableSliderInput label="Tenure" value={years} onChange={setYears} min={1} max={7} step={1} suffix=" yrs" />
 
-          {/* Rate comparison */}
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
             <p className="font-semibold text-foreground mb-2">🏦 Personal Loan Rate Range (2025)</p>
             <div className="flex justify-between text-muted-foreground"><span>Best (750+ CIBIL)</span><span className="font-semibold text-accent">{INDIAN_BENCHMARKS.personalLoanRates.low}%</span></div>
