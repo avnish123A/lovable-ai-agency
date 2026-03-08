@@ -311,10 +311,12 @@ export type Database = {
           deal_id: string
           device: string | null
           email: string
+          estimated_payout_date: string | null
           id: string
           ip_hash: string | null
           paid_at: string | null
           phone: string
+          public_note: string | null
           status: string
           tracking_id: string
           updated_at: string
@@ -330,10 +332,12 @@ export type Database = {
           deal_id: string
           device?: string | null
           email: string
+          estimated_payout_date?: string | null
           id?: string
           ip_hash?: string | null
           paid_at?: string | null
           phone: string
+          public_note?: string | null
           status?: string
           tracking_id: string
           updated_at?: string
@@ -349,10 +353,12 @@ export type Database = {
           deal_id?: string
           device?: string | null
           email?: string
+          estimated_payout_date?: string | null
           id?: string
           ip_hash?: string | null
           paid_at?: string | null
           phone?: string
+          public_note?: string | null
           status?: string
           tracking_id?: string
           updated_at?: string

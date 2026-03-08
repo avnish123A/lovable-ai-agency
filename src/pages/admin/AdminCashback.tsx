@@ -48,6 +48,8 @@ interface CashbackRequest {
   approved_at: string | null;
   paid_at: string | null;
   admin_notes: string | null;
+  public_note: string | null;
+  estimated_payout_date: string | null;
   device: string | null;
   ip_hash: string | null;
   created_at: string;
@@ -84,6 +86,8 @@ const AdminCashback = () => {
   const [selectedReqIds, setSelectedReqIds] = useState<Set<string>>(new Set());
   const [viewReq, setViewReq] = useState<CashbackRequest | null>(null);
   const [adminNote, setAdminNote] = useState("");
+  const [publicNote, setPublicNote] = useState("");
+  const [estimatedDate, setEstimatedDate] = useState("");
 
   const fetchData = async () => {
     const [dealsRes, reqRes] = await Promise.all([
@@ -158,8 +162,12 @@ const AdminCashback = () => {
   };
 
   const saveAdminNote = async (id: string) => {
-    const { error } = await supabase.from("cashback_requests" as any).update({ admin_notes: adminNote } as any).eq("id", id);
-    if (error) toast.error("Failed"); else toast.success("Note saved!");
+    const { error } = await supabase.from("cashback_requests" as any).update({ 
+      admin_notes: adminNote, 
+      public_note: publicNote || null,
+      estimated_payout_date: estimatedDate || null,
+    } as any).eq("id", id);
+    if (error) toast.error("Failed"); else toast.success("Notes & details saved!");
     fetchData();
   };
 
@@ -329,7 +337,7 @@ const AdminCashback = () => {
                     <td className="p-3"><Badge variant="outline" className={`text-xs ${statusColors[req.status] || ""}`}>{req.status}</Badge></td>
                     <td className="p-3 text-muted-foreground text-xs whitespace-nowrap">{new Date(req.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
                     <td className="p-3 text-right space-x-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setViewReq(req); setAdminNote(req.admin_notes || ""); }}><Eye className="w-3.5 h-3.5" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setViewReq(req); setAdminNote(req.admin_notes || ""); setPublicNote(req.public_note || ""); setEstimatedDate(req.estimated_payout_date || ""); }}><Eye className="w-3.5 h-3.5" /></Button>
                       {req.status === "pending" && (<>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-emerald-600" onClick={() => updateRequestStatus(req.id, "approved")}><CheckCircle className="w-3.5 h-3.5" /></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => updateRequestStatus(req.id, "rejected")}><XCircle className="w-3.5 h-3.5" /></Button>
@@ -547,12 +555,33 @@ const AdminCashback = () => {
               )}
             </div>
 
-            {/* Admin Notes */}
-            <div>
-              <Label>Admin Notes</Label>
-              <Textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} placeholder="Add internal notes about this request..." rows={3} />
-              <Button size="sm" className="mt-2" onClick={() => saveAdminNote(viewReq.id)}>Save Note</Button>
+            {/* Public Note (visible to user on tracker) */}
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Public Note (Visible to User)</h4>
+              <div className="flex gap-2 flex-wrap mb-2">
+                {["Transaction not verified", "Duplicate request", "Invalid UPI ID", "Cashback confirmed — processing soon", "Payout sent via UPI"].map(preset => (
+                  <button key={preset} onClick={() => setPublicNote(preset)} className="text-[10px] px-2 py-1 rounded-md bg-muted border border-border hover:bg-muted/80 text-muted-foreground">
+                    {preset}
+                  </button>
+                ))}
+              </div>
+              <Textarea value={publicNote} onChange={e => setPublicNote(e.target.value)} placeholder="This note will be shown to the user on the tracking page..." rows={2} />
             </div>
+
+            {/* Estimated Payout Date */}
+            <div>
+              <Label>Estimated Payout Date</Label>
+              <Input type="date" value={estimatedDate} onChange={e => setEstimatedDate(e.target.value)} />
+              <p className="text-[10px] text-muted-foreground mt-1">Shown to user if status is pending or approved</p>
+            </div>
+
+            {/* Admin Notes (internal only) */}
+            <div>
+              <Label>Admin Notes (Internal Only)</Label>
+              <Textarea value={adminNote} onChange={e => setAdminNote(e.target.value)} placeholder="Internal notes — not visible to user..." rows={3} />
+            </div>
+
+            <Button className="w-full" onClick={() => saveAdminNote(viewReq.id)}>Save All Notes & Details</Button>
           </div>}
         </DialogContent>
       </Dialog>
