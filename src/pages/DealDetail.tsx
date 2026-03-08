@@ -188,7 +188,7 @@ const DealDetail = () => {
       <LeadCaptureDialog
         open={leadOpen}
         onOpenChange={setLeadOpen}
-        deal={deal}
+        deal={deal ? { ...deal, is_finance_deal: true } : null}
         onSuccess={handleLeadSuccess}
       />
     </div>

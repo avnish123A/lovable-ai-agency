@@ -74,7 +74,7 @@ const FinanceDeals = () => {
   };
 
   const handleApply = (deal: any) => {
-    setLeadDeal(deal);
+    setLeadDeal({ ...deal, is_finance_deal: true });
     setLeadOpen(true);
   };
 

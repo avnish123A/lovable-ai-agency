@@ -40,8 +40,10 @@ const Loans = () => {
       id: loan.id,
       title: loan.loan_name,
       merchant: loan.bank_name,
+      bank_name: loan.bank_name,
       subcategory: "loans",
       tracking_link: loan.apply_link || null,
+      is_finance_deal: false,
     };
     setSelectedLoan(dealLike);
     setDialogOpen(true);

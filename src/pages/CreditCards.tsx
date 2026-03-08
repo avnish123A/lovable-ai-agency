@@ -43,8 +43,10 @@ const CreditCards = () => {
       id: card.id,
       title: card.card_name,
       merchant: card.bank_name,
+      bank_name: card.bank_name,
       subcategory: "credit_cards",
       tracking_link: card.apply_link || null,
+      is_finance_deal: false,
     };
     setSelectedCard(dealLike);
     setDialogOpen(true);
