@@ -10,7 +10,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { MaintenanceProvider, useMaintenanceMode } from "@/contexts/MaintenanceContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import KriyaAIChatbot from "./components/KriyaAIChatbot";
+import NiveshAIChatbot from "./components/NiveshAIChatbot";
 import MaintenancePage from "./pages/Maintenance";
 
 // Lazy load pages
@@ -168,7 +168,7 @@ const App = () => (
         <AuthProvider>
           <MaintenanceProvider>
             <AnimatedRoutes />
-            <KriyaAIChatbot />
+            <NiveshAIChatbot />
           </MaintenanceProvider>
         </AuthProvider>
       </BrowserRouter>

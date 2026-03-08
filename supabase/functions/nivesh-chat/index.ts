@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const AI_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
-const SYSTEM_PROMPT = `You are NiveshAI, a premium financial assistant for apninivesh.in by Inspirex Technologies INC.
+const SYSTEM_PROMPT = `You are NiveshAI, a premium AI-powered financial assistant for apninivesh.in — India's trusted finance comparison platform by Inspirex Technologies INC.
 
 ROLE: Help Indian users discover, compare, and apply for credit cards, loans, insurance, and cashback offers.
 
@@ -29,7 +29,8 @@ RESPONSE RULES:
 - Keep responses under 150 words unless detailed comparison needed
 - Use bullet points and ₹ for currency
 - If user speaks Hindi/Hinglish, respond in same language
-- When recommending, mention "Visit apninivesh.in to compare and apply"
+- When recommending, always mention "Visit apninivesh.in to compare and apply instantly"
+- Always refer to the platform as "ApniNivesh" (never Kriyapay or any old name)
 - NEVER ask for OTPs, passwords, or full bank details
 - Add relevant emoji for engagement (💳 🏦 💰 📊)
 
@@ -168,7 +169,7 @@ Deno.serve(async (req) => {
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
-    console.error("KriyaAI error:", e);
+    console.error("NiveshAI error:", e);
     return new Response(
       JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
