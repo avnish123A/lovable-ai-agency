@@ -168,29 +168,29 @@ const AdminSettings = () => {
     setComingSoon(updated);
     setSavingComingSoon(true);
     try {
+      const days = Number(updated.countdown_days) || 0;
+      const hours = Number(updated.countdown_hours) || 0;
+      const minutes = Number(updated.countdown_minutes) || 0;
       const target = new Date(
-        Date.now() +
-        updated.countdown_days * 86400000 +
-        updated.countdown_hours * 3600000 +
-        updated.countdown_minutes * 60000
+        Date.now() + days * 86400000 + hours * 3600000 + minutes * 60000
       ).toISOString();
       const { error } = await supabase
         .from("site_settings")
         .upsert(
-          { key: "coming_soon_mode", value: { ...updated, countdown_target: target } as any, updated_at: new Date().toISOString() } as any,
+          { key: "coming_soon_mode", value: { ...updated, countdown_days: days, countdown_hours: hours, countdown_minutes: minutes, countdown_target: target } as any, updated_at: new Date().toISOString() } as any,
           { onConflict: "key" }
         );
       if (error) {
         console.error("Toggle coming soon error:", error);
         toast.error("Failed to toggle coming soon mode");
-        setComingSoon({ ...updated, enabled: !updated.enabled }); // revert
+        setComingSoon({ ...updated, enabled: !updated.enabled });
       } else {
         toast.success(updated.enabled ? "Coming Soon mode ON — site redirects to launch page" : "Coming Soon mode OFF — site is live");
       }
     } catch (err) {
       console.error("Toggle coming soon exception:", err);
       toast.error("Failed to toggle coming soon mode");
-      setComingSoon({ ...updated, enabled: !updated.enabled }); // revert
+      setComingSoon({ ...updated, enabled: !updated.enabled });
     } finally {
       setSavingComingSoon(false);
     }
