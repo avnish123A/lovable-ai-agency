@@ -86,6 +86,8 @@ const AdminCashback = () => {
   const [selectedReqIds, setSelectedReqIds] = useState<Set<string>>(new Set());
   const [viewReq, setViewReq] = useState<CashbackRequest | null>(null);
   const [adminNote, setAdminNote] = useState("");
+  const [publicNote, setPublicNote] = useState("");
+  const [estimatedDate, setEstimatedDate] = useState("");
 
   const fetchData = async () => {
     const [dealsRes, reqRes] = await Promise.all([
