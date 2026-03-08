@@ -143,6 +143,92 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_clicks: {
+        Row: {
+          clicked_at: string | null
+          deal_id: string
+          id: string
+          ip_hash: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          clicked_at?: string | null
+          deal_id: string
+          id?: string
+          ip_hash?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          clicked_at?: string | null
+          deal_id?: string
+          id?: string
+          ip_hash?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_clicks_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "finance_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      finance_deals: {
+        Row: {
+          cashback: string | null
+          category: string
+          clicks: number | null
+          created_at: string | null
+          deal_id: string
+          description: string | null
+          expiry_date: string | null
+          id: string
+          is_active: boolean | null
+          last_updated: string | null
+          merchant: string
+          offer_type: string | null
+          subcategory: string | null
+          title: string
+          tracking_link: string | null
+        }
+        Insert: {
+          cashback?: string | null
+          category?: string
+          clicks?: number | null
+          created_at?: string | null
+          deal_id: string
+          description?: string | null
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          merchant: string
+          offer_type?: string | null
+          subcategory?: string | null
+          title: string
+          tracking_link?: string | null
+        }
+        Update: {
+          cashback?: string | null
+          category?: string
+          clicks?: number | null
+          created_at?: string | null
+          deal_id?: string
+          description?: string | null
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          merchant?: string
+          offer_type?: string | null
+          subcategory?: string | null
+          title?: string
+          tracking_link?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           company: string | null
