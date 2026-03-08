@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  LayoutDashboard, CreditCard, Tag, Users, Building, Settings, LogOut, Wallet, MessageSquare, Gift, Sparkles, BarChart3
+  LayoutDashboard, CreditCard, Tag, Users, Building, Settings, LogOut, Wallet, MessageSquare, Gift, Sparkles, BarChart3, Building2, FolderOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,8 @@ const links = [
   { label: "Finance Deals", href: "/admin/deals", icon: Tag },
   { label: "Cashback Offers", href: "/admin/cashback", icon: Gift },
   { label: "Leads", href: "/admin/leads", icon: Users },
+  { label: "Banks", href: "/admin/banks", icon: Building2 },
+  { label: "Media Library", href: "/admin/media", icon: FolderOpen },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { label: "AI Tools", href: "/admin/ai-tools", icon: Sparkles },
