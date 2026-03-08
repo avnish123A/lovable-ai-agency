@@ -6,11 +6,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useComingSoonMode } from "@/contexts/ComingSoonContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Rocket, Mail, Bell, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useComingSoonMode } from "@/contexts/ComingSoonContext";
 
 /* ─── Countdown Digit ─── */
 const CountdownDigit = ({ value, label }: { value: number; label: string }) => (
