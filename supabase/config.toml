@@ -2,3 +2,9 @@ project_id = "hkhssvlinxvoxrosdzfu"
 
 [functions.ai-recommend]
 verify_jwt = false
+
+[functions.fetch-cuelinks]
+verify_jwt = false
+
+[functions.track-click]
+verify_jwt = false
