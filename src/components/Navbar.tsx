@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Bot } from "lucide-react";
+import { Menu, X, Diamond } from "lucide-react";
 
-const navItems = ["Services", "About", "Work", "Contact"];
+const navItems = ["Services", "Portfolio", "About", "Pricing", "Contact"];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,35 +18,33 @@ const Navbar = () => {
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
         scrolled
-          ? "border-b border-border/50 backdrop-blur-2xl bg-background/90 shadow-glow-sm"
+          ? "border-b border-border/50 backdrop-blur-2xl bg-background/80 shadow-elegant"
           : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        <a href="#" className="flex items-center gap-2 font-heading text-xl font-bold tracking-tight text-foreground">
-          <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-            <Bot size={16} className="text-primary" />
-          </div>
+      <div className="container mx-auto flex items-center justify-between py-5 px-6">
+        <a href="#" className="flex items-center gap-2.5 font-heading text-xl font-bold tracking-tight text-foreground">
+          <Diamond size={20} className="text-primary" />
           NEXUS<span className="text-gradient">AI</span>
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-10">
           {navItems.map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors duration-300 relative group"
+              className="text-sm font-body font-medium text-muted-foreground hover:text-primary transition-colors duration-500 tracking-wide uppercase"
+              style={{ fontSize: "11px", letterSpacing: "0.15em" }}
             >
               {item}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-primary group-hover:w-full transition-all duration-300" />
             </a>
           ))}
           <a
             href="#contact"
-            className="px-5 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:shadow-glow transition-all duration-300"
+            className="px-6 py-2.5 text-xs font-semibold uppercase tracking-widest rounded-sm bg-primary text-primary-foreground hover:shadow-glow transition-all duration-500"
           >
             Get Started
           </a>
@@ -71,14 +69,14 @@ const Navbar = () => {
                   key={item}
                   href={`#${item.toLowerCase()}`}
                   onClick={() => setIsOpen(false)}
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
                 >
                   {item}
                 </a>
               ))}
               <a
                 href="#contact"
-                className="px-5 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground text-center"
+                className="px-5 py-2.5 text-xs font-semibold uppercase tracking-widest rounded-sm bg-primary text-primary-foreground text-center"
               >
                 Get Started
               </a>
