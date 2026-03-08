@@ -32,7 +32,7 @@ const ComingSoon = () => {
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
 
-  const launchDate = new Date("2025-07-01T00:00:00");
+  const launchDate = new Date("2026-06-01T00:00:00");
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
