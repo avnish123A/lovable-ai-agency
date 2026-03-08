@@ -91,7 +91,6 @@ const HeroSection = () => {
                   { name: "ICICI", logo: "/logos/icici.png" },
                   { name: "Axis", logo: "/logos/axis.png" },
                   { name: "SBI", logo: "/logos/sbi.png" },
-                  { name: "Kotak", logo: "/logos/kotak.png" },
                 ].map((bank, i) => (
                   <motion.div
                     key={bank.name}
