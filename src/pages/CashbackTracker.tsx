@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Loader2, Clock, CheckCircle2, XCircle, IndianRupee, Calendar, Phone, Mail, Hash, ArrowRight, ShieldCheck } from "lucide-react";
+import { Search, Loader2, Clock, CheckCircle2, XCircle, IndianRupee, Calendar, Phone, Mail, Hash, ArrowRight, ShieldCheck, MessageCircle, CalendarClock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,8 @@ interface TrackedRequest {
   created_at: string;
   approved_at: string | null;
   paid_at: string | null;
+  public_note: string | null;
+  estimated_payout_date: string | null;
   deal: {
     merchant_name: string;
     offer_title: string;
