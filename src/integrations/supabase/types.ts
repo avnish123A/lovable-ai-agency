@@ -177,6 +177,7 @@ export type Database = {
       }
       finance_deals: {
         Row: {
+          ai_description: string | null
           cashback: string | null
           category: string
           clicks: number | null
@@ -194,6 +195,7 @@ export type Database = {
           tracking_link: string | null
         }
         Insert: {
+          ai_description?: string | null
           cashback?: string | null
           category?: string
           clicks?: number | null
@@ -211,6 +213,7 @@ export type Database = {
           tracking_link?: string | null
         }
         Update: {
+          ai_description?: string | null
           cashback?: string | null
           category?: string
           clicks?: number | null
@@ -231,45 +234,62 @@ export type Database = {
       }
       leads: {
         Row: {
+          city: string | null
           company: string | null
           created_at: string
+          deal_id: string | null
           email: string
           id: string
           name: string
           notes: string | null
           phone: string | null
+          salary_range: string | null
           service: string | null
           status: string
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          city?: string | null
           company?: string | null
           created_at?: string
+          deal_id?: string | null
           email: string
           id?: string
           name: string
           notes?: string | null
           phone?: string | null
+          salary_range?: string | null
           service?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          city?: string | null
           company?: string | null
           created_at?: string
+          deal_id?: string | null
           email?: string
           id?: string
           name?: string
           notes?: string | null
           phone?: string | null
+          salary_range?: string | null
           service?: string | null
           status?: string
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "finance_deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       loan_products: {
         Row: {
