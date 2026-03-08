@@ -35,10 +35,12 @@ const ComingSoon = () => {
   const [subscribed, setSubscribed] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  // Count down to the saved target timestamp
   useEffect(() => {
-    const launchDate = new Date(settings.launch_date + "T00:00:00");
+    const target = new Date(settings.countdown_target).getTime();
+
     const tick = () => {
-      const diff = launchDate.getTime() - Date.now();
+      const diff = target - Date.now();
       if (diff > 0) {
         setTimeLeft({
           days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -53,7 +55,7 @@ const ComingSoon = () => {
     tick();
     const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, [settings.launch_date]);
+  }, [settings.countdown_target]);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,17 +87,15 @@ const ComingSoon = () => {
           <Rocket className="w-8 h-8 text-primary" />
         </motion.div>
 
-        {/* Dynamic headline from admin */}
         <h1 className="text-4xl md:text-5xl font-heading font-extrabold text-foreground mb-3 tracking-tight">
           {settings.headline || "Coming Soon"}
         </h1>
 
-        {/* Dynamic description from admin */}
         <p className="text-muted-foreground text-base md:text-lg mb-10 max-w-sm mx-auto leading-relaxed">
           {settings.description || "We're building something great. Be the first to experience it."}
         </p>
 
-        {/* Countdown using dynamic launch_date */}
+        {/* Custom countdown from admin */}
         <div className="flex justify-center gap-6 sm:gap-10 mb-10">
           <CountdownDigit value={timeLeft.days} label="Days" />
           <CountdownDigit value={timeLeft.hours} label="Hours" />

@@ -5,7 +5,10 @@ interface ComingSoonSettings {
   enabled: boolean;
   headline: string;
   description: string;
-  launch_date: string;
+  countdown_days: number;
+  countdown_hours: number;
+  countdown_minutes: number;
+  countdown_target: string; // ISO timestamp to count down to
 }
 
 interface ComingSoonContextType {
@@ -19,7 +22,10 @@ const defaultSettings: ComingSoonSettings = {
   enabled: false,
   headline: "Something Powerful is Coming",
   description: "We're building the future of financial comparison. Be the first to know.",
-  launch_date: "2025-04-15",
+  countdown_days: 30,
+  countdown_hours: 0,
+  countdown_minutes: 0,
+  countdown_target: new Date(Date.now() + 30 * 86400000).toISOString(),
 };
 
 const ComingSoonContext = createContext<ComingSoonContextType>({
@@ -44,7 +50,16 @@ export const ComingSoonProvider = ({ children }: { children: ReactNode }) => {
         .maybeSingle();
 
       if (data?.value) {
-        setSettings(data.value as unknown as ComingSoonSettings);
+        const val = data.value as Record<string, unknown>;
+        setSettings({
+          enabled: !!val.enabled,
+          headline: (val.headline as string) || defaultSettings.headline,
+          description: (val.description as string) || defaultSettings.description,
+          countdown_days: (val.countdown_days as number) ?? 30,
+          countdown_hours: (val.countdown_hours as number) ?? 0,
+          countdown_minutes: (val.countdown_minutes as number) ?? 0,
+          countdown_target: (val.countdown_target as string) || defaultSettings.countdown_target,
+        });
       }
     } catch (error) {
       console.error("Error fetching coming soon settings:", error);
