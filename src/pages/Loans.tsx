@@ -13,6 +13,14 @@ import SEOHead from "@/components/SEOHead";
 import CategoryComingSoon from "@/components/CategoryComingSoon";
 import { useCategoryComingSoon } from "@/hooks/useCategoryComingSoon";
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  }),
+};
+
 const Loans = () => {
   const [loans, setLoans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,19 +74,30 @@ const Loans = () => {
         <CategoryComingSoon title="Loans" description="Best loan comparisons are coming soon!" />
       ) : (
       <>
-      <section className="pt-28 pb-24">
-        <div className="container mx-auto px-4 md:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
+      <section className="pt-28 pb-24 relative overflow-hidden">
+        <motion.div
+          animate={{ y: [0, -25, 0], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-32 left-[5%] w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+        />
+        <motion.div
+          animate={{ y: [0, 20, 0], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute bottom-20 right-[10%] w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none"
+        />
+
+        <div className="container mx-auto px-4 md:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
               Compare <span className="text-gradient">Personal Loans</span>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto mb-4">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-muted-foreground max-w-xl mx-auto mb-4">
               Find the best interest rates and get pre-approved for personal loans from top banks.
-            </p>
-            <div className="flex items-center justify-center gap-4">
+            </motion.p>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="flex items-center justify-center gap-4">
               <TrustBadge variant="verified" />
               <TrustBadge variant="secure" />
-            </div>
+            </motion.div>
           </motion.div>
 
           <AffiliateDisclaimer variant="banner" className="mb-8" />
@@ -86,7 +105,20 @@ const Loans = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-2xl border border-border bg-card p-6 animate-pulse h-80" />
+                <div key={i} className="rounded-2xl border border-border bg-card p-6 h-80">
+                  <div className="animate-pulse space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-muted" />
+                      <div className="h-4 bg-muted rounded w-24" />
+                    </div>
+                    <div className="h-24 bg-muted rounded-xl" />
+                    <div className="space-y-2">
+                      <div className="h-3 bg-muted rounded" />
+                      <div className="h-3 bg-muted rounded" />
+                      <div className="h-3 bg-muted rounded w-2/3" />
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           ) : (
@@ -94,13 +126,17 @@ const Loans = () => {
               {loans.map((loan, i) => (
                 <motion.div
                   key={loan.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06 }}
-                  className="rounded-2xl border border-border bg-card shadow-card card-hover flex flex-col"
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  variants={cardVariants}
+                  whileHover={{ y: -8, transition: { duration: 0.25 } }}
+                  className="rounded-2xl border border-border bg-card shadow-card flex flex-col group relative overflow-hidden"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-b from-primary/0 to-primary/0 group-hover:from-primary/3 group-hover:to-accent/3 transition-all duration-500 rounded-2xl pointer-events-none" />
+
                   {/* Bank header */}
-                  <div className="flex items-center justify-between px-6 pt-5 pb-3">
+                  <div className="flex items-center justify-between px-6 pt-5 pb-3 relative z-10">
                     <div className="flex items-center gap-3">
                       <BankLogo bankName={loan.bank_name} size="md" />
                       <div>
@@ -110,20 +146,30 @@ const Loans = () => {
                     </div>
                   </div>
 
-                  {/* Product image or Interest rate highlight */}
-                  {loan.image_url ? (
-                    <div className="mx-6 mb-4">
-                      <img src={loan.image_url} alt={loan.loan_name} className="w-full h-24 object-contain rounded-lg" />
-                    </div>
-                  ) : (
-                    <div className="mx-6 mb-4 p-4 rounded-xl bg-primary/5 border border-primary/10 text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Starting Interest Rate</p>
-                      <p className="text-3xl font-heading font-bold text-primary">{loan.interest_rate}%</p>
-                      <p className="text-xs text-muted-foreground">per annum</p>
-                    </div>
-                  )}
+                  {/* Interest rate highlight */}
+                  <div className="relative z-10">
+                    {loan.image_url ? (
+                      <div className="mx-6 mb-4">
+                        <img src={loan.image_url} alt={loan.loan_name} className="w-full h-24 object-contain rounded-lg" />
+                      </div>
+                    ) : (
+                      <motion.div 
+                        whileHover={{ scale: 1.02 }}
+                        className="mx-6 mb-4 p-4 rounded-xl bg-primary/5 border border-primary/10 text-center relative overflow-hidden"
+                      >
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent"
+                          animate={{ x: ["-100%", "200%"] }}
+                          transition={{ duration: 4, repeat: Infinity, ease: "linear", repeatDelay: 5 }}
+                        />
+                        <p className="text-xs text-muted-foreground mb-1 relative z-10">Starting Interest Rate</p>
+                        <p className="text-3xl font-heading font-bold text-primary relative z-10">{loan.interest_rate}%</p>
+                        <p className="text-xs text-muted-foreground relative z-10">per annum</p>
+                      </motion.div>
+                    )}
+                  </div>
 
-                  <div className="px-6 pb-6 flex flex-col flex-1">
+                  <div className="px-6 pb-6 flex flex-col flex-1 relative z-10">
                     <h3 className="font-heading font-bold text-foreground text-base mb-4">{loan.loan_name}</h3>
 
                     <div className="space-y-2.5 mb-4">
@@ -155,12 +201,14 @@ const Loans = () => {
                     </div>
 
                     <div className="mt-auto pt-4 border-t border-border">
-                      <Button 
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
-                        onClick={() => handleApply(loan)}
-                      >
-                        Apply Now <ExternalLink className="w-4 h-4 ml-2" />
-                      </Button>
+                      <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                        <Button 
+                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                          onClick={() => handleApply(loan)}
+                        >
+                          Apply Now <ExternalLink className="w-4 h-4 ml-2" />
+                        </Button>
+                      </motion.div>
                     </div>
                   </div>
                 </motion.div>
@@ -173,7 +221,6 @@ const Loans = () => {
       </section>
       <Footer />
 
-      {/* Lead Capture Dialog */}
       <LeadCaptureDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}

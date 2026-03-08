@@ -31,40 +31,86 @@ const tools = [
   { icon: Landmark, title: "Retirement Planner", desc: "Plan your retirement corpus", path: "/tools/retirement-planner", color: "from-indigo-500/15 to-blue-500/15", iconColor: "text-indigo-500", ai: true },
 ];
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.04, delayChildren: 0.1 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } },
+};
+
 const FinanceTools = () => (
   <div className="min-h-screen bg-background">
     <Navbar />
-    <section className="pt-28 pb-20">
-      <div className="container mx-auto px-4 md:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-14">
+    <section className="pt-28 pb-20 relative overflow-hidden">
+      {/* Background accents */}
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-40 right-[10%] w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        className="absolute bottom-20 left-[5%] w-72 h-72 bg-accent/5 rounded-full blur-3xl pointer-events-none"
+      />
+
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center mb-14">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-bold mb-5"
+          >
+            <Sparkles className="w-4 h-4" />
+            20+ Free Tools
+          </motion.div>
           <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
             Finance <span className="text-gradient">Power Tools</span>
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            20+ interactive calculators and AI-powered tools to help you make smarter financial decisions.
+            Interactive calculators and AI-powered tools to help you make smarter financial decisions.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {tools.map((t, i) => (
-            <motion.div
-              key={t.path}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }}
-            >
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+        >
+          {tools.map((t) => (
+            <motion.div key={t.path} variants={item} whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.2 } }}>
               <Link
                 to={t.path}
-                className={`group block rounded-2xl border border-border bg-gradient-to-br ${t.color} p-5 card-hover transition-all h-full`}
+                className={`group block rounded-2xl border border-border bg-gradient-to-br ${t.color} p-5 transition-all h-full hover:shadow-card hover:border-primary/30 relative overflow-hidden`}
               >
-                <div className="flex items-start gap-3">
-                  <div className={`w-10 h-10 rounded-xl bg-card/80 border border-border/50 flex items-center justify-center shrink-0 ${t.iconColor} group-hover:scale-110 transition-transform`}>
+                {/* Shimmer on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 translate-x-[-100%] group-hover:translate-x-[100%]" style={{ transition: 'transform 0.8s ease, opacity 0.3s ease' }} />
+
+                <div className="flex items-start gap-3 relative z-10">
+                  <motion.div 
+                    whileHover={{ rotate: [0, -8, 8, 0] }}
+                    transition={{ duration: 0.4 }}
+                    className={`w-10 h-10 rounded-xl bg-card/80 border border-border/50 flex items-center justify-center shrink-0 ${t.iconColor} shadow-sm`}
+                  >
                     <t.icon className="w-5 h-5" />
-                  </div>
+                  </motion.div>
                   <div className="min-w-0">
                     <h3 className="font-heading font-semibold text-sm text-foreground flex items-center gap-1.5">
                       {t.title}
-                      {t.ai && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-accent/20 text-accent font-bold">AI</span>}
+                      {t.ai && (
+                        <motion.span 
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="text-[9px] px-1.5 py-0.5 rounded-full bg-accent/20 text-accent font-bold"
+                        >
+                          AI
+                        </motion.span>
+                      )}
                     </h3>
                     <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{t.desc}</p>
                   </div>
@@ -72,7 +118,7 @@ const FinanceTools = () => (
               </Link>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
     <Footer />

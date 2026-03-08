@@ -90,16 +90,24 @@ const Contact = () => {
     <div className="min-h-screen bg-background">
       <SEOHead title="Contact Us - ApniNivesh | Financial Services Support" description="Get in touch with ApniNivesh for credit cards, loans, insurance queries. We respond within 24 hours." canonical="https://apninivesh.in/contact" />
       <Navbar />
-      <section className="pt-28 pb-24">
-        <div className="container mx-auto px-4 md:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
+      <section className="pt-28 pb-24 relative overflow-hidden">
+        <motion.div
+          animate={{ y: [0, -20, 0], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 right-[10%] w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+        />
+
+        <div className="container mx-auto px-4 md:px-8 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Get in <span className="text-gradient">Touch</span></h1>
-            <p className="text-muted-foreground max-w-xl mx-auto mb-4">Have a question about our financial products or partnership opportunities? We'd love to hear from you.</p>
-            <TrustBadge variant="secure" />
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-muted-foreground max-w-xl mx-auto mb-4">Have a question about our financial products or partnership opportunities? We'd love to hear from you.</motion.p>
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
+              <TrustBadge variant="secure" />
+            </motion.div>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-5xl mx-auto">
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 space-y-6">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.6 }} className="lg:col-span-2 space-y-6">
               <div className="p-6 rounded-2xl border border-border bg-card shadow-card">
                 <h3 className="font-heading font-bold text-foreground mb-4">Contact Information</h3>
                 <div className="space-y-4">
@@ -146,8 +154,14 @@ const Contact = () => {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-3">
-              <div className="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-card">
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className="lg:col-span-3">
+              <div className="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-card relative overflow-hidden">
+                {/* Subtle shimmer */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/3 to-transparent pointer-events-none"
+                  animate={{ x: ["-100%", "200%"] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "linear", repeatDelay: 8 }}
+                />
                 {submitted ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4"><Send className="w-8 h-8 text-accent" /></div>
