@@ -7,7 +7,6 @@ const footerLinks = {
     { label: "Credit Cards", href: "/credit-cards" },
     { label: "Personal Loans", href: "/loans" },
     { label: "Compare Products", href: "/compare" },
-    { label: "Finance Deals", href: "/finance-deals" },
     { label: "Cashback Offers", href: "/cashback" },
   ],
   Company: [

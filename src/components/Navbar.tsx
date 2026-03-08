@@ -7,9 +7,7 @@ import { Button } from "@/components/ui/button";
 const navLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
   { label: "Loans", href: "/loans" },
-  { label: "Insurance", href: "/finance-deals" },
   { label: "Finance Tools", href: "/tools" },
-  { label: "Deals", href: "/finance-deals" },
   { label: "About", href: "/about" },
 ];
 
