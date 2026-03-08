@@ -65,9 +65,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow-sm">
-                <Wallet className="w-5 h-5 text-primary-foreground" />
-              </div>
+              <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-9 w-9 object-contain" />
               <span className="text-xl font-heading font-bold text-foreground">
                 Apni<span className="text-accent">Nivesh</span>
               </span>
