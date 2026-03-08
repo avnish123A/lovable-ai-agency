@@ -11,6 +11,7 @@ import Loans from "./pages/Loans";
 import Cashback from "./pages/Cashback";
 import EMICalculator from "./pages/EMICalculator";
 import EligibilityChecker from "./pages/EligibilityChecker";
+import FinanceDeals from "./pages/FinanceDeals";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const AnimatedRoutes = () => {
           <Route path="/cashback" element={<Cashback />} />
           <Route path="/emi-calculator" element={<EMICalculator />} />
           <Route path="/eligibility" element={<EligibilityChecker />} />
+          <Route path="/finance-deals" element={<FinanceDeals />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
