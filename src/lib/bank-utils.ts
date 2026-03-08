@@ -1,37 +1,37 @@
 // Bank logo and branding utilities
-// Uses Clearbit for logos and maps bank names to brand colors
+// Uses img.logo.dev for logos and maps bank names to brand colors
 
-const BANK_DOMAINS: Record<string, string> = {
-  "HDFC Bank": "hdfcbank.com",
-  "HDFC": "hdfcbank.com",
-  "ICICI Bank": "icicibank.com",
-  "ICICI": "icicibank.com",
-  "Axis Bank": "axisbank.com",
-  "Axis": "axisbank.com",
-  "SBI": "sbicard.com",
-  "SBI Cards": "sbicard.com",
-  "State Bank of India": "sbi.co.in",
-  "Kotak Mahindra Bank": "kotak.com",
-  "Kotak Bank": "kotak.com",
-  "Kotak": "kotak.com",
-  "IndusInd Bank": "indusind.com",
-  "IndusInd": "indusind.com",
-  "Yes Bank": "yesbank.in",
-  "RBL Bank": "rblbank.com",
-  "RBL": "rblbank.com",
-  "IDFC First Bank": "idfcfirstbank.com",
-  "IDFC First": "idfcfirstbank.com",
-  "Federal Bank": "federalbank.co.in",
-  "AU Small Finance Bank": "aubank.in",
-  "Bajaj Finserv": "bajajfinserv.in",
-  "Bajaj Finance": "bajajfinserv.in",
-  "Tata Capital": "tatacapital.com",
-  "Standard Chartered": "sc.com",
-  "Citi Bank": "citibank.co.in",
-  "Citibank": "citibank.co.in",
-  "HSBC": "hsbc.co.in",
-  "American Express": "americanexpress.com",
-  "Amex": "americanexpress.com",
+const BANK_LOGOS: Record<string, string> = {
+  "HDFC Bank": "https://img.logo.dev/hdfcbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "HDFC": "https://img.logo.dev/hdfcbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "ICICI Bank": "https://img.logo.dev/icicibank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "ICICI": "https://img.logo.dev/icicibank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Axis Bank": "https://img.logo.dev/axisbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Axis": "https://img.logo.dev/axisbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "SBI": "https://img.logo.dev/sbicard.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "SBI Cards": "https://img.logo.dev/sbicard.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "State Bank of India": "https://img.logo.dev/sbi.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Kotak Mahindra Bank": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Kotak Bank": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Kotak": "https://img.logo.dev/kotak.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "IndusInd Bank": "https://img.logo.dev/indusind.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "IndusInd": "https://img.logo.dev/indusind.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Yes Bank": "https://img.logo.dev/yesbank.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "RBL Bank": "https://img.logo.dev/rblbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "RBL": "https://img.logo.dev/rblbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "IDFC First Bank": "https://img.logo.dev/idfcfirstbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "IDFC First": "https://img.logo.dev/idfcfirstbank.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Federal Bank": "https://img.logo.dev/federalbank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "AU Small Finance Bank": "https://img.logo.dev/aubank.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Bajaj Finserv": "https://img.logo.dev/bajajfinserv.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Bajaj Finance": "https://img.logo.dev/bajajfinserv.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Tata Capital": "https://img.logo.dev/tatacapital.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Standard Chartered": "https://img.logo.dev/sc.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Citi Bank": "https://img.logo.dev/citibank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Citibank": "https://img.logo.dev/citibank.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "HSBC": "https://img.logo.dev/hsbc.co.in?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "American Express": "https://img.logo.dev/americanexpress.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
+  "Amex": "https://img.logo.dev/americanexpress.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png",
 };
 
 const BANK_COLORS: Record<string, { primary: string; gradient: string }> = {
@@ -64,20 +64,15 @@ const BANK_COLORS: Record<string, { primary: string; gradient: string }> = {
 
 const DEFAULT_COLOR = { primary: "#2563eb", gradient: "from-primary to-primary/80" };
 
-export function getBankLogo(bankName: string, size = 64): string {
-  const domain = BANK_DOMAINS[bankName];
-  if (domain) {
-    return `https://logo.clearbit.com/${domain}?size=${size}`;
+export function getBankLogo(bankName: string): string {
+  if (BANK_LOGOS[bankName]) {
+    return BANK_LOGOS[bankName];
   }
-  // Fallback: try constructing from bank name
+  // Fallback: construct from bank name
   const slug = bankName.toLowerCase().replace(/\s+/g, "").replace(/bank$/i, "");
-  return `https://logo.clearbit.com/${slug}.com?size=${size}`;
+  return `https://img.logo.dev/${slug}.com?token=pk_a8TNe9MYRhSE6Rgc26MNYQ&size=80&format=png`;
 }
 
 export function getBankColor(bankName: string) {
   return BANK_COLORS[bankName] || DEFAULT_COLOR;
-}
-
-export function getBankDomain(bankName: string): string | undefined {
-  return BANK_DOMAINS[bankName];
 }

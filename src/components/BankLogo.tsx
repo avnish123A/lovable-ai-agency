@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { getBankLogo, getBankColor } from "@/lib/bank-utils";
-import { CreditCard as CreditCardIcon } from "lucide-react";
+import { getBankLogo } from "@/lib/bank-utils";
 
 interface BankLogoProps {
   bankName: string;
@@ -9,20 +8,28 @@ interface BankLogoProps {
 }
 
 const sizeMap = {
-  sm: { container: "w-8 h-8", img: 32, icon: "w-4 h-4" },
-  md: { container: "w-10 h-10", img: 48, icon: "w-5 h-5" },
-  lg: { container: "w-12 h-12", img: 64, icon: "w-6 h-6" },
+  sm: { container: "w-8 h-8", icon: "text-[10px]" },
+  md: { container: "w-10 h-10", icon: "text-xs" },
+  lg: { container: "w-12 h-12", icon: "text-sm" },
 };
 
 const BankLogo = ({ bankName, size = "md", className = "" }: BankLogoProps) => {
   const [imgError, setImgError] = useState(false);
   const s = sizeMap[size];
-  const logoUrl = getBankLogo(bankName, s.img);
+  const logoUrl = getBankLogo(bankName);
+
+  // Fallback: show initials
+  const initials = bankName
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   if (imgError) {
     return (
-      <div className={`${s.container} rounded-xl bg-primary/10 flex items-center justify-center ${className}`}>
-        <CreditCardIcon className={`${s.icon} text-primary`} />
+      <div className={`${s.container} rounded-xl bg-primary/10 flex items-center justify-center font-heading font-bold text-primary ${s.icon} ${className}`}>
+        {initials}
       </div>
     );
   }
@@ -32,7 +39,7 @@ const BankLogo = ({ bankName, size = "md", className = "" }: BankLogoProps) => {
       <img
         src={logoUrl}
         alt={`${bankName} logo`}
-        className="w-full h-full object-contain p-1.5"
+        className="w-full h-full object-contain p-1"
         loading="lazy"
         onError={() => setImgError(true)}
       />
