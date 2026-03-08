@@ -54,6 +54,7 @@ const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const AdminAITools = lazy(() => import("./pages/admin/AdminAITools"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
+const AdminAPIKeys = lazy(() => import("./pages/admin/AdminAPIKeys"));
 
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
@@ -135,6 +136,7 @@ const AnimatedRoutes = () => {
               <Route path="messages" element={<AdminMessages />} />
               <Route path="analytics" element={<AdminAnalytics />} />
               <Route path="ai-tools" element={<AdminAITools />} />
+              <Route path="api-keys" element={<AdminAPIKeys />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             {/* Legal */}
