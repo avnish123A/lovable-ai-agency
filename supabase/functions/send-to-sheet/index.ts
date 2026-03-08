@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbw3rtHLUUdiIooCnYL92GfU3bCb9lUOsCZTCZvNrznBaOLXJeDLB4e580NYHr1tUtc/exec";
+  "https://script.google.com/macros/s/AKfycby5ZD2HCtCe3o92CHOtrT3FgZHRCkl48Gf3kzhqudfiOSG7vEypwtLHKoWsJYj8rJ0/exec";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

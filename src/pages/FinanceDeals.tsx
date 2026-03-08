@@ -63,12 +63,9 @@ const FinanceDeals = () => {
   };
 
   const handleLeadSuccess = () => {
-    // Track click and redirect
+    // Track click for analytics (redirect is handled by LeadCaptureDialog)
     if (leadDeal) {
       supabase.functions.invoke("track-click", { body: { deal_id: leadDeal.id } }).catch(() => {});
-      if (leadDeal.tracking_link) {
-        window.open(leadDeal.tracking_link, "_blank", "noopener");
-      }
     }
   };
 
