@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2, Loader2, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ const AdminLoans = () => {
   const [editing, setEditing] = useState<any>(null);
   const [search, setSearch] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [form, setForm] = useState({
     loan_name: "", bank_name: "", interest_rate: 0, min_amount: 50000, max_amount: 5000000,
     min_tenure: 12, max_tenure: 60, processing_fee: "", apply_link: "",
@@ -139,6 +141,16 @@ const AdminLoans = () => {
     toast.success("Loan deleted");
     fetchLoans();
   };
+
+  const handleBulkDelete = async () => {
+    if (selected.size === 0) return;
+    if (!confirm(`Delete ${selected.size} loans?`)) return;
+    for (const id of selected) { await supabase.from("loan_products").delete().eq("id", id); }
+    toast.success(`${selected.size} loans deleted`); setSelected(new Set()); fetchLoans();
+  };
+
+  const toggleSelect = (id: string) => setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const toggleAll = () => setSelected(prev => prev.size === filtered.length ? new Set() : new Set(filtered.map(l => l.id)));
 
   const fields = [
     { key: "loan_name", label: "Loan Name *", type: "text" },
