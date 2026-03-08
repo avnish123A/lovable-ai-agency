@@ -162,8 +162,12 @@ const AdminCashback = () => {
   };
 
   const saveAdminNote = async (id: string) => {
-    const { error } = await supabase.from("cashback_requests" as any).update({ admin_notes: adminNote } as any).eq("id", id);
-    if (error) toast.error("Failed"); else toast.success("Note saved!");
+    const { error } = await supabase.from("cashback_requests" as any).update({ 
+      admin_notes: adminNote, 
+      public_note: publicNote || null,
+      estimated_payout_date: estimatedDate || null,
+    } as any).eq("id", id);
+    if (error) toast.error("Failed"); else toast.success("Notes & details saved!");
     fetchData();
   };
 
@@ -333,7 +337,7 @@ const AdminCashback = () => {
                     <td className="p-3"><Badge variant="outline" className={`text-xs ${statusColors[req.status] || ""}`}>{req.status}</Badge></td>
                     <td className="p-3 text-muted-foreground text-xs whitespace-nowrap">{new Date(req.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
                     <td className="p-3 text-right space-x-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setViewReq(req); setAdminNote(req.admin_notes || ""); }}><Eye className="w-3.5 h-3.5" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setViewReq(req); setAdminNote(req.admin_notes || ""); setPublicNote(req.public_note || ""); setEstimatedDate(req.estimated_payout_date || ""); }}><Eye className="w-3.5 h-3.5" /></Button>
                       {req.status === "pending" && (<>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-emerald-600" onClick={() => updateRequestStatus(req.id, "approved")}><CheckCircle className="w-3.5 h-3.5" /></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => updateRequestStatus(req.id, "rejected")}><XCircle className="w-3.5 h-3.5" /></Button>
