@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getDebtInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const DebtPayoffCalc = () => {
   const [debt, setDebt] = useState(500000);
@@ -38,14 +39,16 @@ const DebtPayoffCalc = () => {
   const debtScore = months <= 24 ? 90 : months <= 48 ? 70 : months <= 72 ? 50 : 30;
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getDebtInsights(debt, rate, effectivePayment, months, totalInterest), [debt, rate, effectivePayment, months, totalInterest]);
+
   return (
-    <ToolLayout title="Debt Payoff Calculator" description="Plan your debt-free journey with a repayment schedule" icon={<BadgeDollarSign className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Debt Payoff Calculator" description="Plan your debt-free journey with real repayment strategies" icon={<BadgeDollarSign className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Enter Debt", "Set Payment", "Payoff Plan"]} current={payment > minPayment ? 2 : 1} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
             { label: "Total Debt (₹)", value: debt, set: setDebt, min: 10000, max: 10000000, step: 10000 },
-            { label: "Interest Rate (%)", value: rate, set: setRate, min: 5, max: 40, step: 0.5 },
+            { label: `Interest Rate (Avg PL: ${INDIAN_BENCHMARKS.personalLoanRates.mid}%)`, value: rate, set: setRate, min: 5, max: 40, step: 0.5 },
             { label: "Monthly Payment (₹)", value: payment, set: setPayment, min: Math.ceil(minPayment), max: debt, step: 1000 },
           ].map((f) => (
             <div key={f.label}>
@@ -82,10 +85,18 @@ const DebtPayoffCalc = () => {
           <div className="rounded-2xl border border-border bg-card p-5 space-y-3">
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Debt</span><span className="font-semibold">{fmt(debt)}</span></div>
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Interest</span><AnimatedCounter value={Math.round(totalInterest)} prefix="₹" className="font-semibold text-destructive" /></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Interest as % of Principal</span><span className="font-semibold text-destructive">{(totalInterest / debt * 100).toFixed(0)}%</span></div>
             <div className="border-t border-border pt-2 flex justify-between text-sm"><span className="font-semibold">Total Paid</span><span className="font-bold">{fmt(totalPaid)}</span></div>
           </div>
           <FinancialScore score={debtScore} label="Payoff Speed" sublabel={months <= 24 ? "Aggressive payoff!" : "Consider increasing payments"} />
-          <AIInsight type="ai" title="AI Debt Strategy" message={`Paying ${fmt(effectivePayment)} monthly, you'll pay ${fmt(totalInterest)} in interest. ${payment < debt * 0.05 ? "Try to pay at least 5% of debt monthly for faster payoff." : "Good payment amount!"}`} />
+          
+          <AIInsight
+            type="ai"
+            title="AI Debt Strategy (Real Data)"
+            message={aiInsights[0] || "Adjust values to see debt payoff insights."}
+            insights={aiInsights.slice(1)}
+          />
+          
           <AchievementBadge type="debt_crusher" show={debtScore >= 70} message="You're on a fast track to debt freedom!" />
           <ResultActions title="Debt Payoff Plan" data={{ "Debt": fmt(debt), "Rate": `${rate}%`, "Payment": fmt(payment), "Duration": `${months} months`, "Total Interest": fmt(totalInterest) }} productLink="/loans" />
         </div>

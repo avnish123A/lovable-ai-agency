@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getHomeLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const HomeLoanCalc = () => {
   const [amount, setAmount] = useState(5000000);
@@ -49,21 +50,23 @@ const HomeLoanCalc = () => {
 
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getHomeLoanInsights(amount, loanAmount, rate, years, emi, totalInterest, downPaymentPercent), [amount, loanAmount, rate, years, emi, totalInterest, downPaymentPercent]);
+
   return (
-    <ToolLayout title="Home Loan Calculator" description="Plan your dream home purchase with detailed EMI breakdown" icon={<Building className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Home Loan Calculator" description="Plan your dream home with real bank rates and tax benefit analysis" icon={<Building className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Property Details", "View EMI", "Get Insights"]} current={loanAmount > 0 ? 2 : 1} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
             { label: "Property Value (₹)", value: amount, set: setAmount, min: 500000, max: 50000000, step: 100000 },
             { label: "Down Payment (₹)", value: downPayment, set: setDownPayment, min: 0, max: amount * 0.8, step: 50000 },
-            { label: "Interest Rate (%)", value: rate, set: setRate, min: 5, max: 15, step: 0.1 },
+            { label: `Interest Rate (Best: SBI ${INDIAN_BENCHMARKS.homeLoanRates.sbi}%)`, value: rate, set: setRate, min: 5, max: 15, step: 0.1 },
             { label: "Loan Tenure (Years)", value: years, set: setYears, min: 5, max: 30, step: 1 },
           ].map((f) => (
             <div key={f.label}>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold text-foreground">{f.label.includes("Rate") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
+                <span className="font-semibold text-foreground">{f.label.includes("Rate") || f.label.includes("Interest") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
               </div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
@@ -80,6 +83,17 @@ const HomeLoanCalc = () => {
               return diff > 0 ? `EMI reduces by ${fmt(diff)}/month` : `EMI increases by ${fmt(Math.abs(diff))}/month`;
             }}
           />
+
+          {/* Bank rate comparison */}
+          <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
+            <p className="font-semibold text-foreground mb-2">🏦 Current Home Loan Rates (2025)</p>
+            {Object.entries(INDIAN_BENCHMARKS.homeLoanRates).map(([bank, bankRate]) => (
+              <div key={bank} className="flex justify-between text-muted-foreground">
+                <span className="capitalize">{bank}</span>
+                <span className={`font-semibold ${bankRate <= rate ? "text-accent" : "text-muted-foreground"}`}>{bankRate}%</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -128,11 +142,15 @@ const HomeLoanCalc = () => {
 
           <FinancialScore score={affordabilityScore} label="Home Loan Score" sublabel={downPaymentPercent >= 20 ? `Great ${Math.round(downPaymentPercent)}% down payment!` : "Try 20%+ down payment"} />
           
-          <AIInsight type="ai" title="AI Home Loan Tip" message={downPaymentPercent < 20 ? `Your down payment is ${Math.round(downPaymentPercent)}%. Banks prefer 20%+ for better rates and no PMI charges.` : `${fmt(emi)} EMI for ${years} years. ${rate <= 8.5 ? "Great interest rate!" : "Consider balance transfer if you find rates below 8.5%."}`} />
-          <AIInsight type="tip" title="Pro Tip" delay={0.2} message={`Making one extra EMI payment per year can save you ${fmt(totalInterest * 0.12)} in interest and reduce tenure by ~${Math.round(years * 0.08)} years!`} />
+          <AIInsight
+            type="ai"
+            title="AI Home Loan Analysis (Real Rates)"
+            message={aiInsights[0] || "Adjust values to see home loan insights."}
+            insights={aiInsights.slice(1)}
+          />
 
           <AchievementBadge type="smart_planner" show={affordabilityScore >= 75} message="Smart home buying decision!" />
-          <ResultActions title="Home Loan Plan" data={{ "Property": fmt(amount), "Down Payment": fmt(downPayment), "Loan": fmt(loanAmount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Total Interest": fmt(totalInterest) }} productLink="/loans" />
+          <ResultActions title="Home Loan Plan" data={{ "Property": fmt(amount), "Down Payment": `${fmt(downPayment)} (${Math.round(downPaymentPercent)}%)`, "Loan": fmt(loanAmount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Total Interest": fmt(totalInterest) }} productLink="/loans" />
         </div>
       </div>
     </ToolLayout>

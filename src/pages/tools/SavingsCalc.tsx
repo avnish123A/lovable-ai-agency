@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PiggyBank } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,6 +9,7 @@ import AIInsight from "@/components/gamification/AIInsight";
 import WhatIfSlider from "@/components/gamification/WhatIfSlider";
 import ResultActions from "@/components/gamification/ResultActions";
 import StepIndicator from "@/components/gamification/StepIndicator";
+import { getSavingsInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const SavingsCalc = () => {
   const [monthly, setMonthly] = useState(10000);
@@ -21,6 +22,8 @@ const SavingsCalc = () => {
   const totalDeposited = monthly * n;
   const interestEarned = futureValue - totalDeposited;
   const growthMultiplier = futureValue / totalDeposited;
+  const realReturn = rate - INDIAN_BENCHMARKS.avgInflation;
+  const realValue = futureValue / Math.pow(1 + INDIAN_BENCHMARKS.avgInflation / 100, years);
   const score = Math.min(100, Math.round(growthMultiplier * 30));
 
   const chartData = Array.from({ length: years }, (_, i) => {
@@ -32,24 +35,44 @@ const SavingsCalc = () => {
 
   const fmt = (v: number) => `₹${Math.round(v).toLocaleString("en-IN")}`;
 
+  const aiInsights = useMemo(() => getSavingsInsights(monthly, rate, years, futureValue, interestEarned), [monthly, rate, years, futureValue, interestEarned]);
+
   return (
-    <ToolLayout title="Savings Calculator" description="Plan your savings and watch your wealth grow" icon={<PiggyBank className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Savings Calculator" description="Plan your savings with real product rate comparisons" icon={<PiggyBank className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Set Savings", "View Growth", "Plan More"]} current={monthly > 500 ? (years > 1 ? 2 : 1) : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
           {[
             { label: "Monthly Savings (₹)", value: monthly, set: setMonthly, min: 500, max: 500000, step: 500 },
-            { label: "Expected Return (%)", value: rate, set: setRate, min: 1, max: 20, step: 0.5 },
+            { label: `Expected Return (PPF: ${INDIAN_BENCHMARKS.ppfRate}%)`, value: rate, set: setRate, min: 1, max: 20, step: 0.5 },
             { label: "Time Period (Years)", value: years, set: setYears, min: 1, max: 30, step: 1 },
           ].map((f) => (
             <div key={f.label}>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-muted-foreground">{f.label}</span>
-                <span className="font-semibold">{f.label.includes("Return") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
+                <span className="font-semibold">{f.label.includes("Return") || f.label.includes("PPF") ? `${f.value}%` : f.label.includes("Year") ? `${f.value} yrs` : fmt(f.value)}</span>
               </div>
               <input type="range" min={f.min} max={f.max} step={f.step} value={f.value} onChange={(e) => f.set(Number(e.target.value))} className="w-full accent-primary" />
             </div>
           ))}
+
+          {/* Product rate comparison */}
+          <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
+            <p className="font-semibold text-foreground mb-2">📊 Where to Save (Current Rates)</p>
+            {[
+              { name: "PPF (15yr lock-in)", ret: INDIAN_BENCHMARKS.ppfRate, tax: "Tax-free" },
+              { name: "EPF", ret: INDIAN_BENCHMARKS.epfRate, tax: "Tax-free" },
+              { name: "Sukanya Samriddhi", ret: INDIAN_BENCHMARKS.sukanyaRate, tax: "Tax-free" },
+              { name: "Small Finance FD", ret: INDIAN_BENCHMARKS.fdRates.smallFinance, tax: "Taxable" },
+              { name: "PSU Bank FD", ret: INDIAN_BENCHMARKS.fdRates.psu, tax: "Taxable" },
+            ].map((p) => (
+              <div key={p.name} className="flex justify-between text-muted-foreground">
+                <span>{p.name}</span>
+                <span><span className={`font-semibold ${p.ret >= rate ? "text-accent" : ""}`}>{p.ret}%</span> <span className="text-[9px]">({p.tax})</span></span>
+              </div>
+            ))}
+          </div>
+
           <WhatIfSlider label="What if you save more?" baseValue={monthly} min={500} max={500000} step={500}
             onResult={(delta) => {
               const newFV = (monthly + delta) * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
@@ -67,6 +90,14 @@ const SavingsCalc = () => {
               <div><p className="text-xs text-muted-foreground">Interest</p><p className="text-sm font-semibold text-accent">{fmt(interestEarned)}</p></div>
             </div>
           </div>
+
+          {/* Inflation warning */}
+          <div className={`rounded-xl border p-3 text-center ${realReturn > 2 ? "border-accent/20 bg-accent/5" : "border-amber-500/20 bg-amber-500/5"}`}>
+            <p className="text-[10px] text-muted-foreground">Real Value (After {INDIAN_BENCHMARKS.avgInflation}% Inflation)</p>
+            <p className={`text-lg font-bold ${realReturn > 2 ? "text-accent" : "text-amber-600"}`}>{fmt(realValue)}</p>
+            <p className="text-[10px] text-muted-foreground">Real return: {realReturn.toFixed(1)}%</p>
+          </div>
+
           <div className="rounded-2xl border border-border bg-card p-4">
             <ResponsiveContainer width="100%" height={160}>
               <AreaChart data={chartData}>
@@ -78,9 +109,16 @@ const SavingsCalc = () => {
             </ResponsiveContainer>
           </div>
           <FinancialScore score={score} label="Growth Score" sublabel={`${growthMultiplier.toFixed(1)}x your deposits`} />
-          <AIInsight type="ai" title="AI Savings Tip" message={years >= 10 ? "Great long-term plan! Compound interest really kicks in after 10+ years." : "Consider extending to 10+ years — compound interest accelerates over time."} />
+          
+          <AIInsight
+            type="ai"
+            title="AI Savings Strategy (Real Rates)"
+            message={aiInsights[0] || "Adjust values to see savings insights."}
+            insights={aiInsights.slice(1)}
+          />
+          
           <AchievementBadge type="savvy_saver" show={score >= 70} message="Your savings plan will multiply your wealth!" />
-          <ResultActions title="Savings Calculation" data={{ "Monthly": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(futureValue), "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
+          <ResultActions title="Savings Calculation" data={{ "Monthly": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(futureValue), "Real Value": fmt(realValue), "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
         </div>
       </div>
     </ToolLayout>
