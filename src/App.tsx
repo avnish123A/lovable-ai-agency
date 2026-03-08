@@ -189,8 +189,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <MaintenanceProvider>
-            <AnimatedRoutes />
-            <NiveshAIChatbot />
+            <ComingSoonProvider>
+              <AnimatedRoutes />
+              <NiveshAIChatbot />
+            </ComingSoonProvider>
           </MaintenanceProvider>
         </AuthProvider>
       </BrowserRouter>
