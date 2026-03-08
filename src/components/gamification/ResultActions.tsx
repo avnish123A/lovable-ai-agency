@@ -3,7 +3,6 @@ import { Download, Share2, Bookmark, ShoppingCart, FileText, Image, Loader2 } fr
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 interface ResultActionsProps {
@@ -11,18 +10,150 @@ interface ResultActionsProps {
   data: Record<string, string>;
   showProducts?: boolean;
   productLink?: string;
-  /** Ref to the container whose visual (charts + results) should be captured */
   captureRef?: RefObject<HTMLDivElement>;
 }
 
-async function captureImage(el: HTMLElement): Promise<HTMLCanvasElement> {
-  return html2canvas(el, {
-    backgroundColor: "#ffffff",
-    scale: 2,
-    useCORS: true,
-    logging: false,
-    allowTaint: true,
-  });
+/** Convert all SVG elements inside a container to inline canvas for html2canvas compatibility */
+async function svgsToCanvas(container: HTMLElement) {
+  const svgs = container.querySelectorAll("svg");
+  const replacements: { svg: SVGSVGElement; canvas: HTMLCanvasElement }[] = [];
+
+  for (const svg of Array.from(svgs)) {
+    try {
+      const rect = svg.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) continue;
+
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      canvas.width = rect.width * scale;
+      canvas.height = rect.height * scale;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+
+      const ctx = canvas.getContext("2d")!;
+      ctx.scale(scale, scale);
+
+      // Serialize SVG with computed styles
+      const clonedSvg = svg.cloneNode(true) as SVGSVGElement;
+      clonedSvg.setAttribute("width", String(rect.width));
+      clonedSvg.setAttribute("height", String(rect.height));
+      
+      // Inline all computed styles
+      const allEls = clonedSvg.querySelectorAll("*");
+      const origEls = svg.querySelectorAll("*");
+      allEls.forEach((el, i) => {
+        if (origEls[i]) {
+          const computed = getComputedStyle(origEls[i]);
+          (el as HTMLElement).style.cssText = computed.cssText;
+        }
+      });
+
+      const data = new XMLSerializer().serializeToString(clonedSvg);
+      const blob = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const img = new window.Image();
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = url;
+      });
+
+      ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      URL.revokeObjectURL(url);
+
+      replacements.push({ svg: svg as SVGSVGElement, canvas });
+    } catch {
+      // Skip SVGs that fail
+    }
+  }
+
+  // Replace SVGs with canvases
+  for (const { svg, canvas } of replacements) {
+    svg.parentNode?.replaceChild(canvas, svg);
+  }
+
+  return replacements;
+}
+
+/** Restore SVGs after capture */
+function restoreSvgs(replacements: { svg: SVGSVGElement; canvas: HTMLCanvasElement }[]) {
+  for (const { svg, canvas } of replacements) {
+    canvas.parentNode?.replaceChild(svg, canvas);
+  }
+}
+
+async function captureElement(el: HTMLElement): Promise<HTMLCanvasElement> {
+  // Dynamically import html2canvas
+  const html2canvas = (await import("html2canvas")).default;
+
+  // Pre-convert SVGs to canvas elements
+  const replacements = await svgsToCanvas(el);
+
+  try {
+    const canvas = await html2canvas(el, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      allowTaint: true,
+      removeContainer: true,
+    });
+    return canvas;
+  } finally {
+    restoreSvgs(replacements);
+  }
+}
+
+/** Add branded watermark to a canvas */
+function addWatermark(canvas: HTMLCanvasElement, title: string): HTMLCanvasElement {
+  const headerH = 60;
+  const footerH = 40;
+  const padding = 20;
+  const out = document.createElement("canvas");
+  out.width = canvas.width + padding * 2;
+  out.height = canvas.height + headerH + footerH + padding * 2;
+  const ctx = out.getContext("2d")!;
+
+  // Background
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, out.width, out.height);
+
+  // Header bar
+  const grad = ctx.createLinearGradient(0, 0, out.width, 0);
+  grad.addColorStop(0, "#1e40af");
+  grad.addColorStop(1, "#2563eb");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, out.width, headerH);
+
+  // Brand name
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 28px system-ui, -apple-system, sans-serif";
+  ctx.fillText("ApniNivesh.in", padding + 10, 28);
+  ctx.font = "14px system-ui, sans-serif";
+  ctx.fillStyle = "rgba(255,255,255,0.85)";
+  ctx.fillText(title, padding + 10, 48);
+
+  // Date on right
+  const dateStr = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+  ctx.textAlign = "right";
+  ctx.fillText(dateStr, out.width - padding - 10, 48);
+  ctx.textAlign = "left";
+
+  // Content
+  ctx.drawImage(canvas, padding, headerH + padding / 2);
+
+  // Footer
+  const footerY = headerH + padding / 2 + canvas.height + padding;
+  ctx.fillStyle = "#f1f5f9";
+  ctx.fillRect(0, footerY, out.width, footerH);
+  ctx.fillStyle = "#94a3b8";
+  ctx.font = "12px system-ui, sans-serif";
+  ctx.fillText("Generated on apninivesh.in | For informational purposes only", padding + 10, footerY + 25);
+  ctx.textAlign = "right";
+  ctx.fillText("apninivesh.in", out.width - padding - 10, footerY + 25);
+
+  return out;
 }
 
 const ResultActions = ({
@@ -39,72 +170,97 @@ const ResultActions = ({
     .map(([k, v]) => `${k}: ${v}`)
     .join("\n")}\n\nGenerated on ApniNivesh.in | apninivesh.in`;
 
+  const getTarget = () =>
+    captureRef?.current || (document.querySelector("[data-result-capture]") as HTMLElement | null);
+
   const handleDownloadPDF = async () => {
     setDownloading("pdf");
     try {
       const pdf = new jsPDF("p", "mm", "a4");
       const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
 
-      // Header
+      // ── Header ──
+      pdf.setFillColor(30, 64, 175);
+      pdf.rect(0, 0, pageW, 30, "F");
+      // Gradient overlay
       pdf.setFillColor(37, 99, 235);
-      pdf.rect(0, 0, pageW, 28, "F");
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(18);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("ApniNivesh.in", 14, 12);
-      pdf.setFontSize(10);
-      pdf.setFont("helvetica", "normal");
-      pdf.text("India's Trusted Finance Platform", 14, 19);
-      pdf.text(new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }), pageW - 14, 19, { align: "right" });
+      pdf.rect(pageW / 2, 0, pageW / 2, 30, "F");
 
-      // Title
-      pdf.setTextColor(30, 30, 30);
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(20);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("ApniNivesh.in", 14, 14);
+      pdf.setFontSize(9);
+      pdf.setFont("helvetica", "normal");
+      pdf.text("India's Trusted Finance Platform", 14, 22);
+      const dateStr = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+      pdf.text(dateStr, pageW - 14, 22, { align: "right" });
+
+      // ── Title ──
+      pdf.setTextColor(15, 23, 42);
       pdf.setFontSize(16);
       pdf.setFont("helvetica", "bold");
-      pdf.text(title, 14, 40);
+      pdf.text(title, 14, 44);
 
-      // Data table
-      let y = 50;
-      pdf.setFontSize(11);
+      // Divider
+      pdf.setDrawColor(226, 232, 240);
+      pdf.setLineWidth(0.5);
+      pdf.line(14, 48, pageW - 14, 48);
+
+      // ── Data Table ──
+      let y = 56;
       const entries = Object.entries(data);
+      pdf.setFontSize(11);
+
       entries.forEach(([k, v], i) => {
         if (i % 2 === 0) {
-          pdf.setFillColor(245, 247, 250);
-          pdf.rect(14, y - 5, pageW - 28, 10, "F");
+          pdf.setFillColor(248, 250, 252);
+          pdf.roundedRect(14, y - 5.5, pageW - 28, 11, 2, 2, "F");
         }
         pdf.setFont("helvetica", "normal");
-        pdf.setTextColor(100, 100, 100);
-        pdf.text(k, 18, y);
+        pdf.setTextColor(100, 116, 139);
+        pdf.text(k, 20, y);
         pdf.setFont("helvetica", "bold");
-        pdf.setTextColor(30, 30, 30);
-        pdf.text(v, pageW - 18, y, { align: "right" });
-        y += 10;
+        pdf.setTextColor(15, 23, 42);
+        pdf.text(v, pageW - 20, y, { align: "right" });
+        y += 12;
       });
 
-      // Capture chart image if ref available
-      if (captureRef?.current) {
+      // ── Chart Image ──
+      const target = getTarget();
+      if (target) {
         try {
-          const canvas = await captureImage(captureRef.current);
+          const canvas = await captureElement(target);
           const imgData = canvas.toDataURL("image/png");
           const imgW = pageW - 28;
           const imgH = (canvas.height / canvas.width) * imgW;
-          y += 8;
-          if (y + imgH > pdf.internal.pageSize.getHeight() - 20) {
+
+          y += 6;
+          // Check if chart fits on current page
+          if (y + imgH > pageH - 25) {
             pdf.addPage();
             y = 20;
           }
+
+          // Border around chart
+          pdf.setDrawColor(226, 232, 240);
+          pdf.setLineWidth(0.3);
+          pdf.roundedRect(13, y - 1, imgW + 2, imgH + 2, 3, 3, "S");
           pdf.addImage(imgData, "PNG", 14, y, imgW, imgH);
-          y += imgH;
+          y += imgH + 8;
         } catch {
-          // Chart capture failed, continue without it
+          // Chart capture failed silently
         }
       }
 
-      // Footer
-      const footerY = pdf.internal.pageSize.getHeight() - 10;
-      pdf.setFontSize(8);
+      // ── Footer ──
+      const footerY = pageH - 12;
+      pdf.setDrawColor(226, 232, 240);
+      pdf.line(14, footerY - 4, pageW - 14, footerY - 4);
+      pdf.setFontSize(7);
       pdf.setFont("helvetica", "normal");
-      pdf.setTextColor(150, 150, 150);
+      pdf.setTextColor(148, 163, 184);
       pdf.text("This is for informational purposes only. Verify details with respective banks/institutions.", 14, footerY);
       pdf.text("apninivesh.in", pageW - 14, footerY, { align: "right" });
 
@@ -120,30 +276,29 @@ const ResultActions = ({
   const handleDownloadPNG = async () => {
     setDownloading("png");
     try {
-      const target = captureRef?.current || document.querySelector("[data-result-capture]") as HTMLElement;
-      if (!target) {
-        // Fallback: create a styled div to capture
+      const target = getTarget();
+      let canvas: HTMLCanvasElement;
+
+      if (target) {
+        canvas = await captureElement(target);
+      } else {
+        // Fallback: render data as styled HTML
         const fallback = document.createElement("div");
         fallback.style.cssText = "padding:32px;background:#fff;width:600px;font-family:system-ui";
         fallback.innerHTML = `<h2 style="font-size:20px;font-weight:bold;color:#1e3a5f;margin-bottom:16px">${title}</h2>
-          <div style="margin-bottom:12px">${Object.entries(data).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span style="color:#666">${k}</span><strong style="color:#111">${v}</strong></div>`).join("")}</div>
-          <p style="font-size:11px;color:#999;margin-top:16px">Generated on ApniNivesh.in</p>`;
+          <div>${Object.entries(data).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e2e8f0"><span style="color:#64748b">${k}</span><strong style="color:#0f172a">${v}</strong></div>`).join("")}</div>`;
         document.body.appendChild(fallback);
-        const canvas = await captureImage(fallback);
+        const html2canvas = (await import("html2canvas")).default;
+        canvas = await html2canvas(fallback, { backgroundColor: "#fff", scale: 2 });
         document.body.removeChild(fallback);
-        const link = document.createElement("a");
-        link.download = `${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        toast.success("Image downloaded!");
-        setDownloading(null);
-        return;
       }
 
-      const canvas = await captureImage(target);
+      // Add branded watermark
+      const branded = addWatermark(canvas, title);
+
       const link = document.createElement("a");
       link.download = `${title.replace(/\s+/g, "-").toLowerCase()}-apninivesh.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = branded.toDataURL("image/png");
       link.click();
       toast.success("Image downloaded!");
     } catch (err) {
@@ -158,13 +313,13 @@ const ResultActions = ({
     try {
       let files: File[] = [];
 
-      // Try to capture chart as image for sharing
-      const target = captureRef?.current || document.querySelector("[data-result-capture]") as HTMLElement;
+      const target = getTarget();
       if (target) {
         try {
-          const canvas = await captureImage(target);
+          const canvas = await captureElement(target);
+          const branded = addWatermark(canvas, title);
           const blob = await new Promise<Blob>((resolve) =>
-            canvas.toBlob((b) => resolve(b!), "image/png")
+            branded.toBlob((b) => resolve(b!), "image/png")
           );
           files = [new File([blob], `${title.replace(/\s+/g, "-").toLowerCase()}.png`, { type: "image/png" })];
         } catch {
@@ -173,11 +328,7 @@ const ResultActions = ({
       }
 
       if (navigator.share) {
-        const shareData: ShareData = {
-          title: `${title} | ApniNivesh`,
-          text: textSummary,
-        };
-        // Check if file sharing is supported
+        const shareData: ShareData = { title: `${title} | ApniNivesh`, text: textSummary };
         if (files.length > 0 && navigator.canShare && navigator.canShare({ files })) {
           shareData.files = files;
         }
@@ -189,7 +340,6 @@ const ResultActions = ({
       }
     } catch (err: any) {
       if (err?.name !== "AbortError") {
-        // Fallback to clipboard
         try {
           await navigator.clipboard.writeText(textSummary);
           toast.success("Result copied to clipboard!");
@@ -210,33 +360,15 @@ const ResultActions = ({
 
   return (
     <div className="flex flex-wrap gap-2 mt-4">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleDownloadPDF}
-        disabled={downloading === "pdf"}
-        className="rounded-xl text-xs gap-1.5"
-      >
+      <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={downloading === "pdf"} className="rounded-xl text-xs gap-1.5">
         {downloading === "pdf" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
         PDF
       </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleDownloadPNG}
-        disabled={downloading === "png"}
-        className="rounded-xl text-xs gap-1.5"
-      >
+      <Button variant="outline" size="sm" onClick={handleDownloadPNG} disabled={downloading === "png"} className="rounded-xl text-xs gap-1.5">
         {downloading === "png" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Image className="w-3.5 h-3.5" />}
         Image
       </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleShare}
-        disabled={sharing}
-        className="rounded-xl text-xs gap-1.5"
-      >
+      <Button variant="outline" size="sm" onClick={handleShare} disabled={sharing} className="rounded-xl text-xs gap-1.5">
         {sharing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Share2 className="w-3.5 h-3.5" />}
         Share
       </Button>
