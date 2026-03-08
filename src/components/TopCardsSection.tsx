@@ -9,6 +9,14 @@ import CreditCardVisual from "@/components/CreditCardVisual";
 import TrustBadge from "@/components/TrustBadge";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.12, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  }),
+};
+
 const TopCardsSection = () => {
   const [cards, setCards] = useState<any[]>([]);
   const [selectedCard, setSelectedCard] = useState<any>(null);
@@ -43,12 +51,20 @@ const TopCardsSection = () => {
 
   return (
     <>
-    <section className="py-24 bg-secondary/30">
-      <div className="container mx-auto px-4 md:px-8">
+    <section className="py-24 bg-secondary/30 relative overflow-hidden">
+      {/* Floating accent */}
+      <motion.div
+        animate={{ x: [0, 40, 0], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+      />
+
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-12"
         >
           <div>
@@ -59,23 +75,30 @@ const TopCardsSection = () => {
               Handpicked cards with the best rewards, cashback, and welcome bonuses.
             </p>
           </div>
-          <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
-            <Link to="/credit-cards">View All Cards</Link>
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+            <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
+              <Link to="/credit-cards">View All Cards</Link>
+            </Button>
+          </motion.div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {cards.map((card, i) => (
             <motion.div
               key={card.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="rounded-2xl border border-border bg-card shadow-card card-hover overflow-hidden"
+              variants={cardVariants}
+              whileHover={{ y: -10, transition: { duration: 0.25 } }}
+              className="rounded-2xl border border-border bg-card shadow-card overflow-hidden relative group"
             >
+              {/* Hover gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/0 to-primary/0 group-hover:from-primary/3 group-hover:to-accent/3 transition-all duration-500 rounded-2xl pointer-events-none" />
+
               {/* Bank header */}
-              <div className="flex items-center justify-between px-6 pt-5 pb-2">
+              <div className="flex items-center justify-between px-6 pt-5 pb-2 relative z-10">
                 <div className="flex items-center gap-2.5">
                   <BankLogo bankName={card.bank_name} size="sm" />
                   <span className="text-xs font-semibold text-foreground">{card.bank_name}</span>
@@ -84,12 +107,12 @@ const TopCardsSection = () => {
               </div>
 
               {/* Card visual */}
-              <div className="px-6 py-3">
+              <div className="px-6 py-3 relative z-10">
                 <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
               </div>
 
               {/* Details */}
-              <div className="px-6 pb-6">
+              <div className="px-6 pb-6 relative z-10">
                 <h3 className="font-heading font-bold text-foreground text-sm mb-3">{card.card_name}</h3>
                 <div className="space-y-2.5 mb-4">
                   <div className="flex justify-between text-sm">
@@ -110,13 +133,15 @@ const TopCardsSection = () => {
                     <Star className="w-4 h-4 text-primary fill-primary" />
                     <span className="text-sm font-bold text-foreground">{card.rating}</span>
                   </div>
-                  <Button
-                    size="sm"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
-                    onClick={() => handleApply(card)}
-                  >
-                    Apply Now
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      size="sm"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                      onClick={() => handleApply(card)}
+                    >
+                      Apply Now
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
