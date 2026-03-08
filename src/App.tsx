@@ -113,8 +113,13 @@ const AnimatedRoutes = () => {
   const { isMaintenanceMode, settings, loading } = useMaintenanceMode();
   const { isComingSoonMode, settings: csSettings, loading: csLoading } = useComingSoonMode();
 
+  // Show loading while contexts fetch settings (prevents flash of normal content)
+  if ((loading || csLoading) && !isAdmin) {
+    return <Loading />;
+  }
+
   // Show coming soon page for all public routes when enabled
-  if (!csLoading && isComingSoonMode && !isAdmin) {
+  if (isComingSoonMode && !isAdmin) {
     return (
       <Suspense fallback={<Loading />}>
         <ComingSoonPage />
@@ -122,7 +127,7 @@ const AnimatedRoutes = () => {
     );
   }
 
-  if (!loading && isMaintenanceMode && !isAdmin) {
+  if (isMaintenanceMode && !isAdmin) {
     return <MaintenancePage message={settings.message} estimatedTime={settings.estimated_time} />;
   }
 

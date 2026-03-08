@@ -336,6 +336,7 @@ const AdminSettings = () => {
               <Switch
                 checked={maintenance.enabled}
                 onCheckedChange={toggleMaintenance}
+                disabled={saving}
               />
             )}
           </div>
