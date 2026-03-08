@@ -1,206 +1,95 @@
-import { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Shield, Zap, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
-const AnimatedCounter = ({ value, suffix = "" }: { value: string; suffix?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const numericPart = value.replace(/[^0-9.]/g, "");
-  const prefix = value.replace(/[0-9.]/g, "").replace(suffix, "");
-  const [count, setCount] = useState(0);
-  const target = parseFloat(numericPart) || 0;
-
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 2000;
-    const startTime = Date.now();
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(eased * target));
-      if (progress < 1) requestAnimationFrame(animate);
-      else setCount(target);
-    };
-    requestAnimationFrame(animate);
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref}>
-      {prefix}{isInView ? count : 0}{suffix}
-    </span>
-  );
-};
-
 const HeroSection = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.8], [1, 0.95]);
-
-  const stagger = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-    },
-  };
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
-    visible: {
-      opacity: 1, y: 0, filter: "blur(0px)",
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
-    },
-  };
-
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated background orbs */}
+    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-hero" />
-      <div className="absolute inset-0 noise-overlay" />
+      <div className="absolute inset-0 grid-pattern opacity-30" />
+
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -80]) }}
-        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[200px] animate-float-slow"
+        className="absolute top-1/4 left-[10%] w-72 h-72 rounded-full bg-primary/5 blur-[100px]"
+        animate={{ y: [0, -30, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, 60]) }}
-        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/8 blur-[180px] animate-float-reverse"
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary/5 blur-[150px] animate-float-slow"
-        style={{ animationDelay: "5s" }}
+        className="absolute bottom-1/4 right-[10%] w-96 h-96 rounded-full bg-accent/5 blur-[120px]"
+        animate={{ y: [0, 20, 0], scale: [1, 0.95, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <motion.div style={{ y, opacity, scale }} className="container mx-auto px-6 pt-32 pb-20 relative z-10">
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-          className="max-w-4xl mx-auto text-center"
-        >
-          <motion.div variants={fadeUp}>
-            <div className="inline-flex items-center gap-2.5 px-5 py-2 mb-10 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-              </span>
-              <span className="text-xs font-medium text-primary tracking-wide">Trusted by 50+ Industry Leaders</span>
-            </div>
+      <div className="container mx-auto px-4 md:px-8 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-8"
+          >
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-sm text-primary font-medium">India's Smartest Financial Platform</span>
           </motion.div>
 
           <motion.h1
-            variants={fadeUp}
-            className="font-heading text-5xl sm:text-6xl lg:text-[82px] font-bold leading-[1.03] tracking-tight mb-7"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight mb-6"
           >
-            We Build Digital
+            Find the{" "}
+            <span className="text-gradient">Best Deals</span>
             <br />
-            Products That{" "}
-            <span className="text-gradient relative">
-              Scale
-              <motion.span
-                className="absolute -bottom-2 left-0 h-[3px] bg-gradient-cta rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-              />
-            </span>
+            on Cards, Loans & Cashback
           </motion.h1>
 
           <motion.p
-            variants={fadeUp}
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed font-light"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Our expert team of AI specialists, professional developers, and experienced designers
-            craft intelligent solutions that transform businesses worldwide.
+            Compare credit cards, personal loans, and cashback offers from top banks.
+            Check your eligibility instantly and save thousands every year.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/contact"
-              className="group relative flex items-center gap-2.5 px-9 py-4 rounded-xl bg-gradient-cta text-primary-foreground font-semibold text-sm overflow-hidden shadow-glow hover:shadow-glow-lg transition-shadow duration-500"
-            >
-              <span className="relative z-10 flex items-center gap-2.5">
-                Start Your Project
-                <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform duration-300" />
-              </span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/10 to-transparent"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "100%" }}
-                transition={{ duration: 0.6 }}
-              />
-            </Link>
-            <Link
-              to="/portfolio"
-              className="group flex items-center gap-2.5 px-9 py-4 rounded-xl border border-border/60 text-foreground font-medium text-sm hover:border-primary/40 hover:bg-primary/5 transition-all duration-400"
-            >
-              View Our Work
-              <motion.span
-                className="inline-block"
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                →
-              </motion.span>
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        {/* Animated Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-28 grid grid-cols-2 md:grid-cols-4 gap-px max-w-3xl mx-auto rounded-2xl overflow-hidden border border-border/40"
-        >
-          {[
-            { value: "50", suffix: "+", label: "Clients Worldwide" },
-            { value: "200", suffix: "+", label: "Projects Delivered" },
-            { value: "98", suffix: "%", label: "Client Satisfaction" },
-            { value: "15", suffix: "+", label: "Industry Specialists" },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 + i * 0.12 }}
-              whileHover={{ backgroundColor: "hsl(230 18% 10%)" }}
-              className="text-center py-7 px-4 bg-card/50 backdrop-blur-md transition-colors duration-300"
-            >
-              <div className="font-heading text-2xl sm:text-3xl font-bold text-gradient">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-              <div className="text-[11px] text-muted-foreground mt-2 font-medium tracking-wide">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1.5"
-        >
           <motion.div
-            animate={{ opacity: [1, 0.3, 1], y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1 h-2 rounded-full bg-primary"
-          />
-        </motion.div>
-      </motion.div>
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 shadow-glow-sm">
+              <Link to="/credit-cards">
+                Explore Cards <ArrowRight className="ml-2 w-4 h-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="text-base px-8 border-border hover:bg-secondary">
+              <Link to="/eligibility">Check Eligibility</Link>
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+          >
+            {[
+              { icon: Shield, label: "Secure", value: "100%" },
+              { icon: Zap, label: "Products", value: "200+" },
+              { icon: TrendingUp, label: "Users", value: "50K+" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <stat.icon className="w-5 h-5 text-primary mx-auto mb-2" />
+                <p className="text-xl font-heading font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 };
