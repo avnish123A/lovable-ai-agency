@@ -207,6 +207,14 @@ const AnimatedRoutes = () => {
     </AnimatePresence>
   );
 };
+const ChatbotWrapper = () => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+  const { isMaintenanceMode, loading } = useMaintenanceMode();
+  const { isComingSoonMode, loading: csLoading } = useComingSoonMode();
+  if (!isAdmin && (isMaintenanceMode || isComingSoonMode || loading || csLoading)) return null;
+  return <NiveshAIChatbot />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
