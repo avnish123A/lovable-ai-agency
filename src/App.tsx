@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { MaintenanceProvider, useMaintenanceMode } from "@/contexts/MaintenanceContext";
+import { ComingSoonProvider, useComingSoonMode } from "@/contexts/ComingSoonContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import NiveshAIChatbot from "./components/NiveshAIChatbot";
