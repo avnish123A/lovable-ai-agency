@@ -270,7 +270,7 @@ const NiveshAIChatbot = () => {
                       { label: "🏦 Bank Accounts", path: "/bank-accounts" },
                     ].map((nav) => (
                       <button
-                        key={nav.path}
+                        key={nav.label}
                         onClick={() => handleQuickNav(nav.path)}
                         className="text-[11px] px-3 py-1.5 rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
                       >
