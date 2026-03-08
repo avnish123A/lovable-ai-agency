@@ -29,6 +29,7 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const FinanceTools = lazy(() => import("./pages/FinanceTools"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
+const ComingSoonPage = lazy(() => import("./pages/ComingSoon"));
 const FinanceDeals = lazy(() => import("./pages/FinanceDeals"));
 const DealDetail = lazy(() => import("./pages/DealDetail"));
 const CompoundInterestCalc = lazy(() => import("./pages/tools/CompoundInterestCalc"));
@@ -93,6 +94,16 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   const { isMaintenanceMode, settings, loading } = useMaintenanceMode();
+  const { isComingSoonMode, settings: csSettings, loading: csLoading } = useComingSoonMode();
+
+  // Show coming soon page for all public routes when enabled
+  if (!csLoading && isComingSoonMode && !isAdmin) {
+    return (
+      <Suspense fallback={<Loading />}>
+        <ComingSoonPage />
+      </Suspense>
+    );
+  }
 
   if (!loading && isMaintenanceMode && !isAdmin) {
     return <MaintenancePage message={settings.message} estimatedTime={settings.estimated_time} />;
