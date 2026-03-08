@@ -14,7 +14,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/kriya-chat`;
 
 const QUICK_ACTIONS = [
-  { icon: CreditCard, label: "Compare Credit Cards", query: "Compare the best credit cards available on kriyapay right now. Show me top options with their fees and benefits.", color: "from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400" },
+  { icon: CreditCard, label: "Compare Credit Cards", query: "Compare the best credit cards available on ApniNivesh right now. Show me top options with their fees and benefits.", color: "from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400" },
   { icon: Gift, label: "Best Cashback Card", query: "Which credit card gives the best cashback in India? Show me the top 3 options.", color: "from-emerald-500/10 to-green-500/10 text-emerald-600 dark:text-emerald-400" },
   { icon: TrendingUp, label: "Check Loan Eligibility", query: "Help me check my loan eligibility. What factors do banks consider for personal loan approval in India?", color: "from-amber-500/10 to-orange-500/10 text-amber-600 dark:text-amber-400" },
   { icon: Calculator, label: "Calculate EMI", query: "Help me calculate EMI. I want to understand how monthly installments work for different loan amounts and tenures.", color: "from-purple-500/10 to-pink-500/10 text-purple-600 dark:text-purple-400" },
@@ -187,7 +187,7 @@ const KriyaAIChatbot = () => {
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             onClick={() => setOpen(true)}
             className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-glow flex items-center justify-center group"
-            aria-label="Open KriyaAI"
+            aria-label="Open NiveshAI"
           >
             <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full animate-pulse" />
@@ -213,7 +213,7 @@ const KriyaAIChatbot = () => {
               </div>
               <div className="relative flex-1 min-w-0">
                 <h3 className="font-heading font-bold text-sm text-foreground flex items-center gap-1.5">
-                  KriyaAI
+                  NiveshAI
                   <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
                 </h3>
                 <p className="text-[11px] text-muted-foreground">Financial Assistant • Always Online</p>
@@ -238,7 +238,7 @@ const KriyaAIChatbot = () => {
                     </motion.div>
                     <h4 className="font-heading font-bold text-foreground text-base mb-1">Namaste! 🙏</h4>
                     <p className="text-xs text-muted-foreground leading-relaxed max-w-[280px] mx-auto">
-                      I'm KriyaAI — your personal finance assistant. Ask me about credit cards, loans, insurance, or cashback offers.
+                      I'm NiveshAI — your personal finance assistant. Ask me about credit cards, loans, insurance, or cashback offers.
                     </p>
                   </div>
 
@@ -387,7 +387,7 @@ const KriyaAIChatbot = () => {
                 </Button>
               </div>
               <p className="text-[9px] text-muted-foreground/60 text-center mt-2">
-                KriyaAI provides general info only. Verify details with banks.
+                NiveshAI provides general info only. Verify details with banks.
               </p>
             </form>
           </motion.div>
