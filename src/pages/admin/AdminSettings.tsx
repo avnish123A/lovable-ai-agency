@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { AlertTriangle, Wrench, Loader2, Rocket, Calendar, Eye } from "lucide-react";
+import { AlertTriangle, Wrench, Loader2, Rocket, Eye } from "lucide-react";
 import { CategoryKey } from "@/hooks/useCategoryComingSoon";
 
 interface MaintenanceSettings {
