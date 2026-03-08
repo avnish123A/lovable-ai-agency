@@ -218,7 +218,7 @@ const App = () => (
           <MaintenanceProvider>
             <ComingSoonProvider>
               <AnimatedRoutes />
-              <NiveshAIChatbot />
+              <ChatbotWrapper />
             </ComingSoonProvider>
           </MaintenanceProvider>
         </AuthProvider>
