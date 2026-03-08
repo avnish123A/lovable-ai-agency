@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      banks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       cashback_offers: {
         Row: {
           cashback_value: string
@@ -147,22 +177,28 @@ export type Database = {
         Row: {
           clicked_at: string | null
           deal_id: string
+          device: string | null
           id: string
           ip_hash: string | null
+          source_page: string | null
           user_agent: string | null
         }
         Insert: {
           clicked_at?: string | null
           deal_id: string
+          device?: string | null
           id?: string
           ip_hash?: string | null
+          source_page?: string | null
           user_agent?: string | null
         }
         Update: {
           clicked_at?: string | null
           deal_id?: string
+          device?: string | null
           id?: string
           ip_hash?: string | null
+          source_page?: string | null
           user_agent?: string | null
         }
         Relationships: [
@@ -243,51 +279,69 @@ export type Database = {
       }
       leads: {
         Row: {
+          bank_name: string | null
           city: string | null
           company: string | null
           created_at: string
           deal_id: string | null
+          device: string | null
           email: string
           id: string
+          ip_hash: string | null
           name: string
           notes: string | null
           phone: string | null
+          product_name: string | null
           salary_range: string | null
           service: string | null
+          source_page: string | null
           status: string
           updated_at: string
+          user_agent: string | null
           user_id: string | null
         }
         Insert: {
+          bank_name?: string | null
           city?: string | null
           company?: string | null
           created_at?: string
           deal_id?: string | null
+          device?: string | null
           email: string
           id?: string
+          ip_hash?: string | null
           name: string
           notes?: string | null
           phone?: string | null
+          product_name?: string | null
           salary_range?: string | null
           service?: string | null
+          source_page?: string | null
           status?: string
           updated_at?: string
+          user_agent?: string | null
           user_id?: string | null
         }
         Update: {
+          bank_name?: string | null
           city?: string | null
           company?: string | null
           created_at?: string
           deal_id?: string | null
+          device?: string | null
           email?: string
           id?: string
+          ip_hash?: string | null
           name?: string
           notes?: string | null
           phone?: string | null
+          product_name?: string | null
           salary_range?: string | null
           service?: string | null
+          source_page?: string | null
           status?: string
           updated_at?: string
+          user_agent?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -357,6 +411,39 @@ export type Database = {
           min_tenure?: number | null
           processing_fee?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      media: {
+        Row: {
+          alt_text: string | null
+          category: string | null
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+        }
+        Insert: {
+          alt_text?: string | null
+          category?: string | null
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+        }
+        Update: {
+          alt_text?: string | null
+          category?: string | null
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
         }
         Relationships: []
       }
