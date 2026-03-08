@@ -20,7 +20,7 @@ const Cashback = lazy(() => import("./pages/Cashback"));
 const EMICalculator = lazy(() => import("./pages/EMICalculator"));
 const EligibilityChecker = lazy(() => import("./pages/EligibilityChecker"));
 
-const DealDetail = lazy(() => import("./pages/DealDetail"));
+
 const CompareProducts = lazy(() => import("./pages/CompareProducts"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -47,7 +47,7 @@ const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminCreditCards = lazy(() => import("./pages/admin/AdminCreditCards"));
 const AdminLoans = lazy(() => import("./pages/admin/AdminLoans"));
-const AdminDeals = lazy(() => import("./pages/admin/AdminDeals"));
+
 const AdminCashback = lazy(() => import("./pages/admin/AdminCashback"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
@@ -104,7 +104,7 @@ const AnimatedRoutes = () => {
             <Route path="/emi-calculator" element={<EMICalculator />} />
             <Route path="/eligibility" element={<EligibilityChecker />} />
             
-            <Route path="/deal/:id" element={<DealDetail />} />
+            
             <Route path="/compare" element={<CompareProducts />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -130,7 +130,7 @@ const AnimatedRoutes = () => {
               <Route index element={<AdminDashboard />} />
               <Route path="credit-cards" element={<AdminCreditCards />} />
               <Route path="loans" element={<AdminLoans />} />
-              <Route path="deals" element={<AdminDeals />} />
+              
               <Route path="cashback" element={<AdminCashback />} />
               <Route path="leads" element={<AdminLeads />} />
               <Route path="messages" element={<AdminMessages />} />

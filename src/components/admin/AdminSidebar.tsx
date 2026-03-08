@@ -10,7 +10,7 @@ const links = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Credit Cards", href: "/admin/credit-cards", icon: CreditCard },
   { label: "Loan Products", href: "/admin/loans", icon: Building },
-  { label: "Finance Deals", href: "/admin/deals", icon: Tag },
+  
   { label: "Cashback Offers", href: "/admin/cashback", icon: Gift },
   { label: "Leads", href: "/admin/leads", icon: Users },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
