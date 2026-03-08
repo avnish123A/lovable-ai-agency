@@ -84,8 +84,10 @@ const AdminSettings = () => {
     };
     const { error } = await supabase
       .from("site_settings")
-      .update({ value: valueToSave, updated_at: new Date().toISOString() })
-      .eq("key", "maintenance_mode");
+      .upsert(
+        { key: "maintenance_mode", value: valueToSave, updated_at: new Date().toISOString() },
+        { onConflict: "key" }
+      );
 
     if (error) {
       toast.error("Failed to save settings");
