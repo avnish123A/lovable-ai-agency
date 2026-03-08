@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  LayoutDashboard, CreditCard, Users, Building, Settings, LogOut, Wallet, MessageSquare, Gift, Sparkles, BarChart3, Key
+  LayoutDashboard, CreditCard, Users, Building, Settings, LogOut, Wallet, MessageSquare, 
+  Gift, Sparkles, BarChart3, Key, Shield, Landmark, TrendingUp, Percent, Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,11 +11,15 @@ const links = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Credit Cards", href: "/admin/credit-cards", icon: CreditCard },
   { label: "Loan Products", href: "/admin/loans", icon: Building },
-  
+  { label: "Insurance", href: "/admin/insurance", icon: Shield },
+  { label: "Bank Accounts", href: "/admin/bank-accounts", icon: Landmark },
+  { label: "Demat Accounts", href: "/admin/demat", icon: TrendingUp },
+  { label: "Fixed Deposits", href: "/admin/fixed-deposits", icon: Percent },
   { label: "Cashback Offers", href: "/admin/cashback", icon: Gift },
   { label: "Leads", href: "/admin/leads", icon: Users },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { label: "Contact Settings", href: "/admin/contact-settings", icon: Phone },
   { label: "AI Tools", href: "/admin/ai-tools", icon: Sparkles },
   { label: "API Keys", href: "/admin/api-keys", icon: Key },
   { label: "Settings", href: "/admin/settings", icon: Settings },
@@ -47,9 +52,7 @@ const AdminSidebar = () => {
               to={link.href}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               )}
             >
               <link.icon className="w-4 h-4" />
@@ -60,13 +63,8 @@ const AdminSidebar = () => {
       </nav>
 
       <div className="p-4 border-t border-border">
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-muted-foreground hover:text-destructive"
-          onClick={signOut}
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
+        <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-destructive" onClick={signOut}>
+          <LogOut className="w-4 h-4 mr-2" /> Logout
         </Button>
       </div>
     </aside>

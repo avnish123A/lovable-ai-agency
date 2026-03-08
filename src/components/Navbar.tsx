@@ -1,19 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Wallet, Search, Bot } from "lucide-react";
+import { Menu, X, Wallet, Search, Bot, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const navLinks = [
+const productLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
   { label: "Loans", href: "/loans" },
+  { label: "Insurance", href: "/insurance" },
+  { label: "Bank Accounts", href: "/bank-accounts" },
+  { label: "Demat Accounts", href: "/demat-accounts" },
+  { label: "Fixed Deposits", href: "/fixed-deposits" },
+  { label: "Cashback", href: "/cashback" },
+];
+
+const navLinks = [
+  { label: "Products", href: "#", children: productLinks },
   { label: "Finance Tools", href: "/tools" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -24,6 +35,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
+    setDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
 
@@ -48,19 +60,47 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                  location.pathname === link.href
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.children ? (
+                <div key={link.label} className="relative" onMouseEnter={() => setDropdownOpen(true)} onMouseLeave={() => setDropdownOpen(false)}>
+                  <button className="px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-muted-foreground hover:text-foreground hover:bg-secondary flex items-center gap-1">
+                    {link.label} <ChevronDown className="w-3 h-3" />
+                  </button>
+                  <AnimatePresence>
+                    {dropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        className="absolute top-full left-0 mt-1 w-48 rounded-xl border border-border bg-card shadow-lg p-2 z-50"
+                      >
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            to={child.href}
+                            className={`block px-3 py-2 text-sm rounded-lg transition-colors ${
+                              location.pathname === child.href ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    location.pathname === link.href ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="hidden lg:flex items-center gap-2">
@@ -90,19 +130,25 @@ const Navbar = () => {
             className="lg:hidden glass border-t border-border overflow-hidden"
           >
             <div className="container mx-auto px-4 py-4 space-y-1">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
+              {productLinks.map((link, i) => (
+                <motion.div key={link.label} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
                   <Link
                     to={link.href}
                     className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                      location.pathname === link.href
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                      location.pathname === link.href ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <div className="border-t border-border my-2" />
+              {[{ label: "Finance Tools", href: "/tools" }, { label: "About", href: "/about" }, { label: "Contact", href: "/contact" }].map((link, i) => (
+                <motion.div key={link.label} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: (productLinks.length + i) * 0.03 }}>
+                  <Link
+                    to={link.href}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      location.pathname === link.href ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                     }`}
                   >
                     {link.label}

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageSquare, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TrustBadge from "@/components/TrustBadge";
+import SEOHead from "@/components/SEOHead";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -19,12 +20,35 @@ const contactSchema = z.object({
   message: z.string().trim().min(10, "Message must be at least 10 characters").max(1000),
 });
 
+interface ContactInfo {
+  email: string; phone: string; address: string; working_hours: string;
+  whatsapp: string; instagram: string; facebook: string; twitter: string; map_embed: string;
+}
+
 const Contact = () => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    email: "contact@kriyapay.co.in", phone: "+91 98765 43210",
+    address: "Inspirex Technologies, Rajasthan, India", working_hours: "Mon-Fri: 10:00 AM - 6:00 PM",
+    whatsapp: "", instagram: "", facebook: "", twitter: "", map_embed: "",
+  });
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      const { data } = await supabase.from("site_settings").select("value").eq("key", "contact_info").maybeSingle();
+      if (data?.value && typeof data.value === "object") {
+        setContactInfo(prev => ({ ...prev, ...(data.value as Record<string, string>) }));
+      }
+    };
+    fetchContact();
+    // Realtime: reflect admin changes instantly
+    const ch = supabase.channel("contact-rt").on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => fetchContact()).subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -42,113 +66,95 @@ const Contact = () => {
       setErrors(fieldErrors);
       return;
     }
-
     setSubmitting(true);
     const { error } = await supabase.from("contact_messages").insert({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || null,
-      service: form.service || null,
-      message: form.message.trim(),
+      name: form.name.trim(), email: form.email.trim(),
+      phone: form.phone.trim() || null, service: form.service || null, message: form.message.trim(),
     });
-
     setSubmitting(false);
     if (error) {
-      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to send message.", variant: "destructive" });
     } else {
       setSubmitted(true);
       toast({ title: "Message Sent!", description: "We'll get back to you within 24 hours." });
     }
   };
 
+  const socialLinks = [
+    contactInfo.whatsapp && { label: "WhatsApp", href: `https://wa.me/${contactInfo.whatsapp.replace(/[^0-9]/g, "")}` },
+    contactInfo.instagram && { label: "Instagram", href: contactInfo.instagram },
+    contactInfo.facebook && { label: "Facebook", href: contactInfo.facebook },
+    contactInfo.twitter && { label: "Twitter", href: contactInfo.twitter },
+  ].filter(Boolean) as { label: string; href: string }[];
+
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead title="Contact Us - KriyaPay | Financial Services Support" description="Get in touch with KriyaPay for credit cards, loans, insurance queries. We respond within 24 hours." canonical="https://kriyapay.lovable.app/contact" />
       <Navbar />
       <section className="pt-28 pb-24">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-              Get in <span className="text-gradient">Touch</span>
-            </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto mb-4">
-              Have a question about our financial products or partnership opportunities? We'd love to hear from you.
-            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Get in <span className="text-gradient">Touch</span></h1>
+            <p className="text-muted-foreground max-w-xl mx-auto mb-4">Have a question about our financial products or partnership opportunities? We'd love to hear from you.</p>
             <TrustBadge variant="secure" />
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-5xl mx-auto">
-            {/* Contact info */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="lg:col-span-2 space-y-6"
-            >
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 space-y-6">
               <div className="p-6 rounded-2xl border border-border bg-card shadow-card">
                 <h3 className="font-heading font-bold text-foreground mb-4">Contact Information</h3>
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
-                      <Mail className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Email</p>
-                      <p className="text-sm font-medium text-foreground">contact@kriyapay.co.in</p>
-                    </div>
+                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0"><Mail className="w-4 h-4 text-primary" /></div>
+                    <div><p className="text-xs text-muted-foreground mb-0.5">Email</p><p className="text-sm font-medium text-foreground">{contactInfo.email}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
-                      <Phone className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Phone</p>
-                      <p className="text-sm font-medium text-foreground">+91 98765 43210</p>
-                    </div>
+                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0"><Phone className="w-4 h-4 text-primary" /></div>
+                    <div><p className="text-xs text-muted-foreground mb-0.5">Phone</p><p className="text-sm font-medium text-foreground">{contactInfo.phone}</p></div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Office</p>
-                      <p className="text-sm font-medium text-foreground">Inspirex Technologies<br />Rajasthan, India</p>
-                    </div>
+                    <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0"><MapPin className="w-4 h-4 text-primary" /></div>
+                    <div><p className="text-xs text-muted-foreground mb-0.5">Office</p><p className="text-sm font-medium text-foreground whitespace-pre-line">{contactInfo.address}</p></div>
                   </div>
+                  {contactInfo.working_hours && (
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-primary/8 flex items-center justify-center shrink-0"><Clock className="w-4 h-4 text-primary" /></div>
+                      <div><p className="text-xs text-muted-foreground mb-0.5">Working Hours</p><p className="text-sm font-medium text-foreground">{contactInfo.working_hours}</p></div>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {socialLinks.length > 0 && (
+                <div className="p-6 rounded-2xl border border-border bg-card shadow-card">
+                  <h3 className="font-heading font-bold text-foreground text-sm mb-3">Follow Us</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {socialLinks.map(s => (
+                      <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg text-xs font-medium bg-secondary text-foreground hover:bg-primary/10 transition-colors flex items-center gap-1">
+                        {s.label} <ExternalLink className="w-3 h-3" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="p-6 rounded-2xl border border-border bg-card shadow-card">
                 <div className="flex items-center gap-2 mb-3">
                   <MessageSquare className="w-4 h-4 text-primary" />
                   <h3 className="font-heading font-bold text-foreground text-sm">Quick Response</h3>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  We typically respond within 24 hours. For urgent matters regarding financial products,
-                  please mention "URGENT" in your message subject.
-                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">We typically respond within 24 hours. For urgent matters regarding financial products, please mention "URGENT" in your message subject.</p>
               </div>
             </motion.div>
 
-            {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="lg:col-span-3"
-            >
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-3">
               <div className="p-6 md:p-8 rounded-2xl border border-border bg-card shadow-card">
                 {submitted ? (
                   <div className="text-center py-12">
-                    <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-                      <Send className="w-8 h-8 text-accent" />
-                    </div>
+                    <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-4"><Send className="w-8 h-8 text-accent" /></div>
                     <h3 className="text-xl font-heading font-bold text-foreground mb-2">Message Sent!</h3>
-                    <p className="text-sm text-muted-foreground mb-6">
-                      Thank you for reaching out. We'll get back to you within 24 hours.
-                    </p>
-                    <Button variant="outline" onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", service: "", message: "" }); }} className="rounded-xl">
-                      Send Another
-                    </Button>
+                    <p className="text-sm text-muted-foreground mb-6">Thank you for reaching out. We'll get back to you within 24 hours.</p>
+                    <Button variant="outline" onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", service: "", message: "" }); }} className="rounded-xl">Send Another</Button>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
@@ -171,16 +177,14 @@ const Contact = () => {
                       </div>
                       <div>
                         <label className="text-xs font-medium text-foreground mb-1.5 block">Subject</label>
-                        <select
-                          name="service"
-                          value={form.service}
-                          onChange={handleChange}
-                          className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        >
+                        <select name="service" value={form.service} onChange={handleChange} className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                           <option value="">Select topic</option>
                           <option value="credit-cards">Credit Cards</option>
                           <option value="loans">Personal Loans</option>
                           <option value="insurance">Insurance</option>
+                          <option value="bank-account">Bank Account</option>
+                          <option value="demat">Demat Account</option>
+                          <option value="fixed-deposit">Fixed Deposit</option>
                           <option value="partnership">Partnership</option>
                           <option value="support">Support</option>
                           <option value="other">Other</option>
@@ -193,12 +197,17 @@ const Contact = () => {
                       {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
                     </div>
                     <Button type="submit" disabled={submitting} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl">
-                      {submitting ? "Sending..." : "Send Message"}
-                      <Send className="w-4 h-4 ml-2" />
+                      {submitting ? "Sending..." : "Send Message"} <Send className="w-4 h-4 ml-2" />
                     </Button>
                   </form>
                 )}
               </div>
+
+              {contactInfo.map_embed && (
+                <div className="mt-6 rounded-2xl overflow-hidden border border-border">
+                  <iframe src={contactInfo.map_embed} width="100%" height="250" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Office Location" />
+                </div>
+              )}
             </motion.div>
           </div>
         </div>
