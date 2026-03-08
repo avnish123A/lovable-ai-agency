@@ -1,15 +1,41 @@
 import { motion } from "framer-motion";
+import { getBankLogo } from "@/lib/bank-utils";
+import { useState } from "react";
 
 const banks = [
-  { name: "HDFC Bank", logo: "https://logo.clearbit.com/hdfcbank.com" },
-  { name: "ICICI Bank", logo: "https://logo.clearbit.com/icicibank.com" },
-  { name: "Axis Bank", logo: "https://logo.clearbit.com/axisbank.com" },
-  { name: "SBI Cards", logo: "https://logo.clearbit.com/sbicard.com" },
-  { name: "Kotak Bank", logo: "https://logo.clearbit.com/kotak.com" },
-  { name: "IndusInd Bank", logo: "https://logo.clearbit.com/indusind.com" },
-  { name: "Yes Bank", logo: "https://logo.clearbit.com/yesbank.in" },
-  { name: "RBL Bank", logo: "https://logo.clearbit.com/rblbank.com" },
+  { name: "HDFC Bank" },
+  { name: "ICICI Bank" },
+  { name: "Axis Bank" },
+  { name: "SBI Cards" },
+  { name: "Kotak Mahindra Bank" },
+  { name: "IndusInd Bank" },
+  { name: "Yes Bank" },
+  { name: "RBL Bank" },
 ];
+
+const BankItem = ({ name }: { name: string }) => {
+  const [error, setError] = useState(false);
+  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+
+  return (
+    <div className="flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-105">
+      <div className="h-10 w-10 rounded-xl bg-card border border-border flex items-center justify-center overflow-hidden">
+        {error ? (
+          <span className="text-[10px] font-heading font-bold text-primary">{initials}</span>
+        ) : (
+          <img
+            src={getBankLogo(name)}
+            alt={`${name} logo`}
+            className="w-full h-full object-contain p-1"
+            loading="lazy"
+            onError={() => setError(true)}
+          />
+        )}
+      </div>
+      <span className="text-xs text-muted-foreground font-medium">{name}</span>
+    </div>
+  );
+};
 
 const PartnerBanks = () => {
   return (
@@ -36,18 +62,8 @@ const PartnerBanks = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="flex flex-col items-center gap-2 opacity-50 hover:opacity-100 transition-all duration-300 hover:scale-105"
             >
-              <img
-                src={bank.logo}
-                alt={`${bank.name} logo`}
-                className="h-10 w-10 rounded-xl object-contain bg-secondary p-1.5"
-                loading="lazy"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-              <span className="text-xs text-muted-foreground font-medium">{bank.name}</span>
+              <BankItem name={bank.name} />
             </motion.div>
           ))}
         </motion.div>
