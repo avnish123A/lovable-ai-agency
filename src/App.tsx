@@ -49,6 +49,7 @@ const AdminCashback = lazy(() => import("./pages/admin/AdminCashback"));
 const AdminLeads = lazy(() => import("./pages/admin/AdminLeads"));
 const AdminMessages = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
+const AdminAITools = lazy(() => import("./pages/admin/AdminAITools"));
 
 const PrivacyPolicy = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.PrivacyPolicy })));
 const TermsConditions = lazy(() => import("./pages/PolicyPages").then(m => ({ default: m.TermsConditions })));
@@ -116,6 +117,7 @@ const AnimatedRoutes = () => {
               <Route path="cashback" element={<AdminCashback />} />
               <Route path="leads" element={<AdminLeads />} />
               <Route path="messages" element={<AdminMessages />} />
+              <Route path="ai-tools" element={<AdminAITools />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             {/* Legal */}
