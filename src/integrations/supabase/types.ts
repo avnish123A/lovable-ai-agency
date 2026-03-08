@@ -167,6 +167,54 @@ export type Database = {
         }
         Relationships: []
       }
+      cashback_deals: {
+        Row: {
+          cashback_amount: string
+          category: string | null
+          created_at: string
+          description: string | null
+          external_deal_id: string | null
+          id: string
+          is_active: boolean
+          merchant_logo: string | null
+          merchant_name: string
+          offer_title: string
+          source: string | null
+          tracking_link: string
+          updated_at: string
+        }
+        Insert: {
+          cashback_amount: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          external_deal_id?: string | null
+          id?: string
+          is_active?: boolean
+          merchant_logo?: string | null
+          merchant_name: string
+          offer_title: string
+          source?: string | null
+          tracking_link: string
+          updated_at?: string
+        }
+        Update: {
+          cashback_amount?: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          external_deal_id?: string | null
+          id?: string
+          is_active?: boolean
+          merchant_logo?: string | null
+          merchant_name?: string
+          offer_title?: string
+          source?: string | null
+          tracking_link?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cashback_offers: {
         Row: {
           cashback_value: string
@@ -202,6 +250,115 @@ export type Database = {
           validity?: string | null
         }
         Relationships: []
+      }
+      cashback_payouts: {
+        Row: {
+          amount: string
+          created_at: string
+          id: string
+          processed_at: string | null
+          request_id: string
+          status: string
+          transaction_ref: string | null
+          upi_id: string
+        }
+        Insert: {
+          amount: string
+          created_at?: string
+          id?: string
+          processed_at?: string | null
+          request_id: string
+          status?: string
+          transaction_ref?: string | null
+          upi_id: string
+        }
+        Update: {
+          amount?: string
+          created_at?: string
+          id?: string
+          processed_at?: string | null
+          request_id?: string
+          status?: string
+          transaction_ref?: string | null
+          upi_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashback_payouts_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "cashback_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cashback_requests: {
+        Row: {
+          admin_notes: string | null
+          approved_at: string | null
+          cashback_amount: string | null
+          click_timestamp: string
+          created_at: string
+          deal_id: string
+          device: string | null
+          email: string
+          id: string
+          ip_hash: string | null
+          paid_at: string | null
+          phone: string
+          status: string
+          tracking_id: string
+          updated_at: string
+          upi_id: string
+          user_name: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          approved_at?: string | null
+          cashback_amount?: string | null
+          click_timestamp?: string
+          created_at?: string
+          deal_id: string
+          device?: string | null
+          email: string
+          id?: string
+          ip_hash?: string | null
+          paid_at?: string | null
+          phone: string
+          status?: string
+          tracking_id: string
+          updated_at?: string
+          upi_id: string
+          user_name: string
+        }
+        Update: {
+          admin_notes?: string | null
+          approved_at?: string | null
+          cashback_amount?: string | null
+          click_timestamp?: string
+          created_at?: string
+          deal_id?: string
+          device?: string | null
+          email?: string
+          id?: string
+          ip_hash?: string | null
+          paid_at?: string | null
+          phone?: string
+          status?: string
+          tracking_id?: string
+          updated_at?: string
+          upi_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashback_requests_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "cashback_deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       coming_soon_subscribers: {
         Row: {
