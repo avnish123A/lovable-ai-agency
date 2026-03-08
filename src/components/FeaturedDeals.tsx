@@ -88,7 +88,7 @@ const FeaturedDeals = () => {
 
               <div className="mt-auto pt-4 border-t border-border">
                 <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl" size="sm">
-                  <Link to="/finance-deals">
+                  <Link to={`/deal/${deal.id}`}>
                     View Deal <ExternalLink className="w-3.5 h-3.5 ml-2" />
                   </Link>
                 </Button>
