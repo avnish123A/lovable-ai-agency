@@ -6,18 +6,13 @@ const brands = [
   { name: "ICICI Bank", logo: "/logos/icici.png" },
   { name: "Axis Bank", logo: "/logos/axis.png" },
   { name: "SBI", logo: "/logos/sbi.png" },
-  { name: "Kotak", logo: "/logos/kotak.png" },
+  { name: "Kotak Mahindra", logo: "/logos/kotak.png" },
   { name: "IndusInd Bank", logo: "/logos/indusind.png" },
   { name: "Yes Bank", logo: "/logos/yesbank.png" },
   { name: "Bajaj Finserv", logo: "/logos/bajaj.png" },
   { name: "Paytm", logo: "/logos/paytm.png" },
   { name: "PhonePe", logo: "/logos/phonepe.png" },
   { name: "Razorpay", logo: "/logos/razorpay.png" },
-  { name: "CRED", logo: "/logos/cred.png" },
-  { name: "Groww", logo: "/logos/groww.png" },
-  { name: "Zerodha", logo: "/logos/zerodha.png" },
-  { name: "PolicyBazaar", logo: "/logos/policybazaar.png" },
-  { name: "BankBazaar", logo: "/logos/bankbazaar.png" },
 ];
 
 const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
