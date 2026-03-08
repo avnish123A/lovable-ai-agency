@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { PiggyBank } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -13,6 +13,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getSavingsInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const SavingsCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [monthly, setMonthly] = useState(10000);
   const [rate, setRate] = useState(7);
   const [years, setYears] = useState(10);
@@ -71,7 +72,7 @@ const SavingsCalc = () => {
             }}
           />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground">Total Savings</p>
             <AnimatedCounter value={Math.round(futureValue)} prefix="₹" className="text-3xl font-bold text-primary" />
@@ -107,7 +108,7 @@ const SavingsCalc = () => {
           />
           
           <AchievementBadge type="savvy_saver" show={score >= 70} message="Your savings plan will multiply your wealth!" />
-          <ResultActions title="Savings Calculation" data={{ "Monthly": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(futureValue), "Real Value": fmt(realValue), "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
+          <ResultActions title="Savings Calculation" data={{ "Monthly": fmt(monthly), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(futureValue), "Real Value": fmt(realValue), "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

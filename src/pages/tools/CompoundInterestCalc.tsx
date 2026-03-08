@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { TrendingUp } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, AreaChart, Area, XAxis, YAxis } from "recharts";
@@ -9,6 +9,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const CompoundInterestCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [principal, setPrincipal] = useState(100000);
   const [rate, setRate] = useState(12);
   const [years, setYears] = useState(5);
@@ -46,7 +47,7 @@ const CompoundInterestCalc = () => {
             </div>
           </div>
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-6">
             <ResponsiveContainer width="100%" height={180}>
               <PieChart><Pie data={data} cx="50%" cy="50%" innerRadius={55} outerRadius={80} dataKey="value" strokeWidth={2}>
@@ -70,7 +71,7 @@ const CompoundInterestCalc = () => {
             </ResponsiveContainer>
           </div>
           <AIInsight type="ai" title="Compound Power" message={`Your money grows ${(total / principal).toFixed(1)}x in ${years} years. ${compound === 12 ? "Monthly compounding gives the best results!" : "Try monthly compounding for faster growth."}`} />
-          <ResultActions title="Compound Interest Result" data={{ "Principal": fmt(principal), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(total), "Interest": fmt(interest) }} productLink="/fixed-deposits" />
+          <ResultActions title="Compound Interest Result" data={{ "Principal": fmt(principal), "Rate": `${rate}%`, "Years": `${years}`, "Total": fmt(total), "Interest": fmt(interest) }} productLink="/fixed-deposits" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>
