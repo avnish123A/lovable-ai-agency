@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Star } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -10,6 +10,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const RewardPointsCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [spend, setSpend] = useState(50000);
   const [pointsPerRupee, setPointsPerRupee] = useState(2);
   const [pointValue, setPointValue] = useState(0.25);
@@ -47,7 +48,7 @@ const RewardPointsCalc = () => {
             </div>
           </div>
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: "Monthly Points", value: monthlyPoints, prefix: "", suffix: " pts", cls: "text-primary" },
@@ -80,7 +81,7 @@ const RewardPointsCalc = () => {
 
           <AIInsight type="ai" title="AI Rewards Tip" message={effectiveCashback >= 1 ? `${effectiveCashback.toFixed(1)}% effective return is excellent! You're earning ${fmt(yearlyValue)} yearly — that's a free gadget!` : `Your effective return is ${effectiveCashback.toFixed(1)}%. Consider cards with higher point value or bonus categories.`} />
           <AchievementBadge type="cashback_pro" show={yearlyValue >= 6000} message={`${fmt(yearlyValue)} yearly in rewards — great returns!`} />
-          <ResultActions title="Reward Points Analysis" data={{ "Spend": fmt(spend), "Points/₹100": `${pointsPerRupee}`, "Value/Point": `₹${pointValue}`, "Monthly Value": fmt(monthlyValue), "Yearly Value": fmt(yearlyValue), "Effective Rate": `${effectiveCashback.toFixed(2)}%` }} productLink="/credit-cards" />
+          <ResultActions title="Reward Points Analysis" data={{ "Spend": fmt(spend), "Points/₹100": `${pointsPerRupee}`, "Value/Point": `₹${pointValue}`, "Monthly Value": fmt(monthlyValue), "Yearly Value": fmt(yearlyValue), "Effective Rate": `${effectiveCashback.toFixed(2)}%` }} productLink="/credit-cards" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

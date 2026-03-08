@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Percent } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,6 +9,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const InterestRateCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [principal, setPrincipal] = useState(100000);
   const [finalAmount, setFinalAmount] = useState(150000);
   const [years, setYears] = useState(3);
@@ -34,7 +35,7 @@ const InterestRateCalc = () => {
           <EditableSliderInput label="Final Amount" value={finalAmount} onChange={setFinalAmount} min={principal} max={50000000} step={1000} prefix="₹" />
           <EditableSliderInput label="Time Period" value={years} onChange={setYears} min={1} max={30} step={1} suffix=" yrs" />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 text-center">
               <p className="text-xs text-muted-foreground mb-1">Simple Interest Rate</p>
@@ -72,7 +73,7 @@ const InterestRateCalc = () => {
           </div>
 
           <AIInsight type="ai" title="AI Rate Analysis" message={compoundRate > 10 ? `${compoundRate.toFixed(1)}% compound return is excellent — better than most FDs. This could be equity-like growth.` : `${compoundRate.toFixed(1)}% compound return is moderate. FDs offer 6-8%, mutual funds can give 12%+.`} />
-          <ResultActions title="Interest Rate Analysis" data={{ "Principal": fmt(principal), "Final": fmt(finalAmount), "Years": `${years}`, "Simple Rate": `${simpleRate.toFixed(2)}%`, "Compound Rate": `${compoundRate.toFixed(2)}%`, "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" />
+          <ResultActions title="Interest Rate Analysis" data={{ "Principal": fmt(principal), "Final": fmt(finalAmount), "Years": `${years}`, "Simple Rate": `${simpleRate.toFixed(2)}%`, "Compound Rate": `${compoundRate.toFixed(2)}%`, "Interest": fmt(interestEarned) }} productLink="/fixed-deposits" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

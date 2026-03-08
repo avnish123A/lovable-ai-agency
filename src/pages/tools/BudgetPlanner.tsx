@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { FileText } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
@@ -22,6 +22,7 @@ const categories = [
 ];
 
 const BudgetPlanner = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [income, setIncome] = useState(50000);
   const [allocations, setAllocations] = useState(categories.map((c) => c.default));
 
@@ -107,7 +108,7 @@ const BudgetPlanner = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-4">
+          <div ref={resultRef} data-result-capture className="rounded-2xl border border-border bg-card p-4">
             <ResponsiveContainer width="100%" height={180}>
               <PieChart>
                 <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} dataKey="value" strokeWidth={1}>
@@ -140,7 +141,7 @@ const BudgetPlanner = () => {
           />
           
           <AchievementBadge type="budget_master" show={budgetScore >= 75 && remaining >= 0} message="Your budget is well-balanced!" />
-          <ResultActions title="Budget Plan" data={Object.fromEntries(categories.map((c, i) => [c.label, fmt(income * allocations[i] / 100)]))} productLink="/bank-accounts" />
+          <ResultActions title="Budget Plan" data={Object.fromEntries(categories.map((c, i) => [c.label, fmt(income * allocations[i] / 100)]))} productLink="/bank-accounts" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

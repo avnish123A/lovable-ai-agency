@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Landmark } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
@@ -47,6 +47,7 @@ function calcTax(taxable: number, slabs: typeof newSlabs) {
 }
 
 const TaxEstimator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [income, setIncome] = useState(1200000);
   const [deductions, setDeductions] = useState(150000);
   const [regime, setRegime] = useState<"new" | "old">("new");
@@ -133,7 +134,7 @@ const TaxEstimator = () => {
             </p>
           </div>
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-5 text-center">
               <p className="text-xs text-muted-foreground">Total Tax</p>
@@ -196,7 +197,7 @@ const TaxEstimator = () => {
             message={aiInsights[0] || "Adjust income to see personalized tax-saving tips."}
             insights={aiInsights.slice(1)}
           />
-          <ResultActions title="Tax Estimate" data={{ "Income": fmt(income), "Regime": regime === "new" ? "New" : "Old", "Taxable": fmt(taxable), "Tax": fmt(totalTax), "Effective Rate": `${effectiveRate.toFixed(1)}%`, "Take Home": fmt(takeHome), "Regime Savings": fmt(Math.abs(regimeSavings)) }} productLink="/bank-accounts" />
+          <ResultActions title="Tax Estimate" data={{ "Income": fmt(income), "Regime": regime === "new" ? "New" : "Old", "Taxable": fmt(taxable), "Tax": fmt(totalTax), "Effective Rate": `${effectiveRate.toFixed(1)}%`, "Take Home": fmt(takeHome), "Regime Savings": fmt(Math.abs(regimeSavings)) }} productLink="/bank-accounts" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

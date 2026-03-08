@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Gift } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -10,6 +10,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const CashbackCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [spend, setSpend] = useState(50000);
   const [cashbackRate, setCashbackRate] = useState(2);
   const [cap, setCap] = useState(1000);
@@ -34,7 +35,7 @@ const CashbackCalc = () => {
           <EditableSliderInput label="Cashback Rate" value={cashbackRate} onChange={setCashbackRate} min={0.5} max={10} step={0.5} suffix="%" />
           <EditableSliderInput label="Monthly Cap" value={cap} onChange={setCap} min={100} max={10000} step={100} prefix="₹" />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-border bg-card p-5 text-center">
               <p className="text-xs text-muted-foreground">Monthly</p>
@@ -60,7 +61,7 @@ const CashbackCalc = () => {
             message={hitsCap ? `You're hitting the ${fmt(cap)} monthly cap. Consider a card with higher cap or use category-specific cards.` : `At ${cashbackRate}% rate, you're earning ${fmt(monthlyCashback)} monthly. Try cards with 5%+ on specific categories for even more.`}
           />
           <AchievementBadge type="cashback_pro" show={yearlyCashback >= 6000} message={`${fmt(yearlyCashback)} yearly cashback — that's a free vacation!`} />
-          <ResultActions title="Cashback Calculation" data={{ "Spend": fmt(spend), "Rate": `${cashbackRate}%`, "Monthly": fmt(monthlyCashback), "Yearly": fmt(yearlyCashback) }} productLink="/credit-cards" />
+          <ResultActions title="Cashback Calculation" data={{ "Spend": fmt(spend), "Rate": `${cashbackRate}%`, "Monthly": fmt(monthlyCashback), "Yearly": fmt(yearlyCashback) }} productLink="/credit-cards" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Building } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -13,6 +13,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getHomeLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const HomeLoanCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [amount, setAmount] = useState(5000000);
   const [rate, setRate] = useState(8.5);
   const [years, setYears] = useState(20);
@@ -87,7 +88,7 @@ const HomeLoanCalc = () => {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             {[
               { label: "Monthly EMI", value: emi, highlight: true },
@@ -141,7 +142,7 @@ const HomeLoanCalc = () => {
           />
 
           <AchievementBadge type="smart_planner" show={affordabilityScore >= 75} message="Smart home buying decision!" />
-          <ResultActions title="Home Loan Plan" data={{ "Property": fmt(amount), "Down Payment": `${fmt(downPayment)} (${Math.round(downPaymentPercent)}%)`, "Loan": fmt(loanAmount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Total Interest": fmt(totalInterest) }} productLink="/loans" />
+          <ResultActions title="Home Loan Plan" data={{ "Property": fmt(amount), "Down Payment": `${fmt(downPayment)} (${Math.round(downPaymentPercent)}%)`, "Loan": fmt(loanAmount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Total Interest": fmt(totalInterest) }} productLink="/loans" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

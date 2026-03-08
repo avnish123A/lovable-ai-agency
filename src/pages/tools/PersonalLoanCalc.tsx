@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Wallet } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from "recharts";
@@ -13,6 +13,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getPersonalLoanInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const PersonalLoanCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [amount, setAmount] = useState(500000);
   const [rate, setRate] = useState(12);
   const [years, setYears] = useState(5);
@@ -81,7 +82,7 @@ const PersonalLoanCalc = () => {
             }}
           />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
             {[
               { label: "Monthly EMI", value: emi, highlight: true },
@@ -130,7 +131,7 @@ const PersonalLoanCalc = () => {
           />
           
           <AchievementBadge type="smart_planner" show={score >= 70} message="Good loan planning!" />
-          <ResultActions title="Personal Loan Plan" data={{ "Amount": fmt(amount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Interest": fmt(interest), "Total": fmt(total) }} productLink="/loans" />
+          <ResultActions title="Personal Loan Plan" data={{ "Amount": fmt(amount), "Rate": `${rate}%`, "Tenure": `${years} yrs`, "EMI": fmt(emi), "Interest": fmt(interest), "Total": fmt(total) }} productLink="/loans" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

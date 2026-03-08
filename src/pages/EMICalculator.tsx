@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { Calculator } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -14,6 +14,7 @@ import StepIndicator from "@/components/gamification/StepIndicator";
 import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 
 const EMICalculator = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [amount, setAmount] = useState(500000);
   const [rate, setRate] = useState(10.5);
   const [tenure, setTenure] = useState(24);
@@ -109,7 +110,7 @@ const EMICalculator = () => {
               />
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-3 space-y-5">
+            <motion.div ref={resultRef} data-result-capture initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="lg:col-span-3 space-y-5">
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: "Monthly EMI", value: result.emi, highlight: true },
@@ -181,6 +182,7 @@ const EMICalculator = () => {
                   "Total Payment": fmt(result.totalPayment),
                 }}
                 productLink="/loans"
+                captureRef={resultRef}
               />
             </motion.div>
           </div>

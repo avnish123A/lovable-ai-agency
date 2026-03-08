@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { BadgeDollarSign } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -13,6 +13,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getDebtInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const DebtPayoffCalc = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [debt, setDebt] = useState(500000);
   const [rate, setRate] = useState(15);
   const [payment, setPayment] = useState(15000);
@@ -60,7 +61,7 @@ const DebtPayoffCalc = () => {
             }}
           />
         </div>
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="rounded-2xl border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground">Debt-Free In</p>
             <p className="text-3xl font-bold text-primary">{years > 0 ? `${years} yr${years > 1 ? "s" : ""} ` : ""}{remainingMonths} mo</p>
@@ -92,7 +93,7 @@ const DebtPayoffCalc = () => {
           />
           
           <AchievementBadge type="debt_crusher" show={debtScore >= 70} message="You're on a fast track to debt freedom!" />
-          <ResultActions title="Debt Payoff Plan" data={{ "Debt": fmt(debt), "Rate": `${rate}%`, "Payment": fmt(payment), "Duration": `${months} months`, "Total Interest": fmt(totalInterest) }} productLink="/loans" />
+          <ResultActions title="Debt Payoff Plan" data={{ "Debt": fmt(debt), "Rate": `${rate}%`, "Payment": fmt(payment), "Duration": `${months} months`, "Total Interest": fmt(totalInterest) }} productLink="/loans" captureRef={resultRef} />
         </div>
       </div>
     </ToolLayout>

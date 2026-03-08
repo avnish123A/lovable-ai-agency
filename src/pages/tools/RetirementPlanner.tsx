@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Landmark } from "lucide-react";
 import ToolLayout from "@/components/ToolLayout";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
@@ -12,6 +12,7 @@ import EditableSliderInput from "@/components/gamification/EditableSliderInput";
 import { getRetirementInsights, INDIAN_BENCHMARKS } from "@/lib/financial-ai-engine";
 
 const RetirementPlanner = () => {
+  const resultRef = useRef<HTMLDivElement>(null);
   const [age, setAge] = useState(30);
   const [retireAge, setRetireAge] = useState(60);
   const [monthly, setMonthly] = useState(15000);
@@ -78,7 +79,7 @@ const RetirementPlanner = () => {
           <EditableSliderInput label="Monthly Expenses (Today)" value={monthlyExpense} onChange={setMonthlyExpense} min={10000} max={300000} step={5000} prefix="₹" />
         </div>
 
-        <div className="space-y-4">
+        <div ref={resultRef} data-result-capture className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-border bg-card p-4 text-center">
               <p className="text-[10px] text-muted-foreground mb-1">Your Corpus (Standard SIP)</p>
@@ -146,6 +147,7 @@ const RetirementPlanner = () => {
               "Readiness": `${result.readiness}%`,
             }}
             productLink="/fixed-deposits"
+            captureRef={resultRef}
           />
         </div>
       </div>
