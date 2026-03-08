@@ -13,6 +13,7 @@ const footerLinks = {
   Company: [
     { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
+    { label: "Finance Tools", href: "/tools" },
     { label: "EMI Calculator", href: "/emi-calculator" },
     { label: "Eligibility Checker", href: "/eligibility" },
   ],
@@ -27,7 +28,6 @@ const footerLinks = {
 
 const Footer = () => {
   useEffect(() => {
-    // Cuelinks smart script
     if (!document.getElementById("cuelinks-script")) {
       const cIdScript = document.createElement("script");
       cIdScript.id = "cuelinks-cid";
@@ -46,7 +46,6 @@ const Footer = () => {
       document.body.appendChild(s);
     }
 
-    // EarnKaro/CashKaro smart link script
     if (!document.getElementById("earnkaro-script")) {
       const ekScript = document.createElement("script");
       ekScript.id = "earnkaro-script";
@@ -68,7 +67,7 @@ const Footer = () => {
                 <Wallet className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-heading font-bold text-foreground">
-                Kriya<span className="text-gradient">pay</span>
+                Kriya<span className="text-accent">pay</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">
@@ -84,7 +83,7 @@ const Footer = () => {
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-accent transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -96,9 +95,9 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Kriyapay by Inspirex Technologies. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors">Terms</Link>
-            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-primary transition-colors">Disclaimer</Link>
+            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-accent transition-colors">Privacy</Link>
+            <Link to="/terms" className="text-xs text-muted-foreground hover:text-accent transition-colors">Terms</Link>
+            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-accent transition-colors">Disclaimer</Link>
           </div>
         </div>
       </div>

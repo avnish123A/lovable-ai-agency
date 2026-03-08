@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Wallet } from "lucide-react";
+import { Menu, X, Wallet, Search, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
@@ -11,7 +11,6 @@ const navLinks = [
   { label: "Compare", href: "/compare" },
   { label: "Deals", href: "/finance-deals" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
@@ -46,7 +45,7 @@ const Navbar = () => {
               <Wallet className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-heading font-bold text-foreground">
-              Kriya<span className="text-gradient">pay</span>
+              Kriya<span className="text-accent">pay</span>
             </span>
           </Link>
 
@@ -66,12 +65,15 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
-            <Button asChild variant="outline" size="sm" className="text-muted-foreground border-border rounded-xl">
-              <Link to="/eligibility">Check Eligibility</Link>
+          <div className="hidden lg:flex items-center gap-2">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
+              <Search className="w-4 h-4" />
             </Button>
-            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl shadow-glow-sm">
-              <Link to="/finance-deals">Explore Deals</Link>
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
+              <Bot className="w-4 h-4" />
+            </Button>
+            <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-xl font-semibold shadow-glow-sm">
+              <Link to="/credit-cards">Apply Now</Link>
             </Button>
           </div>
 
@@ -113,8 +115,8 @@ const Navbar = () => {
                 <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
                   <Link to="/eligibility">Eligibility</Link>
                 </Button>
-                <Button asChild size="sm" className="flex-1 rounded-xl">
-                  <Link to="/finance-deals">Explore Deals</Link>
+                <Button asChild size="sm" className="flex-1 rounded-xl bg-accent text-accent-foreground hover:bg-accent/90">
+                  <Link to="/credit-cards">Apply Now</Link>
                 </Button>
               </div>
             </div>
