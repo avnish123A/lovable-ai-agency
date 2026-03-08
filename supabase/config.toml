@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.send-to-sheet]
 verify_jwt = false
+
+[functions.ai-product-enhance]
+verify_jwt = false
