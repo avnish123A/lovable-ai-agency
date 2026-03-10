@@ -78,7 +78,7 @@ const HomeLoanCalc = () => {
           />
 
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
-            <p className="font-semibold text-foreground mb-2">🏦 Current Home Loan Rates (2025)</p>
+            <p className="font-semibold text-foreground mb-2">🏦 Current Home Loan Rates (2026)</p>
             {Object.entries(INDIAN_BENCHMARKS.homeLoanRates).map(([bank, bankRate]) => (
               <div key={bank} className="flex justify-between text-muted-foreground">
                 <span className="capitalize">{bank}</span>

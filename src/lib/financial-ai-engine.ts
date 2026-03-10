@@ -1,13 +1,13 @@
 /**
  * Real Indian Financial Data & AI Insight Engine
- * All data based on RBI guidelines, SEBI regulations, and real market benchmarks (2025-26)
+ * All data based on RBI guidelines, SEBI regulations, and real market benchmarks (2026-27)
  */
 
 // ============ REAL BENCHMARK DATA ============
 
 export const INDIAN_BENCHMARKS = {
-  // RBI repo rate as of 2025
-  rbiRepoRate: 6.5,
+  // RBI repo rate as of 2026
+  rbiRepoRate: 6.25,
   // Average FD rates by bank type
   fdRates: { psu: 6.5, private: 7.2, smallFinance: 8.5, nbfc: 8.0 },
   // Average home loan rates
@@ -19,7 +19,7 @@ export const INDIAN_BENCHMARKS = {
   // Inflation
   avgInflation: 5.5,
   cpiInflation: 4.8,
-  // Tax (FY 2025-26 New Regime)
+  // Tax (FY 2026-27 New Regime)
   standardDeduction: 75000,
   section80CLimit: 150000,
   npsExtraLimit: 50000,

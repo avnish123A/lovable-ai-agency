@@ -94,7 +94,7 @@ const TaxEstimator = () => {
   const aiInsights = useMemo(() => getTaxInsights(income, regime, deductions, totalTax, effectiveRate), [income, regime, deductions, totalTax, effectiveRate]);
 
   return (
-    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2025-26, Budget 2025 slabs)" icon={<Landmark className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2026-27, Budget 2026 slabs)" icon={<Landmark className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Choose Regime", "Enter Income", "View Tax"]} current={income > 0 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
@@ -122,7 +122,7 @@ const TaxEstimator = () => {
           </div>
 
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
-            <p className="font-semibold text-foreground mb-2">Tax Slabs ({regime === "new" ? "New" : "Old"} Regime FY 2025-26)</p>
+            <p className="font-semibold text-foreground mb-2">Tax Slabs ({regime === "new" ? "New" : "Old"} Regime FY 2026-27)</p>
             {slabs.map((s) => (
               <div key={s.min} className="flex justify-between text-muted-foreground">
                 <span>{s.max === Infinity ? `Above ₹${(s.min - 1).toLocaleString("en-IN")}` : `₹${s.min.toLocaleString("en-IN")} - ₹${s.max.toLocaleString("en-IN")}`}</span>
@@ -193,7 +193,7 @@ const TaxEstimator = () => {
 
           <AIInsight
             type="ai"
-            title="AI Tax Strategy (FY 2025-26)"
+            title="AI Tax Strategy (FY 2026-27)"
             message={aiInsights[0] || "Adjust income to see personalized tax-saving tips."}
             insights={aiInsights.slice(1)}
           />
