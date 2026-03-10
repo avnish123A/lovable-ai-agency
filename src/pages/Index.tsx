@@ -63,6 +63,7 @@ const toolLinks = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <ScrollProgress />
       <SEOHead 
         title="ApniNivesh – Compare Best Credit Cards, Loans & Insurance in India" 
         description="Compare credit cards, personal loans & insurance from 15+ Indian banks. AI-powered recommendations, EMI calculators & eligibility checkers by Inspirex Technologies INC."
