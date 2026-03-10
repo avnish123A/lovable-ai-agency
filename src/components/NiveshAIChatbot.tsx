@@ -295,7 +295,7 @@ const NiveshAIChatbot = () => {
                     </motion.div>
                     <h4 className="font-heading font-bold text-foreground text-base mb-1">Namaste! 🙏 I'm Your Finance Adviser</h4>
                     <p className="text-xs text-muted-foreground leading-relaxed max-w-[300px] mx-auto">
-                      I'll ask you questions to understand your needs, then give personalized recommendations with latest 2025 data.
+                      I'll ask you questions to understand your needs, then give personalized recommendations with latest 2026 data.
                     </p>
                   </div>
 

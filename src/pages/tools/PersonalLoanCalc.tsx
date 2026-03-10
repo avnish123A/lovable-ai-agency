@@ -65,7 +65,7 @@ const PersonalLoanCalc = () => {
           <EditableSliderInput label="Tenure" value={years} onChange={setYears} min={1} max={7} step={1} suffix=" yrs" />
 
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
-            <p className="font-semibold text-foreground mb-2">🏦 Personal Loan Rate Range (2025)</p>
+            <p className="font-semibold text-foreground mb-2">🏦 Personal Loan Rate Range (2026)</p>
             <div className="flex justify-between text-muted-foreground"><span>Best (750+ CIBIL)</span><span className="font-semibold text-accent">{INDIAN_BENCHMARKS.personalLoanRates.low}%</span></div>
             <div className="flex justify-between text-muted-foreground"><span>Average</span><span className="font-semibold">{INDIAN_BENCHMARKS.personalLoanRates.mid}%</span></div>
             <div className="flex justify-between text-muted-foreground"><span>High Risk</span><span className="font-semibold text-destructive">{INDIAN_BENCHMARKS.personalLoanRates.high}%</span></div>

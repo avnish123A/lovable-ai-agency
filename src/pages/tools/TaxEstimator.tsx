@@ -193,7 +193,7 @@ const TaxEstimator = () => {
 
           <AIInsight
             type="ai"
-            title="AI Tax Strategy (FY 2025-26)"
+            title="AI Tax Strategy (FY 2026-27)"
             message={aiInsights[0] || "Adjust income to see personalized tax-saving tips."}
             insights={aiInsights.slice(1)}
           />

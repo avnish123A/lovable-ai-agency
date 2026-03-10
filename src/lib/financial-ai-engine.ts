@@ -19,7 +19,7 @@ export const INDIAN_BENCHMARKS = {
   // Inflation
   avgInflation: 5.5,
   cpiInflation: 4.8,
-  // Tax (FY 2025-26 New Regime)
+  // Tax (FY 2026-27 New Regime)
   standardDeduction: 75000,
   section80CLimit: 150000,
   npsExtraLimit: 50000,
