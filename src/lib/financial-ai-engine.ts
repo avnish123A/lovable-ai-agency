@@ -6,8 +6,8 @@
 // ============ REAL BENCHMARK DATA ============
 
 export const INDIAN_BENCHMARKS = {
-  // RBI repo rate as of 2025
-  rbiRepoRate: 6.5,
+  // RBI repo rate as of 2026
+  rbiRepoRate: 6.25,
   // Average FD rates by bank type
   fdRates: { psu: 6.5, private: 7.2, smallFinance: 8.5, nbfc: 8.0 },
   // Average home loan rates
