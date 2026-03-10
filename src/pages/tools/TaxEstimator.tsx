@@ -94,7 +94,7 @@ const TaxEstimator = () => {
   const aiInsights = useMemo(() => getTaxInsights(income, regime, deductions, totalTax, effectiveRate), [income, regime, deductions, totalTax, effectiveRate]);
 
   return (
-    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2025-26, Budget 2025 slabs)" icon={<Landmark className="w-7 h-7 text-primary" />}>
+    <ToolLayout title="Income Tax Estimator" description="Estimate your tax under New and Old regime (FY 2026-27, Budget 2026 slabs)" icon={<Landmark className="w-7 h-7 text-primary" />}>
       <StepIndicator steps={["Choose Regime", "Enter Income", "View Tax"]} current={income > 0 ? 2 : 0} />
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-5">
