@@ -264,3 +264,13 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+@keyframes text-reveal {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px -5px hsl(160 84% 39% / 0.2); }
+  50% { box-shadow: 0 0 40px -5px hsl(160 84% 39% / 0.4); }
+}
