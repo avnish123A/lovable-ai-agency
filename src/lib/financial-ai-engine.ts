@@ -1,6 +1,6 @@
 /**
  * Real Indian Financial Data & AI Insight Engine
- * All data based on RBI guidelines, SEBI regulations, and real market benchmarks (2025-26)
+ * All data based on RBI guidelines, SEBI regulations, and real market benchmarks (2026-27)
  */
 
 // ============ REAL BENCHMARK DATA ============
