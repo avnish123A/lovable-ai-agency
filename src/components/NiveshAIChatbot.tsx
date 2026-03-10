@@ -20,8 +20,8 @@ const QUICK_ACTIONS = [
   { icon: BadgeIndianRupee, label: "Personal Loan Guide", query: "I'm considering taking a personal loan. Please help me understand my options by asking about my situation.", color: "from-emerald-500/10 to-green-500/10 text-emerald-600 dark:text-emerald-400" },
   { icon: PiggyBank, label: "Start Investing", query: "I want to start investing but don't know where to begin. Please guide me by understanding my financial goals.", color: "from-amber-500/10 to-orange-500/10 text-amber-600 dark:text-amber-400" },
   { icon: Shield, label: "Insurance Check", query: "Help me figure out what insurance coverage I need. Ask me questions about my current situation.", color: "from-purple-500/10 to-pink-500/10 text-purple-600 dark:text-purple-400" },
-  { icon: Landmark, label: "Best FD Rates", query: "What are the best fixed deposit rates right now in India? Show me top options for 2025.", color: "from-teal-500/10 to-cyan-500/10 text-teal-600 dark:text-teal-400" },
-  { icon: Calculator, label: "Tax Saving Tips", query: "Help me save tax for FY 2025-26. What are the best tax-saving options under both old and new regime?", color: "from-rose-500/10 to-red-500/10 text-rose-600 dark:text-rose-400" },
+  { icon: Landmark, label: "Best FD Rates", query: "What are the best fixed deposit rates right now in India? Show me top options for 2026.", color: "from-teal-500/10 to-cyan-500/10 text-teal-600 dark:text-teal-400" },
+  { icon: Calculator, label: "Tax Saving Tips", query: "Help me save tax for FY 2026-27. What are the best tax-saving options under both old and new regime?", color: "from-rose-500/10 to-red-500/10 text-rose-600 dark:text-rose-400" },
 ];
 
 // Context-aware follow-up suggestions based on conversation
