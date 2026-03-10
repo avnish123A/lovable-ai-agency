@@ -122,7 +122,7 @@ const TaxEstimator = () => {
           </div>
 
           <div className="rounded-xl bg-secondary/50 p-4 text-xs space-y-1">
-            <p className="font-semibold text-foreground mb-2">Tax Slabs ({regime === "new" ? "New" : "Old"} Regime FY 2025-26)</p>
+            <p className="font-semibold text-foreground mb-2">Tax Slabs ({regime === "new" ? "New" : "Old"} Regime FY 2026-27)</p>
             {slabs.map((s) => (
               <div key={s.min} className="flex justify-between text-muted-foreground">
                 <span>{s.max === Infinity ? `Above ₹${(s.min - 1).toLocaleString("en-IN")}` : `₹${s.min.toLocaleString("en-IN")} - ₹${s.max.toLocaleString("en-IN")}`}</span>
