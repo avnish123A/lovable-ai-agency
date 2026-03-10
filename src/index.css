@@ -219,6 +219,26 @@
     background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.1), transparent);
     animation: shimmer-sweep 3s ease-in-out infinite;
   }
+
+  .magnetic-hover {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .magnetic-hover:hover {
+    transform: scale(1.05) translateY(-4px);
+  }
+
+  .text-reveal {
+    clip-path: inset(0 100% 0 0);
+    animation: text-reveal 0.8s ease-out forwards;
+  }
+
+  .glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .parallax-slow {
+    will-change: transform;
+  }
 }
 
 @keyframes marquee-scroll {
