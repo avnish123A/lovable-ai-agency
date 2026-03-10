@@ -53,18 +53,25 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
+            {navLinks.map((link, i) => (
+              <motion.div
                 key={link.href}
-                to={link.href}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  location.pathname === link.href
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.05 }}
+                whileHover={{ y: -2, transition: { duration: 0.15 } }}
               >
-                {link.label}
-              </Link>
+                <Link
+                  to={link.href}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    location.pathname === link.href
+                      ? "text-primary bg-primary/10 shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </motion.div>
             ))}
           </div>
 
