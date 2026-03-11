@@ -67,8 +67,7 @@ const Footer = () => {
       transition={{ duration: 0.6 }}
       className="border-t border-border bg-card relative overflow-hidden"
     >
-      {/* Subtle bg accent */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/3 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/2 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
@@ -81,7 +80,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-2 mb-4 group">
               <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-9 w-9 object-contain group-hover:scale-110 transition-transform" />
               <span className="text-xl font-heading font-bold text-foreground">
-                Apni<span className="text-accent">Nivesh</span>
+                Apni<span className="text-primary text-glow">Nivesh</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">

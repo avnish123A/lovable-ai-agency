@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Star, CreditCard, Shield } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,25 +38,23 @@ const TopCardsSection = () => {
   const fmt = (n: number) => (n === 0 ? "Free" : `₹${n.toLocaleString("en-IN")}`);
 
   const handleApply = (card: any) => {
-    const dealLike = {
+    setSelectedCard({
       id: card.id,
       title: card.card_name,
       merchant: card.bank_name,
       subcategory: "credit_cards",
       tracking_link: card.apply_link || null,
-    };
-    setSelectedCard(dealLike);
+    });
     setDialogOpen(true);
   };
 
   return (
     <>
-    <section className="py-24 bg-secondary/30 relative overflow-hidden">
-      {/* Floating accent */}
+    <section className="py-24 bg-secondary/20 relative overflow-hidden">
       <motion.div
-        animate={{ x: [0, 40, 0], opacity: [0.3, 0.5, 0.3] }}
+        animate={{ x: [0, 40, 0], opacity: [0.15, 0.3, 0.15] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+        className="absolute -top-20 -right-20 w-96 h-96 bg-primary/3 rounded-full blur-3xl"
       />
 
       <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -69,14 +67,14 @@ const TopCardsSection = () => {
         >
           <div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3">
-              Top Credit <span className="text-gradient">Cards</span>
+              Top Credit <span className="text-gradient text-glow">Cards</span>
             </h2>
             <p className="text-muted-foreground max-w-md">
               Handpicked cards with the best rewards, cashback, and welcome bonuses.
             </p>
           </div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-            <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl">
+            <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl hover:border-primary/30">
               <Link to="/credit-cards">View All Cards</Link>
             </Button>
           </motion.div>
@@ -92,12 +90,8 @@ const TopCardsSection = () => {
               viewport={{ once: true }}
               variants={cardVariants}
               whileHover={{ y: -10, transition: { duration: 0.25 } }}
-              className="rounded-2xl border border-border bg-card shadow-card overflow-hidden relative group"
+              className="rounded-2xl glass-card-hover overflow-hidden relative group"
             >
-              {/* Hover gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/0 to-primary/0 group-hover:from-primary/3 group-hover:to-accent/3 transition-all duration-500 rounded-2xl pointer-events-none" />
-
-              {/* Bank header */}
               <div className="flex items-center justify-between px-6 pt-5 pb-2 relative z-10">
                 <div className="flex items-center gap-2.5">
                   <BankLogo bankName={card.bank_name} size="sm" />
@@ -106,12 +100,10 @@ const TopCardsSection = () => {
                 <TrustBadge variant="verified" />
               </div>
 
-              {/* Card visual */}
               <div className="px-6 py-3 relative z-10">
                 <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
               </div>
 
-              {/* Details */}
               <div className="px-6 pb-6 relative z-10">
                 <h3 className="font-heading font-bold text-foreground text-sm mb-3">{card.card_name}</h3>
                 <div className="space-y-2.5 mb-4">
@@ -136,7 +128,7 @@ const TopCardsSection = () => {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
                       size="sm"
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl"
+                      className="bg-gradient-cta text-primary-foreground hover:opacity-90 rounded-xl btn-neon"
                       onClick={() => handleApply(card)}
                     >
                       Apply Now
