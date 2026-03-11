@@ -22,14 +22,14 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
 
   return (
     <div className="flex flex-col items-center gap-3 flex-shrink-0 px-8 group">
-      <div className="h-20 w-20 rounded-2xl bg-card border border-border flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-card group-hover:border-primary/30 group-hover:scale-110 transition-all duration-300 p-3">
+      <div className="h-20 w-20 rounded-2xl glass-card border-glow-hover flex items-center justify-center overflow-hidden p-3 group-hover:scale-110 transition-all duration-300">
         {error ? (
           <span className="text-sm font-heading font-bold text-primary">{initials}</span>
         ) : (
           <img
             src={logo}
             alt={`${name} logo`}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 brightness-110"
             loading="eager"
             onError={() => setError(true)}
           />
@@ -40,40 +40,38 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
   );
 };
 
-const PartnerBanks = () => {
-  return (
-    <section className="py-14 border-b border-border overflow-hidden">
-      <div className="container mx-auto px-4 md:px-8">
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center text-sm text-muted-foreground font-medium uppercase tracking-wider mb-10"
-        >
-          Trusted by India's Leading Banks & Financial Brands
-        </motion.p>
-      </div>
+const PartnerBanks = () => (
+  <section className="py-14 border-b border-border overflow-hidden">
+    <div className="container mx-auto px-4 md:px-8">
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center text-sm text-muted-foreground font-medium uppercase tracking-wider mb-10"
+      >
+        Trusted by India's Leading Banks & Financial Brands
+      </motion.p>
+    </div>
 
-      <div className="relative w-full">
-        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+    <div className="relative w-full">
+      <div className="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-background to-transparent pointer-events-none" />
 
-        <div className="marquee-track">
-          <div className="marquee-content">
-            {brands.map((brand) => (
-              <BrandItem key={brand.name} name={brand.name} logo={brand.logo} />
-            ))}
-          </div>
-          <div className="marquee-content" aria-hidden="true">
-            {brands.map((brand) => (
-              <BrandItem key={`dup-${brand.name}`} name={brand.name} logo={brand.logo} />
-            ))}
-          </div>
+      <div className="marquee-track">
+        <div className="marquee-content">
+          {brands.map((brand) => (
+            <BrandItem key={brand.name} name={brand.name} logo={brand.logo} />
+          ))}
+        </div>
+        <div className="marquee-content" aria-hidden="true">
+          {brands.map((brand) => (
+            <BrandItem key={`dup-${brand.name}`} name={brand.name} logo={brand.logo} />
+          ))}
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default PartnerBanks;

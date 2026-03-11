@@ -35,7 +35,7 @@ const Navbar = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass border-b border-border shadow-sm" : "bg-transparent"
+        scrolled ? "glass border-b border-border shadow-neon" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
@@ -48,7 +48,7 @@ const Navbar = () => {
               loading="eager"
             />
             <span className="text-xl font-heading font-bold text-foreground">
-              Apni<span className="text-primary">Nivesh</span>
+              Apni<span className="text-primary text-glow">Nivesh</span>
             </span>
           </Link>
 
@@ -65,7 +65,7 @@ const Navbar = () => {
                   to={link.href}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                     location.pathname === link.href
-                      ? "text-primary bg-primary/10 shadow-sm"
+                      ? "text-primary bg-primary/10 shadow-neon"
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
@@ -76,13 +76,13 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-xl">
               <Search className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-xl">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary rounded-xl">
               <Bot className="w-4 h-4" />
             </Button>
-            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl font-semibold shadow-glow-sm">
+            <Button asChild size="sm" className="bg-gradient-cta text-primary-foreground hover:opacity-90 rounded-xl font-semibold btn-neon">
               <Link to="/credit-cards">Apply Now</Link>
             </Button>
           </div>
@@ -122,10 +122,10 @@ const Navbar = () => {
                 </motion.div>
               ))}
               <div className="pt-3 flex gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
+                <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl border-border">
                   <Link to="/eligibility">Eligibility</Link>
                 </Button>
-                <Button asChild size="sm" className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button asChild size="sm" className="flex-1 rounded-xl bg-gradient-cta text-primary-foreground hover:opacity-90 btn-neon">
                   <Link to="/credit-cards">Apply Now</Link>
                 </Button>
               </div>

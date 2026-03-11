@@ -13,6 +13,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import AISearch from "@/components/AISearch";
 import ScrollProgress from "@/components/ScrollProgress";
+import InteractiveWizard from "@/components/InteractiveWizard";
 import { Sparkles, Calculator, Users, Building, Award, ArrowRight } from "lucide-react";
 
 const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?: string; label: string; icon: any }) => {
@@ -42,10 +43,10 @@ const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       className="text-center cursor-default"
     >
-      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
+      <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3">
         <Icon className="w-6 h-6 text-primary" />
       </div>
-      <p className="text-3xl md:text-4xl font-bold text-foreground">{count}{suffix}</p>
+      <p className="text-3xl md:text-4xl font-bold text-foreground text-glow">{count}{suffix}</p>
       <p className="text-sm text-muted-foreground mt-1">{label}</p>
     </motion.div>
   );
@@ -71,6 +72,9 @@ const Index = () => {
       />
       <Navbar />
       <HeroSection />
+
+      {/* Interactive Wizard */}
+      <InteractiveWizard />
       
       {/* AI Smart Search Section */}
       <section className="py-16 bg-secondary/30">
@@ -81,7 +85,7 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-10"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
               <Sparkles className="w-4 h-4" />
               AI-Powered Search
             </div>
@@ -127,7 +131,7 @@ const Index = () => {
                 transition={{ delay: i * 0.05 }}
                 whileHover={{ y: -3, transition: { duration: 0.15 } }}
               >
-                <Link to={t.path} className="px-5 py-2.5 rounded-xl bg-card border border-border text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-all hover:shadow-md inline-block">
+                <Link to={t.path} className="px-5 py-2.5 rounded-xl glass-card border-glow-hover text-sm font-medium text-foreground hover:text-primary transition-all inline-block">
                   {t.label}
                 </Link>
               </motion.div>
@@ -139,7 +143,7 @@ const Index = () => {
               transition={{ delay: 0.3 }}
               whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.15 } }}
             >
-              <Link to="/tools" className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-1.5">
+              <Link to="/tools" className="px-5 py-2.5 rounded-xl bg-gradient-cta text-primary-foreground text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-1.5 btn-neon">
                 View All 20+ Tools <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </motion.div>
