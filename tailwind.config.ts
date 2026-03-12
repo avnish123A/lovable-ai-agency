@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Poppins', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        heading: ['Playfair Display', 'serif'],
+        body: ['Plus Jakarta Sans', 'sans-serif'],
+        mono: ['Space Mono', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -65,11 +66,32 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        pine: {
+          DEFAULT: "hsl(150 54% 7%)",
+          light: "hsl(150 40% 12%)",
+        },
+        sage: {
+          DEFAULT: "hsl(160 8% 46%)",
+        },
+        bone: {
+          DEFAULT: "hsl(48 16% 86%)",
+          light: "hsl(48 22% 90%)",
+        },
+        volt: {
+          DEFAULT: "hsl(72 100% 50%)",
+          dim: "hsl(72 80% 40%)",
+        },
+        sand: {
+          DEFAULT: "hsl(50 27% 93%)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      transitionTimingFunction: {
+        luxury: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
       keyframes: {
         "accordion-down": {
@@ -108,9 +130,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.6s ease-out forwards",
-        "fade-in": "fade-in 0.5s ease-out forwards",
-        "count-up": "count-up 0.4s ease-out forwards",
+        "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "fade-in": "fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "count-up": "count-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "float": "float 6s ease-in-out infinite",
         "shimmer": "shimmer 2s linear infinite",
         "marquee": "marquee 30s linear infinite",

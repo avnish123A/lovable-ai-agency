@@ -7,34 +7,25 @@ const testimonials = [
   { name: "Ananya Patel", role: "Marketing Manager", text: "I love the cashback offers section. I check ApniNivesh before every major purchase now.", rating: 4 },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 50, rotateX: -10 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, rotateX: 0,
-    transition: { delay: i * 0.15, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  }),
-};
-
 const TestimonialsSection = () => (
-  <section className="py-24 relative overflow-hidden">
-    <motion.div
-      animate={{ y: [0, -20, 0], opacity: [0.15, 0.3, 0.15] }}
-      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-20 right-[15%] w-72 h-72 bg-primary/5 rounded-full blur-3xl"
-    />
-
+  <section className="py-28 relative overflow-hidden section-dark">
     <div className="container mx-auto px-4 md:px-8 relative z-10">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-center mb-16"
       >
-        <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-foreground">
-          Loved by <span className="text-gradient text-glow">50,000+</span> Users
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="h-px w-12" style={{ background: 'hsl(50 27% 93% / 0.15)' }} />
+          <span className="text-sm font-body font-medium tracking-widest uppercase" style={{ color: 'hsl(160 8% 55%)' }}>Testimonials</span>
+          <div className="h-px w-12" style={{ background: 'hsl(50 27% 93% / 0.15)' }} />
+        </div>
+        <h2 className="text-3xl md:text-5xl font-heading font-bold mb-4 tracking-tight" style={{ color: 'hsl(50 27% 93%)' }}>
+          Loved by <span className="font-mono" style={{ color: 'hsl(72 100% 50%)' }}>50,000+</span> Users
         </h2>
-        <p className="text-muted-foreground max-w-md mx-auto">
+        <p className="max-w-md mx-auto" style={{ color: 'hsl(160 8% 55%)' }}>
           See how ApniNivesh is helping people save money and make smarter financial choices.
         </p>
       </motion.div>
@@ -43,47 +34,25 @@ const TestimonialsSection = () => (
         {testimonials.map((t, i) => (
           <motion.div
             key={t.name}
-            custom={i}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            variants={cardVariants}
-            whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
-            className="rounded-2xl glass-card-hover p-6 relative overflow-hidden group cursor-default"
+            transition={{ delay: i * 0.12, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="rounded-2xl p-6 border cursor-default transition-all duration-500 ease-luxury hover:-translate-y-2"
+            style={{ 
+              borderColor: 'hsl(150 30% 16% / 0.5)',
+              background: 'hsl(150 45% 9% / 0.6)'
+            }}
           >
-            {/* Neon shimmer */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear", repeatDelay: 3 }}
-            />
-
-            <div className="relative z-10">
-              <motion.div
-                initial={{ scale: 0, rotate: -20 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 + i * 0.15, type: "spring", stiffness: 200 }}
-              >
-                <Quote className="w-8 h-8 text-primary/30 mb-4" />
-              </motion.div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5">"{t.text}"</p>
-              <div className="flex items-center gap-1 mb-3">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 + i * 0.15 + idx * 0.05, type: "spring", stiffness: 300 }}
-                  >
-                    <Star className={`w-3.5 h-3.5 ${idx < t.rating ? "text-primary fill-primary" : "text-muted"}`} />
-                  </motion.div>
-                ))}
-              </div>
-              <p className="font-heading font-semibold text-foreground text-sm">{t.name}</p>
-              <p className="text-xs text-muted-foreground">{t.role}</p>
+            <Quote className="w-8 h-8 mb-4" style={{ color: 'hsl(72 100% 50% / 0.3)' }} />
+            <p className="text-sm leading-relaxed mb-5" style={{ color: 'hsl(160 8% 65%)' }}>"{t.text}"</p>
+            <div className="flex items-center gap-1 mb-3">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <Star key={idx} className={`w-3.5 h-3.5 ${idx < t.rating ? "fill-current" : ""}`} style={{ color: idx < t.rating ? 'hsl(72 100% 50%)' : 'hsl(150 30% 20%)' }} />
+              ))}
             </div>
+            <p className="font-heading font-semibold text-sm" style={{ color: 'hsl(50 27% 93%)' }}>{t.name}</p>
+            <p className="text-xs" style={{ color: 'hsl(160 8% 55%)' }}>{t.role}</p>
           </motion.div>
         ))}
       </div>
