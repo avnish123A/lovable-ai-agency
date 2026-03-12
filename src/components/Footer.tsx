@@ -60,27 +60,44 @@ const Footer = () => {
   }, []);
 
   return (
-    <motion.footer 
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="border-t border-border bg-card relative overflow-hidden"
-    >
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/2 rounded-full blur-3xl pointer-events-none" />
+    <footer className="border-t border-border bg-card relative overflow-hidden">
+      <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
+        {/* Data Manifesto Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-20 max-w-3xl"
+        >
+          <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6 leading-tight">
+            Our Data <em className="not-italic text-gradient">Manifesto</em>
+          </h3>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              <strong className="text-foreground">Zero Spam Guarantee.</strong> We will never sell your data to third parties. Your information stays with you — period.
+            </p>
+            <p>
+              <strong className="text-foreground">Incognito Mode.</strong> Browse and compare financial products without creating an account. No tracking, no profiling, no manipulation.
+            </p>
+            <p>
+              <strong className="text-foreground">Transparent Affiliations.</strong> We earn through affiliate partnerships, clearly disclosed. Our recommendations are never influenced by commission rates.
+            </p>
+          </div>
+        </motion.div>
 
-      <div className="container mx-auto px-4 md:px-8 py-16 relative z-10">
+        {/* Links grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <Link to="/" className="flex items-center gap-2 mb-4 group">
-              <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-9 w-9 object-contain group-hover:scale-110 transition-transform" />
-              <span className="text-xl font-heading font-bold text-foreground">
-                Apni<span className="text-primary text-glow">Nivesh</span>
+              <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-9 w-9 object-contain group-hover:scale-105 transition-transform duration-500 ease-luxury" />
+              <span className="text-lg font-heading font-bold text-foreground">
+                Apni<span className="text-gradient">Nivesh</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">
@@ -96,13 +113,13 @@ const Footer = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 + colIdx * 0.08, duration: 0.5 }}
+              transition={{ delay: 0.1 + colIdx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h4 className="font-heading font-semibold text-foreground mb-4">{title}</h4>
+              <h4 className="font-heading font-semibold text-foreground mb-4 text-sm tracking-wide">{title}</h4>
               <ul className="space-y-2.5">
-                {links.map((link) => (
+                {links.map(link => (
                   <li key={link.label}>
-                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-primary hover:translate-x-1 transition-all inline-block">
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 inline-block">
                       {link.label}
                     </Link>
                   </li>
@@ -111,22 +128,17 @@ const Footer = () => {
             </motion.div>
           ))}
         </div>
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4"
-        >
+
+        <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-primary transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-primary transition-colors">Terms</Link>
-            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-primary transition-colors">Disclaimer</Link>
+            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Disclaimer</Link>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 };
 

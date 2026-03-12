@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -40,13 +40,13 @@ const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="text-center cursor-default"
     >
-      <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3">
+      <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-3">
         <Icon className="w-6 h-6 text-primary" />
       </div>
-      <p className="text-3xl md:text-4xl font-bold text-foreground text-glow">{count}{suffix}</p>
+      <p className="text-3xl md:text-4xl font-mono font-bold text-foreground">{count}{suffix}</p>
       <p className="text-sm text-muted-foreground mt-1">{label}</p>
     </motion.div>
   );
@@ -77,20 +77,24 @@ const Index = () => {
       <InteractiveWizard />
       
       {/* AI Smart Search Section */}
-      <section className="py-16 bg-secondary/30">
+      <section className="py-20 bg-card border-y border-border">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-center mb-10"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              AI-Powered Search
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="h-px w-12 bg-border" />
+              <span className="text-sm font-body font-medium tracking-widest uppercase text-muted-foreground">
+                AI-Powered Search
+              </span>
+              <div className="h-px w-12 bg-border" />
             </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Find Products in Natural Language
+              Find Products in <em className="not-italic text-gradient">Natural Language</em>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Ask anything like "best cashback credit card" or "low interest personal loan" and our AI will find the perfect match
@@ -103,7 +107,7 @@ const Index = () => {
       <PartnerBanks />
 
       {/* Stats Counter Section */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="container mx-auto px-4 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <Counter end={20} suffix="+" label="Financial Tools" icon={Calculator} />
@@ -115,35 +119,33 @@ const Index = () => {
       </section>
 
       {/* Quick Tools CTA */}
-      <section className="py-12 bg-gradient-to-r from-primary/5 to-accent/5 overflow-hidden">
+      <section className="py-16 border-y border-border overflow-hidden">
         <div className="container mx-auto px-4 md:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold mb-2">Try Our Popular Tools</h2>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold mb-2 text-foreground">Try Our Popular Tools</h2>
             <p className="text-muted-foreground text-sm">Free calculators to plan your finances</p>
           </motion.div>
           <div className="flex flex-wrap justify-center gap-3">
             {toolLinks.map((t, i) => (
               <motion.div
                 key={t.path}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ y: -3, transition: { duration: 0.15 } }}
+                transition={{ delay: i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link to={t.path} className="px-5 py-2.5 rounded-xl glass-card border-glow-hover text-sm font-medium text-foreground hover:text-primary transition-all inline-block">
+                <Link to={t.path} className="px-5 py-2.5 rounded-lg bg-card border border-border text-sm font-medium text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-500 ease-luxury inline-block">
                   {t.label}
                 </Link>
               </motion.div>
             ))}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              whileHover={{ y: -3, scale: 1.02, transition: { duration: 0.15 } }}
+              transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <Link to="/tools" className="px-5 py-2.5 rounded-xl bg-gradient-cta text-primary-foreground text-sm font-medium hover:opacity-90 transition-all inline-flex items-center gap-1.5 btn-neon">
+              <Link to="/tools" className="px-5 py-2.5 rounded-lg bg-gradient-cta text-primary-foreground text-sm font-bold hover:opacity-90 transition-all inline-flex items-center gap-1.5 btn-neon">
                 View All 20+ Tools <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </motion.div>

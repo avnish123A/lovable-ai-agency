@@ -9,14 +9,6 @@ import CreditCardVisual from "@/components/CreditCardVisual";
 import TrustBadge from "@/components/TrustBadge";
 import LeadCaptureDialog from "@/components/LeadCaptureDialog";
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, scale: 1,
-    transition: { delay: i * 0.12, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  }),
-};
-
 const TopCardsSection = () => {
   const [cards, setCards] = useState<any[]>([]);
   const [selectedCard, setSelectedCard] = useState<any>(null);
@@ -50,31 +42,29 @@ const TopCardsSection = () => {
 
   return (
     <>
-    <section className="py-24 bg-secondary/20 relative overflow-hidden">
-      <motion.div
-        animate={{ x: [0, 40, 0], opacity: [0.15, 0.3, 0.15] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-20 -right-20 w-96 h-96 bg-primary/3 rounded-full blur-3xl"
-      />
-
+    <section className="py-28 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between mb-12"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between mb-14"
         >
           <div>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3">
-              Top Credit <span className="text-gradient text-glow">Cards</span>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px w-12 bg-border" />
+              <span className="text-sm font-body font-medium tracking-widest uppercase text-muted-foreground">Top Picks</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3 text-foreground">
+              Top Credit <em className="not-italic text-gradient">Cards</em>
             </h2>
             <p className="text-muted-foreground max-w-md">
               Handpicked cards with the best rewards, cashback, and welcome bonuses.
             </p>
           </div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-            <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-xl hover:border-primary/30">
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Button asChild variant="outline" className="mt-4 md:mt-0 border-border rounded-lg hover:border-primary/30">
               <Link to="/credit-cards">View All Cards</Link>
             </Button>
           </motion.div>
@@ -84,15 +74,13 @@ const TopCardsSection = () => {
           {cards.map((card, i) => (
             <motion.div
               key={card.id}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              variants={cardVariants}
-              whileHover={{ y: -10, transition: { duration: 0.25 } }}
-              className="rounded-2xl glass-card-hover overflow-hidden relative group"
+              transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-2xl bg-card border border-border shadow-card overflow-hidden relative group transition-all duration-500 ease-luxury hover:-translate-y-2 hover:shadow-elegant"
             >
-              <div className="flex items-center justify-between px-6 pt-5 pb-2 relative z-10">
+              <div className="flex items-center justify-between px-6 pt-5 pb-2">
                 <div className="flex items-center gap-2.5">
                   <BankLogo bankName={card.bank_name} size="sm" />
                   <span className="text-xs font-semibold text-foreground">{card.bank_name}</span>
@@ -100,11 +88,11 @@ const TopCardsSection = () => {
                 <TrustBadge variant="verified" />
               </div>
 
-              <div className="px-6 py-3 relative z-10">
+              <div className="px-6 py-3">
                 <CreditCardVisual bankName={card.bank_name} cardName={card.card_name} />
               </div>
 
-              <div className="px-6 pb-6 relative z-10">
+              <div className="px-6 pb-6">
                 <h3 className="font-heading font-bold text-foreground text-sm mb-3">{card.card_name}</h3>
                 <div className="space-y-2.5 mb-4">
                   <div className="flex justify-between text-sm">
@@ -113,22 +101,22 @@ const TopCardsSection = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Annual Fee</span>
-                    <span className="text-foreground font-medium">{fmt(card.annual_fee)}</span>
+                    <span className="text-foreground font-mono font-medium">{fmt(card.annual_fee)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Cashback</span>
-                    <span className="text-primary font-semibold">{card.cashback_rate || "—"}</span>
+                    <span className="text-primary font-mono font-semibold">{card.cashback_rate || "—"}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-primary fill-primary" />
-                    <span className="text-sm font-bold text-foreground">{card.rating}</span>
+                    <span className="text-sm font-mono font-bold text-foreground">{card.rating}</span>
                   </div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                     <Button
                       size="sm"
-                      className="bg-gradient-cta text-primary-foreground hover:opacity-90 rounded-xl btn-neon"
+                      className="bg-gradient-cta text-primary-foreground hover:opacity-90 rounded-lg btn-neon"
                       onClick={() => handleApply(card)}
                     >
                       Apply Now

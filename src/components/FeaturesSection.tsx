@@ -2,7 +2,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { CreditCard, Sparkles, Shield, Calculator, Gift, TrendingUp, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
-import FloatingParticles from "@/components/FloatingParticles";
 
 const features = [
   { icon: CreditCard, title: "Smart Comparison", desc: "Compare credit cards and loans from top banks side by side with detailed insights.", href: "/credit-cards" },
@@ -19,57 +18,42 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 60, scale: 0.9, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 50 },
   show: { 
-    opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as const } 
+    opacity: 1, y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } 
   },
 };
 
 const FeaturesSection = () => {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const bgScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1.2]);
-
   return (
-    <section ref={ref} className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-secondary/20" />
-      <motion.div 
-        style={{ scale: bgScale }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/3 rounded-full blur-3xl" 
-      />
-      <FloatingParticles count={5} />
+    <section className="py-32 relative overflow-hidden section-dark">
+      {/* Subtle texture */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+        backgroundImage: 'linear-gradient(hsl(50 27% 93% / 0.2) 1px, transparent 1px), linear-gradient(90deg, hsl(50 27% 93% / 0.2) 1px, transparent 1px)',
+        backgroundSize: '60px 60px'
+      }} />
       
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-20"
         >
-          <motion.span 
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, type: "spring", stiffness: 200 }}
-            className="inline-block px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-bold mb-6"
-          >
-            Platform Features
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold mb-6 text-foreground tracking-tight">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-px w-12" style={{ background: 'hsl(50 27% 93% / 0.15)' }} />
+            <span className="text-sm font-body font-medium tracking-widest uppercase" style={{ color: 'hsl(160 8% 55%)' }}>Platform Features</span>
+            <div className="h-px w-12" style={{ background: 'hsl(50 27% 93% / 0.15)' }} />
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 tracking-tight" style={{ color: 'hsl(50 27% 93%)' }}>
             Everything to{" "}
-            <span className="text-gradient text-glow">Save Smarter</span>
+            <em className="not-italic" style={{ color: 'hsl(72 100% 50%)' }}>Save Smarter</em>
           </h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
-          >
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'hsl(160 8% 55%)' }}>
             Complete suite of tools to find, compare, and apply for the best financial products.
-          </motion.p>
+          </p>
         </motion.div>
 
         <motion.div
@@ -79,33 +63,29 @@ const FeaturesSection = () => {
           viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {features.map((f) => (
-            <motion.div key={f.title} variants={item} whileHover={{ y: -12, transition: { duration: 0.25 } }}>
+          {features.map(f => (
+            <motion.div key={f.title} variants={item}>
               <Link
                 to={f.href}
-                className="block p-8 rounded-3xl glass-card-hover group h-full relative overflow-hidden"
+                className="block p-8 rounded-2xl border group h-full relative overflow-hidden transition-all duration-500 ease-luxury hover:-translate-y-2"
+                style={{ 
+                  borderColor: 'hsl(150 30% 16% / 0.5)',
+                  background: 'hsl(150 45% 9% / 0.6)'
+                }}
               >
-                {/* Neon shimmer on hover */}
-                <motion.div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: "linear-gradient(105deg, transparent 40%, hsl(145 100% 45% / 0.04) 50%, transparent 60%)" }}
-                  animate={{ x: ["-100%", "200%"] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
-                />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{
+                  background: 'linear-gradient(145deg, hsl(72 100% 50% / 0.03), transparent)'
+                }} />
                 
                 <div className="relative z-10">
-                  <motion.div 
-                    whileHover={{ scale: 1.2, rotate: 8 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    className="w-14 h-14 rounded-2xl bg-gradient-cta flex items-center justify-center mb-6 shadow-neon"
-                  >
-                    <f.icon className="w-7 h-7 text-primary-foreground" />
-                  </motion.div>
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-3 flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-cta flex items-center justify-center mb-6">
+                    <f.icon className="w-6 h-6 text-primary-foreground" />
+                  </div>
+                  <h3 className="text-lg font-heading font-bold mb-3 flex items-center justify-between" style={{ color: 'hsl(50 27% 93%)' }}>
                     {f.title}
-                    <ArrowUpRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary transition-all duration-300" />
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500 ease-luxury" style={{ color: 'hsl(72 100% 50%)' }} />
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
+                  <p className="leading-relaxed" style={{ color: 'hsl(160 8% 55%)' }}>{f.desc}</p>
                 </div>
               </Link>
             </motion.div>
