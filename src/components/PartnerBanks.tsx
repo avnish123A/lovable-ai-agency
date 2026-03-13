@@ -22,7 +22,7 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
 
   return (
     <div className="flex flex-col items-center gap-3 flex-shrink-0 px-8 group">
-      <div className="h-16 w-16 rounded-xl bg-card border border-border flex items-center justify-center overflow-hidden p-3 group-hover:border-primary/30 transition-all duration-500 ease-luxury">
+      <div className="h-16 w-16 rounded-xl bg-card border border-border flex items-center justify-center overflow-hidden p-3 group-hover:border-foreground/20 transition-all duration-500 ease-luxury">
         {error ? (
           <span className="text-sm font-heading font-bold text-foreground">{initials}</span>
         ) : (
@@ -35,7 +35,7 @@ const BrandItem = ({ name, logo }: { name: string; logo: string }) => {
           />
         )}
       </div>
-      <span className="text-xs text-muted-foreground font-medium whitespace-nowrap group-hover:text-foreground transition-colors duration-300">{name}</span>
+      <span className="text-xs text-muted-foreground font-mono font-bold whitespace-nowrap group-hover:text-foreground transition-colors duration-300 uppercase tracking-wider" style={{ fontSize: '9px' }}>{name}</span>
     </div>
   );
 };
@@ -48,7 +48,7 @@ const PartnerBanks = () => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center text-sm text-muted-foreground font-medium uppercase tracking-widest mb-10"
+        className="text-center font-mono text-[10px] font-bold tracking-[0.15em] uppercase text-muted-foreground mb-10"
       >
         Trusted by India's Leading Banks & Financial Brands
       </motion.p>

@@ -14,7 +14,7 @@ import Footer from "@/components/Footer";
 import AISearch from "@/components/AISearch";
 import ScrollProgress from "@/components/ScrollProgress";
 import InteractiveWizard from "@/components/InteractiveWizard";
-import { Sparkles, Calculator, Users, Building, Award, ArrowRight } from "lucide-react";
+import { Calculator, Users, Building, Award, ArrowRight } from "lucide-react";
 
 const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?: string; label: string; icon: any }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -37,17 +37,17 @@ const Counter = ({ end, suffix = "", label, icon: Icon }: { end: number; suffix?
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="text-center cursor-default"
     >
-      <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-3">
-        <Icon className="w-6 h-6 text-primary" />
+      <div className="w-12 h-12 rounded-xl bg-primary border border-foreground flex items-center justify-center mx-auto mb-3" style={{ boxShadow: '2px 2px 0px hsl(150 54% 7%)' }}>
+        <Icon className="w-6 h-6 text-primary-foreground" />
       </div>
       <p className="text-3xl md:text-4xl font-mono font-bold text-foreground">{count}{suffix}</p>
-      <p className="text-sm text-muted-foreground mt-1">{label}</p>
+      <p className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase text-muted-foreground mt-2">{label}</p>
     </motion.div>
   );
 };
@@ -77,26 +77,20 @@ const Index = () => {
       <InteractiveWizard />
       
       {/* AI Smart Search Section */}
-      <section className="py-20 bg-card border-y border-border">
+      <section className="py-20 border-y border-border">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-center mb-10"
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="h-px w-12 bg-border" />
-              <span className="text-sm font-body font-medium tracking-widest uppercase text-muted-foreground">
-                AI-Powered Search
-              </span>
-              <div className="h-px w-12 bg-border" />
-            </div>
+            <span className="tag-mono mb-6 inline-block">AI-POWERED SEARCH</span>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Find Products in <em className="not-italic text-gradient">Natural Language</em>
+              Find Products in <em className="not-italic italic text-gradient">Natural Language</em>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto font-body">
               Ask anything like "best cashback credit card" or "low interest personal loan" and our AI will find the perfect match
             </p>
           </motion.div>
@@ -121,9 +115,9 @@ const Index = () => {
       {/* Quick Tools CTA */}
       <section className="py-16 border-y border-border overflow-hidden">
         <div className="container mx-auto px-4 md:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="text-center mb-8">
+          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-heading font-bold mb-2 text-foreground">Try Our Popular Tools</h2>
-            <p className="text-muted-foreground text-sm">Free calculators to plan your finances</p>
+            <p className="text-muted-foreground text-sm font-body">Free calculators to plan your finances</p>
           </motion.div>
           <div className="flex flex-wrap justify-center gap-3">
             {toolLinks.map((t, i) => (
@@ -134,7 +128,7 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               >
-                <Link to={t.path} className="px-5 py-2.5 rounded-lg bg-card border border-border text-sm font-medium text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-500 ease-luxury inline-block">
+                <Link to={t.path} className="px-5 py-2.5 rounded-lg bg-card border border-border text-sm font-medium font-body text-foreground hover:border-foreground/30 transition-all duration-300 ease-luxury inline-block">
                   {t.label}
                 </Link>
               </motion.div>
@@ -145,7 +139,7 @@ const Index = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <Link to="/tools" className="px-5 py-2.5 rounded-lg bg-gradient-cta text-primary-foreground text-sm font-bold hover:opacity-90 transition-all inline-flex items-center gap-1.5 btn-neon">
+              <Link to="/tools" className="btn-brutal px-5 py-2.5 rounded-lg text-sm inline-flex items-center gap-1.5">
                 View All 20+ Tools <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </motion.div>

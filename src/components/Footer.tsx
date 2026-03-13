@@ -62,26 +62,27 @@ const Footer = () => {
   return (
     <footer className="border-t border-border bg-card relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
-        {/* Data Manifesto Section */}
+        {/* Data Manifesto Section — Editorial style, not hidden in fine print */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-20 max-w-3xl"
         >
-          <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6 leading-tight">
-            Our Data <em className="not-italic text-gradient">Manifesto</em>
+          <span className="tag-mono mb-4 inline-block">OUR DATA MANIFESTO</span>
+          <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-8 leading-tight">
+            Your Data. <em className="italic">Your Rules.</em>
           </h3>
-          <div className="space-y-4 text-muted-foreground leading-relaxed">
+          <div className="space-y-5 text-muted-foreground leading-relaxed font-body">
             <p>
-              <strong className="text-foreground">Zero Spam Guarantee.</strong> We will never sell your data to third parties. Your information stays with you — period.
+              <strong className="text-foreground font-bold">Zero Spam Guarantee.</strong> We will never sell your data to third parties. Your information stays with you — period.
             </p>
             <p>
-              <strong className="text-foreground">Incognito Mode.</strong> Browse and compare financial products without creating an account. No tracking, no profiling, no manipulation.
+              <strong className="text-foreground font-bold">Incognito Mode.</strong> Browse and compare financial products without creating an account. No tracking, no profiling, no manipulation.
             </p>
             <p>
-              <strong className="text-foreground">Transparent Affiliations.</strong> We earn through affiliate partnerships, clearly disclosed. Our recommendations are never influenced by commission rates.
+              <strong className="text-foreground font-bold">Transparent Affiliations.</strong> We earn through affiliate partnerships, clearly disclosed. Our recommendations are never influenced by commission rates.
             </p>
           </div>
         </motion.div>
@@ -100,11 +101,11 @@ const Footer = () => {
                 Apni<span className="text-gradient">Nivesh</span>
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3 font-body">
               Compare the best credit cards, loans, insurance & investment products from India's top banks.
             </p>
-            <p className="text-xs text-muted-foreground">
-              A product by <strong className="text-foreground">Inspirex Technologies INC</strong>
+            <p className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-muted-foreground">
+              By Inspirex Technologies INC
             </p>
           </motion.div>
           {Object.entries(footerLinks).map(([title, links], colIdx) => (
@@ -115,11 +116,11 @@ const Footer = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 + colIdx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h4 className="font-heading font-semibold text-foreground mb-4 text-sm tracking-wide">{title}</h4>
+              <h4 className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase text-foreground mb-4">{title}</h4>
               <ul className="space-y-2.5">
                 {links.map(link => (
                   <li key={link.label}>
-                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 inline-block">
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 inline-block font-body">
                       {link.label}
                     </Link>
                   </li>
@@ -130,11 +131,11 @@ const Footer = () => {
         </div>
 
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC. All rights reserved.</p>
+          <p className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC</p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
-            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Disclaimer</Link>
+            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Privacy</Link>
+            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Terms</Link>
+            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Disclaimer</Link>
           </div>
         </div>
       </div>

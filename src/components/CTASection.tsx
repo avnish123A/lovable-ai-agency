@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const rotatingQuestions = [
@@ -26,23 +25,28 @@ const CTASection = () => {
     <section className="py-32">
       <div className="container mx-auto px-4 md:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="relative rounded-3xl overflow-hidden bg-gradient-hero p-12 md:p-20 lg:p-28"
         >
-          {/* Volt accent glow */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full blur-[120px] opacity-10" style={{ background: 'hsl(72 100% 50%)' }} />
+          {/* Grid texture */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: 'linear-gradient(hsl(48 30% 95% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(48 30% 95% / 0.3) 1px, transparent 1px)',
+            backgroundSize: '80px 80px'
+          }} />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center">
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="h-px w-8" style={{ background: 'hsl(50 27% 93% / 0.2)' }} />
-              <span className="text-sm font-body font-medium tracking-widest uppercase" style={{ color: 'hsl(160 8% 55%)' }}>Ask NiveshAI</span>
-              <div className="h-px w-8" style={{ background: 'hsl(50 27% 93% / 0.2)' }} />
-            </div>
+            <span className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-md border inline-block mb-8" style={{
+              color: 'hsl(72 100% 50%)',
+              borderColor: 'hsl(72 100% 50% / 0.3)',
+              background: 'hsl(72 100% 50% / 0.06)'
+            }}>
+              ASK NIVESH AI
+            </span>
             
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-8 leading-tight tracking-tight" style={{ color: 'hsl(50 27% 93%)' }}>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-8 leading-tight tracking-tight" style={{ color: 'hsl(48 30% 95%)' }}>
               Ask Anything{" "}
               <span className="relative inline-block min-h-[1.2em]">
                 <AnimatePresence mode="wait">
@@ -60,25 +64,24 @@ const CTASection = () => {
                 </AnimatePresence>
               </span>
             </h2>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed" style={{ color: 'hsl(160 8% 55%)' }}>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed font-body" style={{ color: 'hsl(160 8% 55%)' }}>
               Get instant answers about credit cards, loans, and cashback offers. Our AI assistant helps you make informed financial decisions.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Button asChild size="lg" className="bg-gradient-cta text-primary-foreground hover:opacity-90 px-10 h-14 rounded-xl font-bold text-base btn-neon">
-                  <Link to="/credit-cards">
-                    Explore Products <ArrowRight className="ml-2 w-5 h-5" />
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                <Button asChild variant="outline" size="lg" className="px-10 h-14 rounded-xl font-bold text-base" style={{ borderColor: 'hsl(50 27% 93% / 0.15)', color: 'hsl(50 27% 93%)' }}>
-                  <Link to="/tools">
-                    Financial Tools <ArrowUpRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-              </motion.div>
+              <Link
+                to="/credit-cards"
+                className="btn-brutal-dark px-10 py-4 rounded-lg text-base inline-flex items-center gap-2 font-body justify-center"
+              >
+                Explore Products <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/tools"
+                className="px-10 py-4 rounded-lg text-base font-semibold font-body inline-flex items-center gap-2 justify-center transition-all duration-300 ease-luxury"
+                style={{ border: '1px solid hsl(48 30% 95% / 0.15)', color: 'hsl(48 30% 95%)' }}
+              >
+                Financial Tools <ArrowUpRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </motion.div>

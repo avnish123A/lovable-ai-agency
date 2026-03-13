@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
@@ -34,15 +33,12 @@ const Navbar = () => {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-luxury ${
-        scrolled
-          ? "glass shadow-elegant"
-          : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-luxury ${
+        scrolled ? "glass shadow-card" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <img
               src="/logos/apninivesh-logo.png"
@@ -57,35 +53,30 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link, i) => (
-              <motion.div
+            {navLinks.map((link) => (
+              <Link
                 key={link.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                to={link.href}
+                className={`px-4 py-2 rounded-lg text-sm font-medium font-body transition-all duration-300 ease-luxury ${
+                  location.pathname === link.href
+                    ? "text-foreground bg-foreground/5"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
-                <Link
-                  to={link.href}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-500 ease-luxury ${
-                    location.pathname === link.href
-                      ? "text-foreground bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </motion.div>
+                {link.label}
+              </Link>
             ))}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <Button asChild size="sm" className="bg-gradient-cta text-primary-foreground hover:opacity-90 rounded-lg font-bold btn-neon group">
-              <Link to="/credit-cards" className="flex items-center gap-1.5">
-                Get Started
-                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-              </Link>
-            </Button>
+            <Link
+              to="/credit-cards"
+              className="btn-brutal px-6 py-2.5 rounded-lg text-sm inline-flex items-center gap-1.5"
+            >
+              Get Started
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
           {/* Mobile toggle */}
@@ -102,33 +93,30 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden glass border-t border-border overflow-hidden"
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden bg-card border-t border-border overflow-hidden"
           >
             <div className="container mx-auto px-4 py-4 space-y-1">
-              {navLinks.map((link, i) => (
-                <motion.div
+              {navLinks.map((link) => (
+                <Link
                   key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  to={link.href}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium font-body transition-colors duration-300 ${
+                    location.pathname === link.href
+                      ? "text-foreground bg-foreground/5"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
                 >
-                  <Link
-                    to={link.href}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-300 ${
-                      location.pathname === link.href
-                        ? "text-foreground bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
               <div className="pt-3">
-                <Button asChild size="sm" className="w-full rounded-lg bg-gradient-cta text-primary-foreground hover:opacity-90 btn-neon font-bold">
-                  <Link to="/credit-cards">Get Started</Link>
-                </Button>
+                <Link
+                  to="/credit-cards"
+                  className="btn-brutal w-full px-6 py-3 rounded-lg text-sm inline-flex items-center justify-center gap-1.5"
+                >
+                  Get Started
+                </Link>
               </div>
             </div>
           </motion.div>
