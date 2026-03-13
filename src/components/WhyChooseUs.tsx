@@ -27,15 +27,12 @@ const WhyChooseUs = () => (
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-px w-12 bg-border" />
-            <span className="text-sm font-body font-medium tracking-widest uppercase text-muted-foreground">Why ApniNivesh</span>
-          </div>
+          <span className="tag-mono mb-6 inline-block">WHY APNINIVESH</span>
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-8 text-foreground leading-tight tracking-tight">
             Trusted Financial{" "}
-            <em className="not-italic text-gradient">Information</em> Platform
+            <em className="not-italic italic text-gradient">Intelligence</em> Platform
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-10">
+          <p className="text-lg text-muted-foreground leading-relaxed mb-10 font-body">
             We focus on transparency and trust — providing accurate information, verified partnerships, and tools that genuinely help.
           </p>
           
@@ -50,7 +47,7 @@ const WhyChooseUs = () => (
                 className="flex items-center gap-3 cursor-default"
               >
                 <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                <span className="text-foreground font-medium text-sm">{benefit}</span>
+                <span className="text-foreground font-medium text-sm font-body">{benefit}</span>
               </motion.div>
             ))}
           </div>
@@ -60,17 +57,17 @@ const WhyChooseUs = () => (
           {reasons.map((r, i) => (
             <motion.div
               key={r.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="p-6 rounded-2xl bg-card border border-border shadow-card transition-all duration-500 ease-luxury hover:-translate-y-2 hover:shadow-elegant group"
+              transition={{ delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="bento-card p-6 group"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-cta flex items-center justify-center mb-5">
+              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mb-5 border border-foreground" style={{ boxShadow: '2px 2px 0px hsl(150 54% 7%)' }}>
                 <r.icon className="w-6 h-6 text-primary-foreground" />
               </div>
               <h3 className="font-heading font-bold text-foreground mb-2">{r.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{r.desc}</p>
+              <p className="text-muted-foreground text-sm leading-relaxed font-body">{r.desc}</p>
             </motion.div>
           ))}
         </div>

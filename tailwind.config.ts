@@ -79,16 +79,17 @@ export default {
         },
         volt: {
           DEFAULT: "hsl(72 100% 50%)",
-          dim: "hsl(72 80% 40%)",
+          dim: "hsl(72 100% 45%)",
         },
         sand: {
-          DEFAULT: "hsl(50 27% 93%)",
+          DEFAULT: "hsl(48 30% 95%)",
         },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "3xl": "24px",
       },
       transitionTimingFunction: {
         luxury: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -103,24 +104,12 @@ export default {
           to: { height: "0" },
         },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "0%": { opacity: "0", transform: "translateY(40px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
-        },
-        "count-up": {
-          "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        "shimmer": {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
         },
         "marquee": {
           "0%": { transform: "translateX(0)" },
@@ -130,12 +119,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "fade-up": "fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "fade-in": "fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-        "count-up": "count-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 2s linear infinite",
-        "marquee": "marquee 30s linear infinite",
+        "marquee": "marquee 40s linear infinite",
       },
     },
   },

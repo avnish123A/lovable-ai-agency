@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CreditCard, Landmark, Shield, TrendingUp, PiggyBank, ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 
@@ -56,21 +55,17 @@ const InteractiveWizard = () => {
     <section className="py-28 relative overflow-hidden" id="wizard">
       <div className="container mx-auto px-4 md:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16"
         >
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-px w-12 bg-border" />
-            <span className="text-sm font-body font-medium tracking-widest uppercase text-muted-foreground">Product Finder</span>
-            <div className="h-px w-12 bg-border" />
-          </div>
+          <span className="tag-mono mb-6 inline-block">PRODUCT FINDER</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground tracking-tight mb-4">
-            Let's Find Your <em className="text-gradient not-italic">Perfect Match</em>
+            Let's Find Your <em className="not-italic font-heading italic text-gradient">Perfect Match</em>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto font-body">
             Answer 3 quick questions — we'll recommend the best financial products for you.
           </p>
         </motion.div>
@@ -78,9 +73,9 @@ const InteractiveWizard = () => {
         <div className="max-w-2xl mx-auto">
           {/* Progress */}
           <div className="mb-8">
-            <div className="flex justify-between text-xs text-muted-foreground mb-3 font-medium">
+            <div className="flex justify-between text-muted-foreground mb-3">
               {stepLabels.map((label, i) => (
-                <span key={label} className={`transition-colors duration-500 ${i <= step ? "text-foreground" : ""}`}>
+                <span key={label} className={`font-mono text-[10px] font-bold tracking-[0.1em] uppercase transition-colors duration-500 ${i <= step ? "text-foreground" : ""}`}>
                   {i < step ? <CheckCircle2 className="w-3.5 h-3.5 inline mr-1 text-primary" /> : null}
                   {label}
                 </span>
@@ -88,15 +83,15 @@ const InteractiveWizard = () => {
             </div>
             <div className="h-1 rounded-full bg-border overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-cta rounded-full"
+                className="h-full bg-primary rounded-full"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               />
             </div>
           </div>
 
-          {/* Wizard card */}
-          <div className="rounded-2xl bg-card border border-border p-8 md:p-10 shadow-card min-h-[380px] flex flex-col">
+          {/* Wizard card — bento style */}
+          <div className="bento-card p-8 md:p-10 min-h-[380px] flex flex-col">
             <AnimatePresence mode="wait" custom={direction}>
               {step === 0 && (
                 <motion.div
@@ -112,35 +107,34 @@ const InteractiveWizard = () => {
                   <h3 className="text-xl font-heading font-bold text-foreground mb-2">
                     What are you looking for today?
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-6">Choose one to get started</p>
+                  <p className="text-sm text-muted-foreground mb-6 font-body">Choose one to get started</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {productOptions.map(opt => (
-                      <motion.button
+                      <button
                         key={opt.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => setSelected(opt.id)}
-                        className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-500 ease-luxury ${
+                        className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-300 ease-luxury ${
                           selected === opt.id
-                            ? "border-primary/50 bg-primary/10"
-                            : "border-border bg-background hover:border-primary/20"
+                            ? "border-foreground bg-primary/10 shadow-brutal-sm"
+                            : "border-border bg-background hover:border-foreground/20"
                         }`}
+                        style={selected === opt.id ? { boxShadow: '2px 2px 0px hsl(150 54% 7%)' } : {}}
                       >
                         <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                          selected === opt.id ? "bg-gradient-cta" : "bg-secondary"
+                          selected === opt.id ? "bg-primary" : "bg-secondary"
                         }`}>
                           <opt.icon className={`w-5 h-5 ${selected === opt.id ? "text-primary-foreground" : "text-muted-foreground"}`} />
                         </div>
                         <div>
-                          <p className={`font-semibold text-sm ${selected === opt.id ? "text-foreground" : "text-foreground"}`}>{opt.label}</p>
-                          <p className="text-xs text-muted-foreground">{opt.desc}</p>
+                          <p className="font-semibold text-sm text-foreground font-body">{opt.label}</p>
+                          <p className="text-xs text-muted-foreground font-body">{opt.desc}</p>
                         </div>
                         {selected === opt.id && (
                           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="ml-auto">
                             <CheckCircle2 className="w-5 h-5 text-primary" />
                           </motion.div>
                         )}
-                      </motion.button>
+                      </button>
                     ))}
                   </div>
                 </motion.div>
@@ -160,27 +154,26 @@ const InteractiveWizard = () => {
                   <h3 className="text-xl font-heading font-bold text-foreground mb-2">
                     What is your monthly income?
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-6">This helps us filter the best options</p>
+                  <p className="text-sm text-muted-foreground mb-6 font-body">This helps us filter the best options</p>
                   <div className="grid grid-cols-1 gap-3">
                     {incomeRanges.map(range => (
-                      <motion.button
+                      <button
                         key={range}
-                        whileHover={{ x: 4 }}
-                        whileTap={{ scale: 0.98 }}
                         onClick={() => setIncome(range)}
-                        className={`p-4 rounded-xl border text-left transition-all duration-500 ease-luxury flex items-center justify-between ${
+                        className={`p-4 rounded-xl border text-left transition-all duration-300 ease-luxury flex items-center justify-between ${
                           income === range
-                            ? "border-primary/50 bg-primary/10"
-                            : "border-border bg-background hover:border-primary/20"
+                            ? "border-foreground bg-primary/10"
+                            : "border-border bg-background hover:border-foreground/20"
                         }`}
+                        style={income === range ? { boxShadow: '2px 2px 0px hsl(150 54% 7%)' } : {}}
                       >
-                        <span className={`font-mono text-sm font-medium ${income === range ? "text-foreground" : "text-foreground"}`}>{range}</span>
+                        <span className="font-mono text-sm font-medium text-foreground">{range}</span>
                         {income === range && (
                           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                             <CheckCircle2 className="w-5 h-5 text-primary" />
                           </motion.div>
                         )}
-                      </motion.button>
+                      </button>
                     ))}
                   </div>
                 </motion.div>
@@ -200,24 +193,24 @@ const InteractiveWizard = () => {
                   <h3 className="text-xl font-heading font-bold text-foreground mb-2">
                     Almost done! What's your name?
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-6">We'll personalize your results</p>
+                  <p className="text-sm text-muted-foreground mb-6 font-body">We'll personalize your results</p>
                   <div className="space-y-4">
                     <Input
                       value={name}
                       onChange={e => setName(e.target.value)}
                       placeholder="Enter your full name"
-                      className="h-14 rounded-xl bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-base"
+                      className="h-14 rounded-xl bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-foreground focus:ring-foreground/10 text-base font-body"
                     />
                     {name.trim().length >= 2 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ ease: [0.16, 1, 0.3, 1] }}
-                        className="p-4 rounded-xl bg-primary/5 border border-primary/15"
+                        className="p-4 rounded-xl bg-primary/5 border border-primary/20"
                       >
-                        <p className="text-sm text-foreground font-medium">
-                          Hey <span className="font-mono">{name.split(" ")[0]}</span>! We'll show you the best{" "}
-                          {productOptions.find(p => p.id === selected)?.label || "products"} for <span className="font-mono">{income || "your range"}</span>.
+                        <p className="text-sm text-foreground font-body">
+                          Hey <span className="font-mono font-bold">{name.split(" ")[0]}</span>! We'll show you the best{" "}
+                          {productOptions.find(p => p.id === selected)?.label || "products"} for <span className="font-mono font-bold">{income || "your range"}</span>.
                         </p>
                       </motion.div>
                     )}
@@ -228,35 +221,30 @@ const InteractiveWizard = () => {
 
             {/* Navigation */}
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
-              <Button
-                variant="ghost"
+              <button
                 onClick={goBack}
                 disabled={step === 0}
-                className="text-muted-foreground hover:text-foreground rounded-lg"
+                className="text-muted-foreground hover:text-foreground text-sm font-medium font-body inline-flex items-center gap-2 disabled:opacity-30 transition-colors duration-300"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+                <ArrowLeft className="w-4 h-4" />
                 Back
-              </Button>
+              </button>
               {step < stepLabels.length - 1 ? (
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button
-                    onClick={goNext}
-                    disabled={!canProceed}
-                    className="bg-gradient-cta text-primary-foreground rounded-lg px-8 h-12 font-bold btn-neon disabled:opacity-40"
-                  >
-                    Continue <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </motion.div>
+                <button
+                  onClick={goNext}
+                  disabled={!canProceed}
+                  className="btn-brutal px-8 py-3 rounded-lg text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  Continue <ArrowRight className="w-4 h-4" />
+                </button>
               ) : (
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button
-                    onClick={handleFinish}
-                    disabled={!canProceed}
-                    className="bg-gradient-cta text-primary-foreground rounded-lg px-8 h-12 font-bold btn-neon disabled:opacity-40"
-                  >
-                    Show My Results
-                  </Button>
-                </motion.div>
+                <button
+                  onClick={handleFinish}
+                  disabled={!canProceed}
+                  className="btn-brutal px-8 py-3 rounded-lg text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  Show My Results
+                </button>
               )}
             </div>
           </div>
