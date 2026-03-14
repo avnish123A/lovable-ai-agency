@@ -18,36 +18,35 @@ const benefits = [
 ];
 
 const WhyChooseUs = () => (
-  <section className="py-32 relative overflow-hidden">
-    <div className="container mx-auto px-4 md:px-8 relative z-10">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+  <section className="py-24">
+    <div className="container mx-auto px-4 md:px-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
+          initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="tag-mono mb-6 inline-block">WHY APNINIVESH</span>
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-8 text-foreground leading-tight tracking-tight">
-            Trusted Financial{" "}
-            <em className="not-italic italic text-gradient">Intelligence</em> Platform
+          <span className="tag-mono mb-4 inline-block">Why ApniNivesh</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground leading-tight tracking-tight">
+            Trusted Financial <span className="text-primary">Intelligence</span> Platform
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-10 font-body">
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">
             We focus on transparency and trust — providing accurate information, verified partnerships, and tools that genuinely help.
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {benefits.map((benefit, i) => (
               <motion.div
                 key={benefit}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.1 + i * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 cursor-default"
+                transition={{ delay: 0.1 + i * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="flex items-center gap-3"
               >
-                <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                <span className="text-foreground font-medium text-sm font-body">{benefit}</span>
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+                <span className="text-foreground font-medium text-sm">{benefit}</span>
               </motion.div>
             ))}
           </div>
@@ -57,17 +56,17 @@ const WhyChooseUs = () => (
           {reasons.map((r, i) => (
             <motion.div
               key={r.title}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="bento-card p-6 group"
+              transition={{ delay: i * 0.08, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="apple-card p-6"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mb-5 border border-foreground" style={{ boxShadow: '2px 2px 0px hsl(150 54% 7%)' }}>
-                <r.icon className="w-6 h-6 text-primary-foreground" />
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+                <r.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="font-heading font-bold text-foreground mb-2">{r.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed font-body">{r.desc}</p>
+              <h3 className="font-semibold text-foreground mb-2">{r.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{r.desc}</p>
             </motion.div>
           ))}
         </div>

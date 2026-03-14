@@ -23,9 +23,9 @@ const incomeRanges = [
 const stepLabels = ["Choose Product", "Your Income", "Your Name"];
 
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 120 : -120, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -200 : 200, opacity: 0 }),
+  exit: (dir: number) => ({ x: dir > 0 ? -120 : 120, opacity: 0 }),
 };
 
 const InteractiveWizard = () => {
@@ -52,20 +52,20 @@ const InteractiveWizard = () => {
     (step === 2 && name.trim().length >= 2);
 
   return (
-    <section className="py-28 relative overflow-hidden" id="wizard">
-      <div className="container mx-auto px-4 md:px-8 relative z-10">
+    <section className="py-24" id="wizard">
+      <div className="container mx-auto px-4 md:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <span className="tag-mono mb-6 inline-block">PRODUCT FINDER</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground tracking-tight mb-4">
-            Let's Find Your <em className="not-italic font-heading italic text-gradient">Perfect Match</em>
+          <span className="tag-mono mb-4 inline-block">Product Finder</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-3">
+            Find Your Perfect <span className="text-primary">Match</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto font-body">
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             Answer 3 quick questions — we'll recommend the best financial products for you.
           </p>
         </motion.div>
@@ -75,8 +75,8 @@ const InteractiveWizard = () => {
           <div className="mb-8">
             <div className="flex justify-between text-muted-foreground mb-3">
               {stepLabels.map((label, i) => (
-                <span key={label} className={`font-mono text-[10px] font-bold tracking-[0.1em] uppercase transition-colors duration-500 ${i <= step ? "text-foreground" : ""}`}>
-                  {i < step ? <CheckCircle2 className="w-3.5 h-3.5 inline mr-1 text-primary" /> : null}
+                <span key={label} className={`text-xs font-medium tracking-wide uppercase transition-colors duration-500 ${i <= step ? "text-foreground" : ""}`}>
+                  {i < step ? <CheckCircle2 className="w-3.5 h-3.5 inline mr-1 text-success" /> : null}
                   {label}
                 </span>
               ))}
@@ -90,44 +90,32 @@ const InteractiveWizard = () => {
             </div>
           </div>
 
-          {/* Wizard card — bento style */}
-          <div className="bento-card p-8 md:p-10 min-h-[380px] flex flex-col">
+          {/* Wizard card */}
+          <div className="apple-card p-8 md:p-10 min-h-[380px] flex flex-col">
             <AnimatePresence mode="wait" custom={direction}>
               {step === 0 && (
-                <motion.div
-                  key="step-0"
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1"
-                >
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                    What are you looking for today?
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-6 font-body">Choose one to get started</p>
+                <motion.div key="step-0" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className="flex-1">
+                  <h3 className="text-xl font-semibold text-foreground mb-2">What are you looking for today?</h3>
+                  <p className="text-sm text-muted-foreground mb-6">Choose one to get started</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {productOptions.map(opt => (
                       <button
                         key={opt.id}
                         onClick={() => setSelected(opt.id)}
-                        className={`flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-300 ease-luxury ${
+                        className={`flex items-center gap-4 p-4 rounded-2xl border text-left transition-all duration-300 ease-luxury ${
                           selected === opt.id
-                            ? "border-foreground bg-primary/10 shadow-brutal-sm"
-                            : "border-border bg-background hover:border-foreground/20"
+                            ? "border-primary bg-primary/5 shadow-sm"
+                            : "border-border bg-card hover:border-muted-foreground/30"
                         }`}
-                        style={selected === opt.id ? { boxShadow: '2px 2px 0px hsl(150 54% 7%)' } : {}}
                       >
-                        <div className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                          selected === opt.id ? "bg-primary" : "bg-secondary"
+                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                          selected === opt.id ? "bg-primary" : "bg-muted"
                         }`}>
                           <opt.icon className={`w-5 h-5 ${selected === opt.id ? "text-primary-foreground" : "text-muted-foreground"}`} />
                         </div>
                         <div>
-                          <p className="font-semibold text-sm text-foreground font-body">{opt.label}</p>
-                          <p className="text-xs text-muted-foreground font-body">{opt.desc}</p>
+                          <p className="font-medium text-sm text-foreground">{opt.label}</p>
+                          <p className="text-xs text-muted-foreground">{opt.desc}</p>
                         </div>
                         {selected === opt.id && (
                           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="ml-auto">
@@ -141,33 +129,21 @@ const InteractiveWizard = () => {
               )}
 
               {step === 1 && (
-                <motion.div
-                  key="step-1"
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1"
-                >
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                    What is your monthly income?
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-6 font-body">This helps us filter the best options</p>
+                <motion.div key="step-1" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className="flex-1">
+                  <h3 className="text-xl font-semibold text-foreground mb-2">What is your monthly income?</h3>
+                  <p className="text-sm text-muted-foreground mb-6">This helps us filter the best options</p>
                   <div className="grid grid-cols-1 gap-3">
                     {incomeRanges.map(range => (
                       <button
                         key={range}
                         onClick={() => setIncome(range)}
-                        className={`p-4 rounded-xl border text-left transition-all duration-300 ease-luxury flex items-center justify-between ${
+                        className={`p-4 rounded-2xl border text-left transition-all duration-300 ease-luxury flex items-center justify-between ${
                           income === range
-                            ? "border-foreground bg-primary/10"
-                            : "border-border bg-background hover:border-foreground/20"
+                            ? "border-primary bg-primary/5"
+                            : "border-border bg-card hover:border-muted-foreground/30"
                         }`}
-                        style={income === range ? { boxShadow: '2px 2px 0px hsl(150 54% 7%)' } : {}}
                       >
-                        <span className="font-mono text-sm font-medium text-foreground">{range}</span>
+                        <span className="text-sm font-medium text-foreground">{range}</span>
                         {income === range && (
                           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                             <CheckCircle2 className="w-5 h-5 text-primary" />
@@ -180,37 +156,26 @@ const InteractiveWizard = () => {
               )}
 
               {step === 2 && (
-                <motion.div
-                  key="step-2"
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1"
-                >
-                  <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                    Almost done! What's your name?
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-6 font-body">We'll personalize your results</p>
+                <motion.div key="step-2" custom={direction} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className="flex-1">
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Almost done! What's your name?</h3>
+                  <p className="text-sm text-muted-foreground mb-6">We'll personalize your results</p>
                   <div className="space-y-4">
                     <Input
                       value={name}
                       onChange={e => setName(e.target.value)}
                       placeholder="Enter your full name"
-                      className="h-14 rounded-xl bg-background border-border text-foreground placeholder:text-muted-foreground focus:border-foreground focus:ring-foreground/10 text-base font-body"
+                      className="h-14 rounded-2xl bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-base"
                     />
                     {name.trim().length >= 2 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ ease: [0.16, 1, 0.3, 1] }}
-                        className="p-4 rounded-xl bg-primary/5 border border-primary/20"
+                        className="p-4 rounded-2xl bg-primary/5 border border-primary/15"
                       >
-                        <p className="text-sm text-foreground font-body">
-                          Hey <span className="font-mono font-bold">{name.split(" ")[0]}</span>! We'll show you the best{" "}
-                          {productOptions.find(p => p.id === selected)?.label || "products"} for <span className="font-mono font-bold">{income || "your range"}</span>.
+                        <p className="text-sm text-foreground">
+                          Hey <span className="font-bold">{name.split(" ")[0]}</span>! We'll show you the best{" "}
+                          {productOptions.find(p => p.id === selected)?.label || "products"} for <span className="font-bold">{income || "your range"}</span>.
                         </p>
                       </motion.div>
                     )}
@@ -224,16 +189,15 @@ const InteractiveWizard = () => {
               <button
                 onClick={goBack}
                 disabled={step === 0}
-                className="text-muted-foreground hover:text-foreground text-sm font-medium font-body inline-flex items-center gap-2 disabled:opacity-30 transition-colors duration-300"
+                className="text-muted-foreground hover:text-foreground text-sm font-medium inline-flex items-center gap-2 disabled:opacity-30 transition-colors duration-300"
               >
-                <ArrowLeft className="w-4 h-4" />
-                Back
+                <ArrowLeft className="w-4 h-4" /> Back
               </button>
               {step < stepLabels.length - 1 ? (
                 <button
                   onClick={goNext}
                   disabled={!canProceed}
-                  className="btn-brutal px-8 py-3 rounded-lg text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
+                  className="btn-primary px-8 py-3 text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -241,7 +205,7 @@ const InteractiveWizard = () => {
                 <button
                   onClick={handleFinish}
                   disabled={!canProceed}
-                  className="btn-brutal px-8 py-3 rounded-lg text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
+                  className="btn-primary px-8 py-3 text-sm inline-flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none"
                 >
                   Show My Results
                 </button>
