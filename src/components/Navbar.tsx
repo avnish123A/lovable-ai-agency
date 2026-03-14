@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 
 const navLinks = [
   { label: "Credit Cards", href: "/credit-cards" },
@@ -38,28 +38,27 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-16 md:h-[72px]">
           <Link to="/" className="flex items-center gap-2.5 group">
             <img
               src="/logos/apninivesh-logo.png"
               alt="ApniNivesh"
-              className="h-9 w-9 object-contain group-hover:scale-105 transition-transform duration-500 ease-luxury"
+              className="h-8 w-8 object-contain group-hover:scale-105 transition-transform duration-500 ease-luxury"
               loading="eager"
             />
-            <span className="text-lg font-heading font-bold text-foreground tracking-tight">
+            <span className="text-lg font-semibold text-foreground tracking-tight">
               Apni<span className="text-gradient">Nivesh</span>
             </span>
           </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium font-body transition-all duration-300 ease-luxury ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ease-luxury ${
                   location.pathname === link.href
-                    ? "text-foreground bg-foreground/5"
+                    ? "text-primary bg-primary/5"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -68,25 +67,21 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
               to="/credit-cards"
-              className="btn-brutal px-6 py-2.5 rounded-lg text-sm inline-flex items-center gap-1.5"
+              className="btn-primary px-6 py-2.5 text-sm inline-flex items-center gap-2"
             >
-              Get Started
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              Get Started <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          {/* Mobile toggle */}
           <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-2 text-foreground" aria-label="Toggle menu">
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -101,9 +96,9 @@ const Navbar = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium font-body transition-colors duration-300 ${
+                  className={`block px-4 py-3 rounded-2xl text-sm font-medium transition-colors duration-300 ${
                     location.pathname === link.href
-                      ? "text-foreground bg-foreground/5"
+                      ? "text-primary bg-primary/5"
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
@@ -113,7 +108,7 @@ const Navbar = () => {
               <div className="pt-3">
                 <Link
                   to="/credit-cards"
-                  className="btn-brutal w-full px-6 py-3 rounded-lg text-sm inline-flex items-center justify-center gap-1.5"
+                  className="btn-primary w-full px-6 py-3 text-sm inline-flex items-center justify-center gap-2"
                 >
                   Get Started
                 </Link>

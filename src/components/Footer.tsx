@@ -60,82 +60,71 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="border-t border-border bg-card relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
-        {/* Data Manifesto Section — Editorial style, not hidden in fine print */}
+    <footer className="border-t border-border bg-card">
+      <div className="container mx-auto px-4 md:px-8 py-16">
+        {/* Data Manifesto */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 max-w-3xl"
+          className="mb-16 max-w-2xl"
         >
-          <span className="tag-mono mb-4 inline-block">OUR DATA MANIFESTO</span>
-          <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-8 leading-tight">
-            Your Data. <em className="italic">Your Rules.</em>
+          <span className="tag-mono mb-4 inline-block">Our Promise</span>
+          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6 leading-tight">
+            Your Data. Your Rules.
           </h3>
-          <div className="space-y-5 text-muted-foreground leading-relaxed font-body">
+          <div className="space-y-4 text-muted-foreground leading-relaxed text-sm">
             <p>
-              <strong className="text-foreground font-bold">Zero Spam Guarantee.</strong> We will never sell your data to third parties. Your information stays with you — period.
+              <strong className="text-foreground font-semibold">Zero Spam Guarantee.</strong> We will never sell your data to third parties.
             </p>
             <p>
-              <strong className="text-foreground font-bold">Incognito Mode.</strong> Browse and compare financial products without creating an account. No tracking, no profiling, no manipulation.
+              <strong className="text-foreground font-semibold">Incognito Mode.</strong> Browse and compare without creating an account. No tracking, no profiling.
             </p>
             <p>
-              <strong className="text-foreground font-bold">Transparent Affiliations.</strong> We earn through affiliate partnerships, clearly disclosed. Our recommendations are never influenced by commission rates.
+              <strong className="text-foreground font-semibold">Transparent Affiliations.</strong> We earn through affiliate partnerships, clearly disclosed.
             </p>
           </div>
         </motion.div>
 
         {/* Links grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div>
             <Link to="/" className="flex items-center gap-2 mb-4 group">
-              <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-9 w-9 object-contain group-hover:scale-105 transition-transform duration-500 ease-luxury" />
-              <span className="text-lg font-heading font-bold text-foreground">
+              <img src="/logos/apninivesh-logo.png" alt="ApniNivesh" className="h-8 w-8 object-contain" />
+              <span className="text-lg font-semibold text-foreground">
                 Apni<span className="text-gradient">Nivesh</span>
               </span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-3 font-body">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3">
               Compare the best credit cards, loans, insurance & investment products from India's top banks.
             </p>
-            <p className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               By Inspirex Technologies INC
             </p>
-          </motion.div>
-          {Object.entries(footerLinks).map(([title, links], colIdx) => (
-            <motion.div 
-              key={title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 + colIdx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <h4 className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase text-foreground mb-4">{title}</h4>
+          </div>
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title}>
+              <h4 className="text-xs font-semibold tracking-wide uppercase text-foreground mb-4">{title}</h4>
               <ul className="space-y-2.5">
                 {links.map(link => (
                   <li key={link.label}>
-                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 inline-block font-body">
+                    <Link to={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300">
                       {link.label}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC</p>
+        <div className="mt-12 pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ApniNivesh by Inspirex Technologies INC</p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Privacy</Link>
-            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Terms</Link>
-            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-foreground transition-colors font-body">Disclaimer</Link>
+            <Link to="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+            <Link to="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+            <Link to="/disclaimer" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Disclaimer</Link>
           </div>
         </div>
       </div>

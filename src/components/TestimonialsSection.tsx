@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 const testimonials = [
   { name: "Priya Sharma", role: "Software Engineer", text: "ApniNivesh helped me find a credit card with 5X rewards on online shopping. Saved ₹15,000 in the first year!", rating: 5 },
@@ -8,32 +8,20 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => (
-  <section className="py-28 relative overflow-hidden section-dark">
-    {/* Grid */}
-    <div className="absolute inset-0 opacity-[0.03]" style={{
-      backgroundImage: 'linear-gradient(hsl(48 30% 95% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(48 30% 95% / 0.3) 1px, transparent 1px)',
-      backgroundSize: '80px 80px'
-    }} />
-
-    <div className="container mx-auto px-4 md:px-8 relative z-10">
+  <section className="py-24 bg-card">
+    <div className="container mx-auto px-4 md:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center mb-16"
+        className="text-center mb-14"
       >
-        <span className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-md border inline-block mb-6" style={{
-          color: 'hsl(72 100% 50%)',
-          borderColor: 'hsl(72 100% 50% / 0.3)',
-          background: 'hsl(72 100% 50% / 0.06)'
-        }}>
-          TESTIMONIALS
-        </span>
-        <h2 className="text-3xl md:text-5xl font-heading font-bold mb-4 tracking-tight" style={{ color: 'hsl(48 30% 95%)' }}>
-          Loved by <span className="font-mono" style={{ color: 'hsl(72 100% 50%)' }}>50,000+</span> Users
+        <span className="tag-mono mb-4 inline-block">Testimonials</span>
+        <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight text-foreground">
+          Loved by <span className="text-primary">50,000+</span> Users
         </h2>
-        <p className="max-w-md mx-auto font-body" style={{ color: 'hsl(160 8% 55%)' }}>
+        <p className="text-muted-foreground max-w-md mx-auto">
           See how ApniNivesh is helping people make smarter financial choices.
         </p>
       </motion.div>
@@ -42,25 +30,20 @@ const TestimonialsSection = () => (
         {testimonials.map((t, i) => (
           <motion.div
             key={t.name}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.12, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-3xl p-7 border cursor-default transition-all duration-500 ease-luxury hover:-translate-y-2"
-            style={{ 
-              borderColor: 'hsl(150 30% 16% / 0.5)',
-              background: 'hsl(150 45% 9% / 0.5)'
-            }}
+            transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="rounded-3xl p-7 bg-background border border-border transition-all duration-500 ease-luxury hover:-translate-y-2 hover:shadow-apple"
           >
-            <Quote className="w-8 h-8 mb-4" style={{ color: 'hsl(72 100% 50% / 0.3)' }} />
-            <p className="text-sm leading-relaxed mb-5 font-body" style={{ color: 'hsl(160 8% 65%)' }}>"{t.text}"</p>
-            <div className="flex items-center gap-1 mb-3">
+            <div className="flex items-center gap-1 mb-4">
               {Array.from({ length: 5 }).map((_, idx) => (
-                <Star key={idx} className={`w-3.5 h-3.5 ${idx < t.rating ? "fill-current" : ""}`} style={{ color: idx < t.rating ? 'hsl(72 100% 50%)' : 'hsl(150 30% 20%)' }} />
+                <Star key={idx} className={`w-4 h-4 ${idx < t.rating ? "fill-current text-amber-400" : "text-border"}`} />
               ))}
             </div>
-            <p className="font-heading font-semibold text-sm" style={{ color: 'hsl(48 30% 95%)' }}>{t.name}</p>
-            <p className="text-xs font-mono" style={{ color: 'hsl(160 8% 55%)' }}>{t.role}</p>
+            <p className="text-sm leading-relaxed mb-5 text-foreground">"{t.text}"</p>
+            <p className="font-semibold text-sm text-foreground">{t.name}</p>
+            <p className="text-xs text-muted-foreground">{t.role}</p>
           </motion.div>
         ))}
       </div>

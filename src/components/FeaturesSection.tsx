@@ -13,88 +13,60 @@ const features = [
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 40 },
-  show: { 
-    opacity: 1, y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } 
-  },
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-const FeaturesSection = () => {
-  return (
-    <section className="py-32 relative overflow-hidden section-dark">
-      {/* Grid texture */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: 'linear-gradient(hsl(48 30% 95% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(48 30% 95% / 0.3) 1px, transparent 1px)',
-        backgroundSize: '80px 80px'
-      }} />
-      
-      <div className="container mx-auto px-4 md:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-20"
-        >
-          <span className="font-mono text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-1.5 rounded-md border inline-block mb-6" style={{
-            color: 'hsl(72 100% 50%)',
-            borderColor: 'hsl(72 100% 50% / 0.3)',
-            background: 'hsl(72 100% 50% / 0.06)'
-          }}>
-            PLATFORM FEATURES
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 tracking-tight" style={{ color: 'hsl(48 30% 95%)' }}>
-            Everything to{" "}
-            <em className="not-italic italic" style={{ color: 'hsl(72 100% 50%)' }}>Save Smarter</em>
-          </h2>
-          <p className="text-lg max-w-2xl mx-auto font-body" style={{ color: 'hsl(160 8% 55%)' }}>
-            Complete suite of tools to find, compare, and apply for the best financial products.
-          </p>
-        </motion.div>
+const FeaturesSection = () => (
+  <section className="py-24">
+    <div className="container mx-auto px-4 md:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="text-center mb-16"
+      >
+        <span className="tag-mono mb-4 inline-block">Platform Features</span>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight text-foreground">
+          Everything to <span className="text-primary">Save Smarter</span>
+        </h2>
+        <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
+          Complete suite of tools to find, compare, and apply for the best financial products.
+        </p>
+      </motion.div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {features.map(f => (
-            <motion.div key={f.title} variants={item}>
-              <Link
-                to={f.href}
-                className="block p-8 rounded-3xl border group h-full relative overflow-hidden transition-all duration-500 ease-luxury hover:-translate-y-2"
-                style={{ 
-                  borderColor: 'hsl(150 30% 16% / 0.5)',
-                  background: 'hsl(150 45% 9% / 0.5)'
-                }}
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
-                  background: 'linear-gradient(145deg, hsl(72 100% 50% / 0.04), transparent)'
-                }} />
-                
-                <div className="relative z-10">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6" style={{ background: 'hsl(72 100% 50%)', border: '1px solid hsl(72 100% 50%)' }}>
-                    <f.icon className="w-6 h-6" style={{ color: 'hsl(150 54% 7%)' }} />
-                  </div>
-                  <h3 className="text-lg font-heading font-bold mb-3 flex items-center justify-between" style={{ color: 'hsl(48 30% 95%)' }}>
-                    {f.title}
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500 ease-luxury" style={{ color: 'hsl(72 100% 50%)' }} />
-                  </h3>
-                  <p className="leading-relaxed font-body text-sm" style={{ color: 'hsl(160 8% 55%)' }}>{f.desc}</p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-};
+      <motion.div
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+      >
+        {features.map(f => (
+          <motion.div key={f.title} variants={item}>
+            <Link
+              to={f.href}
+              className="apple-card block p-8 group h-full"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-105 transition-all duration-500 ease-luxury">
+                <f.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center justify-between">
+                {f.title}
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500 ease-luxury" />
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+            </Link>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
 
 export default FeaturesSection;

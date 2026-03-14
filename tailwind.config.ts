@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Playfair Display', 'serif'],
-        body: ['Plus Jakarta Sans', 'sans-serif'],
-        mono: ['Space Mono', 'monospace'],
+        heading: ['Inter', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+        mono: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -48,6 +48,10 @@ export default {
           DEFAULT: "hsl(var(--highlight))",
           foreground: "hsl(var(--highlight-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -66,30 +70,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        pine: {
-          DEFAULT: "hsl(150 54% 7%)",
-          light: "hsl(150 40% 12%)",
-        },
-        sage: {
-          DEFAULT: "hsl(160 8% 46%)",
-        },
-        bone: {
-          DEFAULT: "hsl(48 16% 86%)",
-          light: "hsl(48 22% 90%)",
-        },
-        volt: {
-          DEFAULT: "hsl(72 100% 50%)",
-          dim: "hsl(72 100% 45%)",
-        },
-        sand: {
-          DEFAULT: "hsl(48 30% 95%)",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "2xl": "16px",
         "3xl": "24px",
+        "4xl": "32px",
       },
       transitionTimingFunction: {
         luxury: "cubic-bezier(0.16, 1, 0.3, 1)",
@@ -104,7 +92,7 @@ export default {
           to: { height: "0" },
         },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(40px)" },
+          "0%": { opacity: "0", transform: "translateY(30px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
